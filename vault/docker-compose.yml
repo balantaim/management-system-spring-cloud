@@ -1,0 +1,11 @@
+services:
+  vault:
+    build: .
+    container_name: vault
+    ports:
+      - "8200:8200"
+    volumes:
+      - ./data:/vault/data
+    cap_add:
+      - IPC_LOCK
+    restart: unless-stopped

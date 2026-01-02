@@ -1,0 +1,15 @@
+server:
+  port: 5000
+spring:
+  application:
+    name: management-system-users
+  config:
+    import: configserver:http://localhost:8888
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,busrefresh
+  endpoint:
+    health:
+      show-details: always

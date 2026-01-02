@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    config:
+      server:
+        vault:
+          host: 127.0.0.1
+          port: 8200
+          scheme: http
+          backend: kv
+          default-key: ${VAULT_KEY:management-system}
+          profile-separator: ","
+          kv-version: 1
+          skip-ssl-validation: true
+          timeout: 5
+          authentication: TOKEN
+          token: ${ROOT_TOKEN}
+  #          namespace: null
