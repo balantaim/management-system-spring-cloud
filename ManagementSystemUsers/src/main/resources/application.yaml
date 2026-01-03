@@ -5,18 +5,12 @@ spring:
     name: management-system-users
   config:
     import: configserver:http://localhost:8888
-  # Message broker required for busrefresh
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:user}
-    password: ${RABBITMQ_PASSWORD:password}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,refresh,busrefresh
+        include: health,info,refresh
   endpoint:
     health:
       show-details: always
