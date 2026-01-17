@@ -13,7 +13,7 @@ public class UserController {
 
     private final Environment environment;
 
-    @GetMapping("/users")
+    @GetMapping("/info")
     public String getUsers() {
         String value = environment.getProperty("private.key");
         return "Lallala: " + value;

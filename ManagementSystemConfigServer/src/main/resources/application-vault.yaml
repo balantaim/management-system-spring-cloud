@@ -6,12 +6,13 @@ spring:
           host: 127.0.0.1
           port: 8200
           scheme: http
-          backend: kv
+          backend: secret
           default-key: ${VAULT_KEY:management-system}
           profile-separator: ","
-          kv-version: 1
+          kv-version: 2
           skip-ssl-validation: true
           timeout: 5
           authentication: TOKEN
           token: ${ROOT_TOKEN}
+          order: 1
   #          namespace: null
