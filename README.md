@@ -1,6 +1,24 @@
 # Management System
+[License: Apache 2.0](LICENSE)
 
 ## Description
+
+**Management System** is a Spring Cloud–based microservices application designed to demonstrate a scalable, secure, and distributed system architecture. The project follows modern cloud-native principles and integrates several Spring Cloud components to handle service discovery, configuration management, security, and communication between services.
+
+The system uses `Spring Cloud Config Server` for centralized configuration management, with `HashiCorp Vault` as a secure backend for storing sensitive secrets such as credentials and tokens. Configuration updates are dynamically propagated across services using `Spring Cloud Bus` with `RabbitMQ`, enabling real-time refresh without service restarts.
+
+`Eureka Discovery Server` is used for service registration and discovery, allowing microservices to locate and communicate with each other dynamically. An `API Gateway` acts as a single entry point for all client requests, providing routing, load balancing, and centralized request handling.
+
+The architecture is designed to be modular and extensible, making it easy to add new microservices or integrate additional cloud components in the future.
+
+**Key Features:**
+- Spring Cloud microservices architecture
+- Centralized configuration using Spring Cloud Config Server
+- Secure secrets management with HashiCorp Vault
+- Dynamic configuration refresh with Spring Cloud Bus and RabbitMQ
+- Service discovery with Eureka
+- API Gateway for routing and load balancing
+- Decoupled and scalable microservice design
 
 ## Software and Requirements
 
@@ -47,7 +65,7 @@ You will receive:
 - 5 unseal keys
 - 1 root token
 
-Example result:
+Credentials Example:
 
 ```text
 Unseal Key 1: xxxxxx
@@ -59,7 +77,8 @@ Unseal Key 5: xxxxxx
 Initial Root Token: xxxxxx
 ```
 
-!IMPORTANT Save your keys in file!
+> [!IMPORTANT]
+> You are responsible for securely saving the keys in the file for future use.
 
 You need to execute the following command at least `3 TIMES` and enter the unused key:
 
