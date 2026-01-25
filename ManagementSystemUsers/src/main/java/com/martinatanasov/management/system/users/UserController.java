@@ -13,7 +13,7 @@ import java.util.List;
 @RefreshScope
 @RequiredArgsConstructor
 @RestController
-//@RequestMapping("/api/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final Environment environment;

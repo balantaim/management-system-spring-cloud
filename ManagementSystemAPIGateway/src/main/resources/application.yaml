@@ -10,22 +10,22 @@ spring:
     banner-mode: off
   cloud:
     gateway:
-#      discovery:
-#        locator:
-#          enabled: true
-      routes:
-        - id: management-system-users-id
-          uri: ${USERS_SERVICE_URL:lb://management-system-users}
-          predicates:
-            - Path=/info/**
-          filters:
-            - RewritePath=/info/(?<segment>.*), /info/${segment}
       server:
         webflux:
           discovery:
             locator:
-              enabled: true
+              # Enable auto created locator (Keep false if you have custom routes)
+              enabled: false
+              # Disable upper case name for services
               lower-case-service-id: true
+          routes:
+            - id: management-system-users-id
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/**
+                - Method=GET, POST
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
 
 eureka:
   client:
@@ -40,3 +40,12 @@ management:
     web:
       exposure:
         include: health,info,gateway
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: DEBUG
+      web:
+        reactive: DEBUG
