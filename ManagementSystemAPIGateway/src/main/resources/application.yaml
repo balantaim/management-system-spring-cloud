@@ -6,10 +6,15 @@ spring:
     name: management-system-api-gateway
   config:
     import: configserver:http://localhost:8888
+  main:
+    banner-mode: off
   cloud:
     gateway:
+#      discovery:
+#        locator:
+#          enabled: true
       routes:
-        - id: management-system-users
+        - id: management-system-users-id
           uri: ${USERS_SERVICE_URL:lb://management-system-users}
           predicates:
             - Path=/info/**
@@ -28,7 +33,10 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 management:
+  endpoint:
+    gateway:
+      access: read_only
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,gateway

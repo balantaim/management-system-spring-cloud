@@ -5,6 +5,8 @@ spring:
     name: management-system-discovery-server
   config:
     import: configserver:http://localhost:8888
+  main:
+    banner-mode: off
 eureka:
   client:
     register-with-eureka: false

@@ -5,9 +5,9 @@
 
 **Management System** is a Spring Cloud–based microservices application designed to demonstrate a scalable, secure, and distributed system architecture. The project follows modern cloud-native principles and integrates several Spring Cloud components to handle service discovery, configuration management, security, and communication between services.
 
-The system uses `Spring Cloud Config Server` for centralized configuration management, with `HashiCorp Vault` as a secure backend for storing sensitive secrets such as credentials and tokens. Configuration updates are dynamically propagated across services using `Spring Cloud Bus` with `RabbitMQ`, enabling real-time refresh without service restarts.
+The system uses **Spring Cloud Config Server** for centralized configuration management, with **HashiCorp Vault** as a secure backend for storing sensitive secrets such as credentials and tokens. Configuration updates are dynamically propagated across services using **Spring Cloud Bus** with **RabbitMQ**, enabling real-time refresh without service restarts.
 
-`Eureka Discovery Server` is used for service registration and discovery, allowing microservices to locate and communicate with each other dynamically. An `API Gateway` acts as a single entry point for all client requests, providing routing, load balancing, and centralized request handling.
+**Eureka Discovery Server** is used for service registration and discovery, allowing microservices to locate and communicate with each other dynamically. An **API Gateway** acts as a single entry point for all client requests, providing routing, load balancing, and centralized request handling.
 
 The architecture is designed to be modular and extensible, making it easy to add new microservices or integrate additional cloud components in the future.
 
@@ -19,6 +19,8 @@ The architecture is designed to be modular and extensible, making it easy to add
 - Service discovery with Eureka
 - API Gateway for routing and load balancing
 - Decoupled and scalable microservice design
+
+**Software Architecture:** Microservice architecture with layered design, organized and packaged by feature.
 
 ## Software and Requirements
 
@@ -105,8 +107,19 @@ Create add new secrets:
 ```bash
 vault kv put secret/management-system \
 private.key="111" \
-spring.rabbitmq.host=localhost \
-spring.rabbitmq.port=5672 \
+spring.rabbitmq.host="localhost" \
+spring.rabbitmq.port="5672" \
+spring.rabbitmq.username="user" \
+spring.rabbitmq.password="password"
+```
+
+TEST
+
+```bash
+vault kv put secret/management-system-docker \
+private.key="222" \
+spring.rabbitmq.host="rabbitmq" \
+spring.rabbitmq.port="5672" \
 spring.rabbitmq.username="user" \
 spring.rabbitmq.password="password"
 ```

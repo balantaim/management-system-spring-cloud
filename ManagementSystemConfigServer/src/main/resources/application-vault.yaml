@@ -3,7 +3,7 @@ spring:
     config:
       server:
         vault:
-          host: 127.0.0.1
+          host: ${VAULT_HOST:127.0.0.1}
           port: 8200
           scheme: http
           backend: secret
