@@ -29,6 +29,26 @@
           "response": []
         },
         {
+          "name": "get user by email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{GATEWAY_BASE_URL}}/api/users/email/abv@abv.bg",
+              "host": [
+                "{{GATEWAY_BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "email",
+                "abv@abv.bg"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "get all users",
           "request": {
             "method": "GET",
@@ -81,7 +101,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"fullName\": \"{{$randomFullName}}\",\n    \"password\": \"Test123!\",\n    \"passwordRepeat\": \"Test123!\"\n}",
+              "raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"fullName\": \"{{$randomFullName}}\",\n    \"password\": \"Test123!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

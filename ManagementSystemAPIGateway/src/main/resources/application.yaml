@@ -19,11 +19,18 @@ spring:
               # Disable upper case name for services
               lower-case-service-id: true
           routes:
-            - id: management-system-users-id
+            - id: management-system-users-get
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
-                - Path=/api/users/**
-                - Method=GET, POST
+                - Path=/api/users,/api/users/info,/api/users/email/**
+                - Method=GET
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+            - id: management-system-users-post
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/login,/api/users/register
+                - Method=POST
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
 

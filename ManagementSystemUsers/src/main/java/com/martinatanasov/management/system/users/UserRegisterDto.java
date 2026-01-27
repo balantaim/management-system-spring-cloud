@@ -27,15 +27,7 @@ public record UserRegisterDto(
                 regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,50}$",
                 message = "Password must contain uppercase, lowercase, number, and special character"
         )
-        String password,
-
-        @NotBlank(message = "Password repeat is required")
-        @Size(min = 8, max = 50, message = "Password repeat must be between 8 and 50 characters")
-        @Pattern(
-                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,50}$",
-                message = "Password repeat must contain uppercase, lowercase, number, and special character"
-        )
-        String passwordRepeat
+        String password
 
 ) {
 

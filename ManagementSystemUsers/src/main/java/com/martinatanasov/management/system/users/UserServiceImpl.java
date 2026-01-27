@@ -3,10 +3,10 @@ package com.martinatanasov.management.system.users;
 import com.martinatanasov.management.system.authorities.Authority;
 import com.martinatanasov.management.system.authorities.AuthorityName;
 import com.martinatanasov.management.system.mapper.UserMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(userRegisterDto.email()).isPresent()) {
             //todo exception handling
         }
-
 
         Authority authority = Authority.builder()
                 .name(AuthorityName.READ)

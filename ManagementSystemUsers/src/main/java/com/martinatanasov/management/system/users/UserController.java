@@ -46,9 +46,6 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDetailsDto> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
-        if (!userRegisterDto.password().equals(userRegisterDto.passwordRepeat())) {
-            //todo
-        }
         UserDetailsDto registeredUser = userService.createUser(userRegisterDto);
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
