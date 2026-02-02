@@ -65,10 +65,11 @@ public class User {
 
     public String toString() {
         return "User " + "\n\tID: " + id +
-                "\n\temail: " + email +
-                "\n\tfull name: " + fullName +
+                "\n\tEmail: " + email +
+                "\n\tFull name: " + fullName +
                 "\n\tUUID: " + userId +
-                "\n\tenabled: " + enabled +
+                "\n\tEnabled: " + enabled +
+                "\n\tPassword: " + password +
                 "\n\tRoles: " + roles;
     }
 

@@ -1,8 +1,10 @@
 package com.martinatanasov.management.system.users;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     List<UserDetailsDto> findAll();
 

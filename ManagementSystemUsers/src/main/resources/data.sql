@@ -24,8 +24,8 @@ VALUES (2, 3),
 
 -- Create base Customer and Admin role
 INSERT INTO users (email, full_name, password, user_id, enabled)
-VALUES ('abv@abv.bg', 'Customer', 'Test123!', gen_random_uuid(), TRUE),
-       ('admin@abv.bg', 'Admin', 'Test123!', gen_random_uuid(), TRUE);
+VALUES ('abv@abv.bg', 'Customer', '$2a$10$D8vmo9/vGXaTIA0vOHGRlu0UDSCYl54PLoRuI3U7J0A5ay86/5CEy', gen_random_uuid(), TRUE),
+       ('admin@abv.bg', 'Admin', '$2a$10$D8vmo9/vGXaTIA0vOHGRlu0UDSCYl54PLoRuI3U7J0A5ay86/5CEy', gen_random_uuid(), TRUE);
 
 -- Assign roles to the users (1: CUSTOMER, 2: ADMIN)
 INSERT INTO users_roles (user_id, role_id)

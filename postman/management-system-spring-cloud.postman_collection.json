@@ -69,6 +69,9 @@
         {
           "name": "login",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [],
             "body": {
@@ -81,13 +84,12 @@
               }
             },
             "url": {
-              "raw": "{{GATEWAY_BASE_URL}}/api/users/login",
+              "raw": "{{GATEWAY_BASE_URL}}/auth/login",
               "host": [
                 "{{GATEWAY_BASE_URL}}"
               ],
               "path": [
-                "api",
-                "users",
+                "auth",
                 "login"
               ]
             }

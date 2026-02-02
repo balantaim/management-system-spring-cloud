@@ -38,12 +38,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/login")
-    public UserDetailsDto login(@Valid @RequestBody UserLoginDto userLoginDto) {
-        UserDetailsDto user = userService.findByEmailAndEnabledTrue(userLoginDto.email());
-        return user;
-    }
-
     @PostMapping("/register")
     public ResponseEntity<UserDetailsDto> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         UserDetailsDto registeredUser = userService.createUser(userRegisterDto);

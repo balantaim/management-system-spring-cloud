@@ -5,9 +5,13 @@ import com.martinatanasov.management.system.authorities.AuthorityName;
 import com.martinatanasov.management.system.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDetailsDto> findAll() {
@@ -46,7 +51,7 @@ public class UserServiceImpl implements UserService {
         User createUser = User.builder()
                 .email(userRegisterDto.email())
                 .fullName(userRegisterDto.fullName())
-                .password(userRegisterDto.password())
+                .password(passwordEncoder.encode(userRegisterDto.password()))
                 .enabled(true)
                 .build();
 
@@ -70,6 +75,22 @@ public class UserServiceImpl implements UserService {
             //todo exception handling
         }
         return userMapper.userToUserDataDto(user.get());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(username);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found: " + username);
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.get().getEmail(),
+                user.get().getPassword(),
+                user.get().getEnabled(),
+                true,
+                true,
+                true,
+                new ArrayList<>());
     }
 
 }
