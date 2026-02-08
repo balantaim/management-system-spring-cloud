@@ -59,8 +59,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request,
             HttpServletResponse response,
             FilterChain chain,
-            Authentication authResult)
-            throws IOException {
+            Authentication authResult) throws IOException {
         //Get username
         String username = ((User) authResult.getPrincipal()).getUsername();
         //Get user credentials

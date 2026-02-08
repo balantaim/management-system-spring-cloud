@@ -11,7 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Base64;
 
 @Configuration
-public class TokenUtilities {
+public class SymmetricTokenUtils {
 
     /**
      * Token utilities for JJWT v0.13.0

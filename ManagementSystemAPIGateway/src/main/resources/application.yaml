@@ -22,10 +22,11 @@ spring:
             - id: management-system-users-get
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
-                - Path=/api/users,/api/users/info,/api/users/email/**
+                - Path=/api/users/info,/api/users,/api/users/email/**
                 - Method=GET
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
             - id: management-system-users-post
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
@@ -33,6 +34,7 @@ spring:
                 - Method=POST
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
             - id: management-system-users-h2
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
@@ -54,6 +56,15 @@ management:
     web:
       exposure:
         include: health,info,gateway
+
+authorization:
+  token:
+    header:
+      name: Authorization
+      prefix: "Bearer "
+token:
+  expiration-time: 3600000
+  secret-key: ${TOKEN_SECRET_KEY}
 
 logging:
   level:

@@ -11,6 +11,21 @@
       "item": [
         {
           "name": "get info",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -30,11 +45,36 @@
         },
         {
           "name": "get user by email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{GATEWAY_BASE_URL}}/api/users/email/abv@abv.bg",
+              "raw": "{{GATEWAY_BASE_URL}}/api/users/email/{{USERNAME}}",
               "host": [
                 "{{GATEWAY_BASE_URL}}"
               ],
@@ -42,7 +82,7 @@
                 "api",
                 "users",
                 "email",
-                "abv@abv.bg"
+                "{{USERNAME}}"
               ]
             }
           },
@@ -50,7 +90,32 @@
         },
         {
           "name": "get all users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
@@ -68,6 +133,28 @@
         },
         {
           "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "// Parse the JSON response",
+                  "const response = pm.response.json();",
+                  "// Extract the token",
+                  "const userToken = response.token;",
+                  "// Store it in an environment variable named 'TOKEN'",
+                  "pm.environment.set(\"TOKEN\", userToken);",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "noauth"
@@ -76,7 +163,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"abv@abv.bg\",\n    \"password\": \"Test123!\"\n}",
+              "raw": "{\n    \"email\": \"{{USERNAME}}\",\n    \"password\": \"{{PASSWORD}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -97,7 +184,42 @@
           "response": []
         },
         {
+          "name": "logout",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{GATEWAY_BASE_URL}}/logout",
+              "host": [
+                "{{GATEWAY_BASE_URL}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [],

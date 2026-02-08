@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class GlobalSecurityConfig {
 
@@ -44,7 +45,7 @@ public class GlobalSecurityConfig {
                 .authorizeHttpRequests(config -> config
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/api/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/info", "/actuator/**").permitAll()
-                        .requestMatchers("/h2-console/**", "/api/users").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .headers((headers) -> headers

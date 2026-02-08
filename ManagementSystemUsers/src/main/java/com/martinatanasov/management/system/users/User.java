@@ -37,7 +37,21 @@ public class User {
     @Column(name = "user_id", unique = true, nullable = false, updatable = false, length = 36)
     private String userId;
 
-    private Boolean enabled;
+    @Builder.Default
+    @Column(name = "account_non_expired", nullable = false)
+    private Boolean accountNonExpired = true;
+
+    @Builder.Default
+    @Column(name = "account_non_locked", nullable = false)
+    private Boolean accountNonLocked = true;
+
+    @Builder.Default
+    @Column(name = "credentials_non_expired", nullable = false)
+    private Boolean credentialsNonExpired = true;
+
+    @Builder.Default
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled = true;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(

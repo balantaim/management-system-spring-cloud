@@ -1,14 +1,17 @@
 -- Users table
 CREATE TABLE users
 (
-    id            BIGSERIAL PRIMARY KEY,
-    email         VARCHAR(255) NOT NULL UNIQUE,
-    full_name     VARCHAR(255) NOT NULL,
-    password      VARCHAR(255) NOT NULL,
-    user_id       VARCHAR(36)  NOT NULL UNIQUE,
-    enabled       BOOLEAN      NOT NULL DEFAULT FALSE,
-    created_date  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_date TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id                      BIGSERIAL PRIMARY KEY,
+    email                   VARCHAR(255) NOT NULL UNIQUE,
+    full_name               VARCHAR(255) NOT NULL,
+    password                VARCHAR(255) NOT NULL,
+    user_id                 VARCHAR(36)  NOT NULL UNIQUE,
+    account_non_expired     BOOLEAN      NOT NULL DEFAULT FALSE,
+    account_non_locked      BOOLEAN      NOT NULL DEFAULT FALSE,
+    credentials_non_expired BOOLEAN      NOT NULL DEFAULT FALSE,
+    enabled                 BOOLEAN      NOT NULL DEFAULT FALSE,
+    created_date            TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date           TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Authorities table
