@@ -172,7 +172,7 @@ TODO variables...
 
 ## Contact me
 
-![Static Badge](https://img.shields.io/badge/Github-%2366099c?style=for-the-badge&logo=github&logoColor=black&labelColor=white&link=https%3A%2F%2Fgithub.com%2Fbalantaim%2F)
-![Static Badge](https://img.shields.io/badge/google_play-%23057308?style=for-the-badge&link=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdev%3Fid%3D4991626043223074729)
-![Static Badge](https://img.shields.io/badge/Linkedin-%23321ee6?style=for-the-badge&logoColor=black&labelColor=white&link=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fmartin-atanasov-47550b1a2%2F)
+[![Static Badge](https://img.shields.io/badge/Github-%2366099c?style=for-the-badge&logo=github&logoColor=black&labelColor=white)](https://github.com/balantaim)
+[![Static Badge](https://img.shields.io/badge/google_play-%23057308?style=for-the-badge)](https://play.google.com/store/apps/dev?id=4991626043223074729)
+[![Static Badge](https://img.shields.io/badge/Linkedin-%23321ee6?style=for-the-badge&logoColor=black&labelColor=white)](https://www.linkedin.com/in/martin-atanasov-47550b1a2/)
 
