@@ -5,13 +5,14 @@ import com.martinatanasov.management.system.authorities.AuthorityName;
 import com.martinatanasov.management.system.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,8 +70,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetailsDto findByEmailAndEnabledTrue(String email) {
-        Optional<User> user = userRepository.findByEmailAndEnabledTrue(email);
+    public UserDetailsDto findByEmailAndFullEnabled(String email) {
+        Optional<User> user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email);
         if (user.isEmpty()) {
             //todo exception handling
         }
@@ -78,19 +79,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String username) {
+        Optional<User> user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(username);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found: " + username);
         }
+        //Get all authorities
+        List<GrantedAuthority> authorities = user.get().getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toList());
+
         return new org.springframework.security.core.userdetails.User(
                 user.get().getEmail(),
                 user.get().getPassword(),
                 user.get().getEnabled(),
-                true,
-                true,
-                true,
-                new ArrayList<>());
+                user.get().getAccountNonExpired(),
+                user.get().getCredentialsNonExpired(),
+                user.get().getAccountNonLocked(),
+                authorities);
     }
 
 }

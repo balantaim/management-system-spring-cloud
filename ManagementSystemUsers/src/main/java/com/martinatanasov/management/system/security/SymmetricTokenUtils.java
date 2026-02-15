@@ -15,6 +15,7 @@ public class SymmetricTokenUtils {
 
     /**
      * Token utilities for JJWT v0.13.0
+     * Symmetric key
      */
 
     @Value("${token.secret-key}")

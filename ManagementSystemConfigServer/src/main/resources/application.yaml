@@ -14,11 +14,18 @@ spring:
   main:
     banner-mode: off
 
+encrypt:
+  key-store:
+    location: classpath:management-system.p12
+    password: ${KEYSTORE-PASSWORD}
+    alias: management-system-key
+    secret: ${KEYSTORE-SECRET-PASSWORD}
+
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,busrefresh
+        include: health,info,busrefresh,mappings,env
   endpoint:
     health:
       show-details: always

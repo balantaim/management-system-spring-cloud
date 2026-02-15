@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tools.jackson.databind.json.JsonMapper;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -63,9 +65,17 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         //Get username
         String username = ((User) authResult.getPrincipal()).getUsername();
         //Get user credentials
-        UserDetailsDto userDetailsDto = userService.findByEmailAndEnabledTrue(username);
+        UserDetailsDto userDetailsDto = userService.findByEmailAndFullEnabled(username);
 
         Instant timeNow = Instant.now();
+
+        List<String> authorities = authResult.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(auth -> !auth.startsWith("FACTOR_"))
+                .toList();
+
+        log.info("\t\nUser Roles: {}", authorities);
 
         //Generate Token
         String token = Jwts.builder()                       // (1)
@@ -76,6 +86,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .expiration(Date.from(timeNow.plusMillis(Long.parseLong(environment.getProperty("token.expiration-time")))))
                 .issuedAt(Date.from(timeNow))
                 .subject(userDetailsDto.userId())           // (3) JSON Claims, or
+                //Add user's authorities
+                .claim("scope", authorities)
                 //.content(aByteArray, "text/plain")        //     any byte[] content, with media type
                 //Add SecretKey (token) and algorithm
                 .signWith(

@@ -12,6 +12,6 @@ public interface UserService extends UserDetailsService {
 
     UserDetailsDto findByEmail(String email);
 
-    UserDetailsDto findByEmailAndEnabledTrue(String email);
+    UserDetailsDto findByEmailAndFullEnabled(String email);
 
 }

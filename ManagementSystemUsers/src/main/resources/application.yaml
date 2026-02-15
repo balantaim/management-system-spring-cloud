@@ -53,6 +53,9 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password: sa
+  threads:
+    virtual:
+      enabled: false
 
 eureka:
   instance:
@@ -75,6 +78,13 @@ login:
 token:
   expiration-time: 3600000
   secret-key: ${TOKEN_SECRET_KEY}
+
+encrypt:
+  key-store:
+    location: classpath:management-system.p12
+    password: ${KEYSTORE-PASSWORD}
+    alias: management-system-key
+    secret: ${KEYSTORE-SECRET-PASSWORD}
 
 logging:
   level:

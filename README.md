@@ -169,6 +169,10 @@ TODO variables...
 - RabbitMQ: http://localhost:5672/
 - RabbitMQ UI: http://localhost:15672/
 
+### Validate Token
+
+https://www.jwt.io/
+
 
 ## Contact me
 

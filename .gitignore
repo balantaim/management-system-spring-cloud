@@ -1,5 +1,6 @@
 vault/data/
-VAULT_KEY.txt
+vault/VAULT_KEY.txt
+keygen.txt
 
 HELP.md
 target/

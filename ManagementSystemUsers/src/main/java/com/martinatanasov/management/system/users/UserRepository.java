@@ -12,11 +12,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmailAndEnabledTrue(String email);
 
-}
+    Optional<User> findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(String email);
 
-//@Repository
-//public interface UserRepository extends ReactiveCrudRepository<User, Long> {
-//
-////    Optional<User> findByEmail(String email);
-//
-//}
+}

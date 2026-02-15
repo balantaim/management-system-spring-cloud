@@ -247,6 +247,129 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "ConfigServer",
+      "item": [
+        {
+          "name": "config-default",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8888/config/default",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "config",
+                "default"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "config-encrypt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "afasf",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8888/encrypt",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "encrypt"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "config-decrypt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "AQA9jc9dg5hJJ8o4XidvcBAXWd+72q6/iotMGWBqKk+H5114HAZzjt+5rBnPxWXXzjj5ONJGW5jMbZYW2aT8hUxh9sibhBsHfHXZj2KO/Fuhp+qnP4rDkD0c32bWYylSPBpq1b080f4675bHhWIR2FNR3OxwE+VgSNjqyYXGuu+VKQUPjbGs13xaXeIddmT49pEM0heOl0b5xUdWyvN1/Vu6myd9pHZpjzY0sUzIUz95t1+pmdxAzreKWFqxMw9h0CIxaLy80jRTuZHFx5YAYvQT5T+8Yn1yEEluKHg7MYyb18U3ewFkvwzIwyoqnL1PtGOFVtgW+VqtbgqcE/+C6np4cnD9KO8I/Vumq693YRGiPFpGI4jqv3rWZwOTzHWE1GM=",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8888/decrypt",
+              "host": [
+                "localhost"
+              ],
+              "port": "8888",
+              "path": [
+                "decrypt"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
