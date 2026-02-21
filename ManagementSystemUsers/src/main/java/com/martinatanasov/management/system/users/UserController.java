@@ -42,6 +42,15 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasRole('CUSTOMER') && #userId == authentication.principal")
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDetailsDto> getUserById(@PathVariable String userId) {
+        if (userId != null) {
+            return new ResponseEntity<>(userService.findByUserId(userId), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<UserDetailsDto> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         UserDetailsDto registeredUser = userService.createUser(userRegisterDto);

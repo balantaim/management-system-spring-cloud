@@ -22,7 +22,7 @@ spring:
             - id: management-system-users-get
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
-                - Path=/api/users/info,/api/users,/api/users/email/**
+                - Path=/api/users/info,/api/users,/api/users/email/**,/api/users/{userId}
                 - Method=GET
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}

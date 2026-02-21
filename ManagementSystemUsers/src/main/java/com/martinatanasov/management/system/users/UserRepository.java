@@ -10,6 +10,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByUserId(String email);
+
     Optional<User> findByEmailAndEnabledTrue(String email);
 
     Optional<User> findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(String email);

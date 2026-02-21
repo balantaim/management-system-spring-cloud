@@ -1,9 +1,6 @@
 package com.martinatanasov.management.system.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,17 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -30,6 +24,7 @@ import java.util.stream.Collectors;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final Environment environment;
+    private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -40,47 +35,49 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         assert prefix != null;
 
         if (authHeader == null || !authHeader.startsWith(prefix)) {
+            log.error("JWT header config is missing in environment properties or Authorization prefix is not presented");
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = authHeader.substring(prefix.length());
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
 
         try {
-            Claims claims = Jwts.parser()
-                    .verifyWith(key)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+            Claims claims = jwtService.extractAllClaims(token);
 
-            String username = claims.getSubject();
+            String username = jwtService.extractSubjectFromClaims(claims);
+            if (username == null) {
+                log.warn("JWT subject is missing");
+                SecurityContextHolder.clearContext();
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-            @SuppressWarnings("unchecked")
-            List<String> authoritiesFromToken = claims.get("authorities", List.class);
+            List<GrantedAuthority> authorities = jwtService.extractAuthorities(claims);
+            log.trace("Token authorities: {}", authorities);
 
-            Collection<SimpleGrantedAuthority> authorities = authoritiesFromToken.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
-
-            log.trace("\n\tToken authorities: {}", authoritiesFromToken);
-
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            authorities
-                    );
-
-            authentication.setDetails(
-                    new WebAuthenticationDetailsSource().buildDetails(request)
-            );
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        } catch (Exception e) {
-            // Token invalid >> clear context
-            log.error("Error: {}", String.valueOf(e.fillInStackTrace()));
+        } catch (ExpiredJwtException ex) {
+            log.warn("JWT token expired: {}", ex.getMessage());
+            SecurityContextHolder.clearContext();
+        } catch (MalformedJwtException ex) {
+            log.warn("Malformed JWT token: {}", ex.getMessage());
+            SecurityContextHolder.clearContext();
+        } catch (SignatureException ex) {
+            log.warn("Invalid JWT signature: {}", ex.getMessage());
+            SecurityContextHolder.clearContext();
+        } catch (UnsupportedJwtException ex) {
+            log.warn("Unsupported JWT token: {}", ex.getMessage());
+            SecurityContextHolder.clearContext();
+        } catch (JwtException ex) {
+            log.warn("JWT error: {}", ex.getMessage());
+            SecurityContextHolder.clearContext();
+        } catch (Exception ex) {
+            log.error("Unexpected error during JWT processing: {}", ex.getMessage());
             SecurityContextHolder.clearContext();
         }
 

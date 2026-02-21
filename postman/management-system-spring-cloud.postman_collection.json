@@ -89,6 +89,50 @@
           "response": []
         },
         {
+          "name": "get user by userId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{GATEWAY_BASE_URL}}/api/users/{{USER_ID}}",
+              "host": [
+                "{{GATEWAY_BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{USER_ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "get all users",
           "event": [
             {
@@ -147,6 +191,9 @@
                   "const userToken = response.token;",
                   "// Store it in an environment variable named 'TOKEN'",
                   "pm.environment.set(\"TOKEN\", userToken);",
+                  "",
+                  "const userId = pm.response.headers.get('userId');",
+                  "pm.environment.set(\"USER_ID\", userId);",
                   ""
                 ],
                 "type": "text/javascript",

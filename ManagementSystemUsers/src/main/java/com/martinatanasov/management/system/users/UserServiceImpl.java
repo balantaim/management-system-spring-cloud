@@ -70,6 +70,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDetailsDto findByUserId(String userId) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        if (user.isEmpty()) {
+            //todo exception handling
+        }
+        return userMapper.userToUserDataDto(user.get());
+    }
+
+    @Override
     public UserDetailsDto findByEmailAndFullEnabled(String email) {
         Optional<User> user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email);
         if (user.isEmpty()) {
