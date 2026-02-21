@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.authorities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.martinatanasov.management.system.roles.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,7 @@ public class Authority {
     @Column(nullable = false, length = 20)
     private AuthorityName name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "authorities")
     private Collection<Role> roles;
 

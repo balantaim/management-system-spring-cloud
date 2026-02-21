@@ -6,6 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
 import java.util.List;
+import java.util.Objects;
 
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
@@ -24,8 +26,9 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
     }
 
     @Override
+    @NonNull
     public Mono<Authentication> authenticate(Authentication authentication) {
-        String token = authentication.getCredentials().toString();
+        String token = Objects.requireNonNull(authentication.getCredentials()).toString();
 
         return Mono.fromCallable(() -> {
                     String secret = environment.getProperty("token.secret-key");

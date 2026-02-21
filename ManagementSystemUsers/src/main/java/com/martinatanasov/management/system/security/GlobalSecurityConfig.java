@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,12 +29,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GlobalSecurityConfig {
 
+    /**
+     * ToDo: Implement the following security configurations:
+     * Argon2 instead of bcryptPasswordEncoder
+     * OneTimeToken
+     * webAuthn() -> Passkey
+     */
+
     private final UserService userService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final Environment environment;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) {
         //AuthenticationFilter authFilter = new AuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
 
         //Create AuthenticationManager
@@ -62,7 +70,8 @@ public class GlobalSecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authenticationManager(authenticationManager)
-                .addFilter(authenticationFilter);
+                .addFilter(authenticationFilter)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -1,7 +1,15 @@
 package com.martinatanasov.management.system.users;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.martinatanasov.management.system.roles.Role;
 
-public record UserDetailsDto(String userId, String email, String fullName, LocalDateTime createdDate) {
+import java.time.LocalDateTime;
+import java.util.Collection;
+
+public record UserDetailsDto(String userId,
+                             String email,
+                             String fullName,
+                             @JsonIgnore Collection<Role> roles,
+                             LocalDateTime createdDate) {
 
 }

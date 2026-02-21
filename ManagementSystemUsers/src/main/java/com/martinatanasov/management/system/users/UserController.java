@@ -6,6 +6,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +26,14 @@ public class UserController {
         return "Lallala: " + value;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserDetailsDto>> getAllUsers() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
+    // #userId == authentication.principal
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDetailsDto> getUserByEmail(@PathVariable String email) {
         if (email != null && !email.isEmpty()) {

@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.roles;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.martinatanasov.management.system.authorities.Authority;
 import com.martinatanasov.management.system.users.User;
 import jakarta.persistence.*;
@@ -27,6 +28,7 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_authorities",

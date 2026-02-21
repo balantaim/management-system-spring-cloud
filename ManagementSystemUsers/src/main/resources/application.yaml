@@ -11,20 +11,6 @@ spring:
 #    refresh:
       # Disable refresh for AOT compilation
 #      enabled: false
-    openfeign:
-#      compression:
-#        request:
-#          enabled: true
-#        response:
-#          enabled: true
-      client:
-        config:
-          default:
-            connectTimeout: 5000
-            readTimeout: 5000
-            loggerLevel: basic
-      # Disable lazy attributes in OpenFeign client in order to run AOT compilation
-#      lazy-attributes-resolution: false
   h2:
     console:
       enabled: true
@@ -79,6 +65,12 @@ token:
   expiration-time: 3600000
   secret-key: ${TOKEN_SECRET_KEY}
 
+authorization:
+  token:
+    header:
+      name: Authorization
+      prefix: "Bearer "
+
 encrypt:
   key-store:
     location: classpath:management-system.p12
@@ -92,7 +84,7 @@ logging:
       hibernate:
         sql: DEBUG
       springframework:
-        security: DEBUG
+        security: TRACE
         jdbc: TRACE
         h2: TRACE
 

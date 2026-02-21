@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.martinatanasov.management.system.roles.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,6 +54,7 @@ public class User {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
