@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: management-system-desktop-client
+  main:
+    banner-mode: off
+app:
+# Theme color variant: light, dark
+  theme-variant: dark
+# Theme names: Flat, macOS, IntelliJ, Cyan-Purple, Material, Solarized-Carbon, Orange-Ocean
+  theme-name: Material
+flat:
+  inspector:
+    enabled: true
+screen:
+  preferred-resolution:
+    width: 1024
+    height: 800
+  minimum-resolution:
+    width: 800
+    height: 500
