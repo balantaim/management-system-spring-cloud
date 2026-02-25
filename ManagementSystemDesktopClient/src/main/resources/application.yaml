@@ -3,10 +3,12 @@ spring:
     name: management-system-desktop-client
   main:
     banner-mode: off
+    # Disable web environment (disabled by default if no WebMVC or WebFlux)
+    web-application-type: none
 app:
-# Theme color variant: light, dark
+  # Theme color variant: light, dark
   theme-variant: dark
-# Theme names: Flat, macOS, IntelliJ, Cyan-Purple, Material, Solarized-Carbon, Orange-Ocean
+  # Theme names: Flat, macOS, IntelliJ, Cyan-Purple, Material, Solarized-Carbon, Orange-Ocean
   theme-name: Material
 flat:
   inspector:

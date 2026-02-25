@@ -1,6 +1,6 @@
 package com.martinatanasov;
 
-import com.martinatanasov.view.HomeFrame;
+import com.martinatanasov.view.MainFrame;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -25,7 +25,7 @@ public class ManagementSystemDesktopClientApplication {
 
         // Start Swing UI on EDT
         SwingUtilities.invokeLater(() -> {
-            HomeFrame frame = context.getBean(HomeFrame.class);
+            MainFrame frame = context.getBean(MainFrame.class);
             frame.setVisible(true);
         });
     }

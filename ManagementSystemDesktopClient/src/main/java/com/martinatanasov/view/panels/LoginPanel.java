@@ -1,5 +1,10 @@
-package com.martinatanasov.view;
+package com.martinatanasov.view.panels;
 
+import com.martinatanasov.services.UserService;
+import com.martinatanasov.view.Theme;
+import com.martinatanasov.view.router.Router;
+import com.martinatanasov.view.router.Routes;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -9,25 +14,35 @@ import java.awt.*;
 @Component
 public class LoginPanel implements Theme {
 
-    JPanel card;
-    JTextField emailField;
-    JPasswordField passwordField;
-    JButton loginButton;
+    @Getter
+    private JPanel view;
+    private JTextField emailField;
+    private JPasswordField passwordField;
+    private JButton loginButton;
+    private final Router router;
+    private final UserService userService;
 
-    public LoginPanel(@Value("${app.theme-variant}") String themeVariant, @Value("${app.theme-name}") String themeName) {
+
+    public LoginPanel(@Value("${app.theme-variant}") String themeVariant,
+            @Value("${app.theme-name}") String themeName,
+            Router router,
+            UserService userService) {
+        this.router = router;
+        this.userService = userService;
+
         setAppTheme(themeVariant, themeName);
-        card = new JPanel();
-        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-        card.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
-        card.setPreferredSize(new Dimension(600, 420));
+        view = new JPanel();
+        view.setLayout(new BoxLayout(view, BoxLayout.Y_AXIS));
+        view.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
+        view.setPreferredSize(new Dimension(600, 420));
 
         // Header
-        JLabel header = new JLabel("Management System");
+        JLabel header = new JLabel("Management System - Login");
         header.setFont(new Font("SansSerif", Font.BOLD, 32));
         header.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
 
-        card.add(header);
-        card.add(Box.createVerticalStrut(35));
+        view.add(header);
+        view.add(Box.createVerticalStrut(35));
 
         // Email
         JLabel emailLabel = new JLabel("Email");
@@ -38,10 +53,10 @@ public class LoginPanel implements Theme {
         emailField.setPreferredSize(new Dimension(350, 45));
         emailField.putClientProperty("JTextField.placeholderText", "Enter your email");
 
-        card.add(emailLabel);
-        card.add(Box.createVerticalStrut(6));
-        card.add(emailField);
-        card.add(Box.createVerticalStrut(25));
+        view.add(emailLabel);
+        view.add(Box.createVerticalStrut(6));
+        view.add(emailField);
+        view.add(Box.createVerticalStrut(25));
 
         // Password
         JLabel passwordLabel = new JLabel("Password");
@@ -52,10 +67,10 @@ public class LoginPanel implements Theme {
         passwordField.setPreferredSize(new Dimension(350, 45));
         passwordField.putClientProperty("JTextField.placeholderText", "Enter your password");
 
-        card.add(passwordLabel);
-        card.add(Box.createVerticalStrut(6));
-        card.add(passwordField);
-        card.add(Box.createVerticalStrut(35));
+        view.add(passwordLabel);
+        view.add(Box.createVerticalStrut(6));
+        view.add(passwordField);
+        view.add(Box.createVerticalStrut(35));
 
         // Login button
         loginButton = new JButton("Login");
@@ -69,14 +84,15 @@ public class LoginPanel implements Theme {
         //loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
 
-        card.add(loginButton);
+        view.add(loginButton);
 
         // Login click
-        //loginButton.addActionListener(e -> toast.showToast("You are logged in", this));
-    }
-
-    public JPanel getLoginView() {
-        return card;
+        // loginButton.addActionListener(e -> toast.showToast("You are logged in", this));
+        loginButton.addActionListener(e -> {
+            if (userService.login(emailField.getText(), passwordField.getPassword())) {
+                router.navigateTo(Routes.HOME);
+            }
+        });
     }
 
 }
