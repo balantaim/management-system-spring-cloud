@@ -32,7 +32,7 @@ public class Router {
         root.repaint();
     }
 
-    public GridBagConstraints createGbc() {
+    private GridBagConstraints createGbc() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;

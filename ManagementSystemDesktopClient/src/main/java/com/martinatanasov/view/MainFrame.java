@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -36,6 +37,7 @@ public class MainFrame extends JFrame implements Theme {
     @PostConstruct
     public void init() {
         setTitle("Management System");
+        setName("main-frame");
         initFlatInspector();
         setAppTheme(environment.getProperty("app.theme-variant", "light"),
                 environment.getProperty("app.theme-name", "Material"));
@@ -52,6 +54,7 @@ public class MainFrame extends JFrame implements Theme {
         router.navigateTo(Routes.LOGIN);
         //Add the root container
         add(rootPanel);
+        setVisible(true);
 
         addAppCloseListener();
     }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.HierarchyEvent;
 
 @Component
 public class LoginPanel implements Theme {
@@ -32,12 +33,13 @@ public class LoginPanel implements Theme {
 
         setAppTheme(themeVariant, themeName);
         view = new JPanel();
+        view.setName("login-panel");
         view.setLayout(new BoxLayout(view, BoxLayout.Y_AXIS));
         view.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
         view.setPreferredSize(new Dimension(600, 420));
 
         // Header
-        JLabel header = new JLabel("Management System - Login");
+        JLabel header = new JLabel("Login Form");
         header.setFont(new Font("SansSerif", Font.BOLD, 32));
         header.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
 
@@ -49,6 +51,7 @@ public class LoginPanel implements Theme {
         emailLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         // Email field
         emailField = new JTextField();
+        emailField.setName("email-field");
         emailField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         emailField.setPreferredSize(new Dimension(350, 45));
         emailField.putClientProperty("JTextField.placeholderText", "Enter your email");
@@ -63,6 +66,7 @@ public class LoginPanel implements Theme {
         passwordLabel.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         // Password field
         passwordField = new JPasswordField();
+        passwordField.setName("password-field");
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         passwordField.setPreferredSize(new Dimension(350, 45));
         passwordField.putClientProperty("JTextField.placeholderText", "Enter your password");
@@ -74,6 +78,7 @@ public class LoginPanel implements Theme {
 
         // Login button
         loginButton = new JButton("Login");
+        loginButton.setName("login-button");
         loginButton.setAlignmentX(0.5f);
         loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         loginButton.setPreferredSize(new Dimension(350, 45));
@@ -82,15 +87,24 @@ public class LoginPanel implements Theme {
         //Color darkPurple = new Color(88, 28, 135);
         //loginButton.setBackground(darkPurple);
         //loginButton.setForeground(Color.WHITE);
-        loginButton.setFocusPainted(false);
 
         view.add(loginButton);
 
         // Login click
         // loginButton.addActionListener(e -> toast.showToast("You are logged in", this));
+        addListeners();
+    }
+
+    private void addListeners() {
         loginButton.addActionListener(e -> {
             if (userService.login(emailField.getText(), passwordField.getPassword())) {
                 router.navigateTo(Routes.HOME);
+            }
+        });
+
+        emailField.addHierarchyListener(e -> {
+            if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && emailField.isShowing()) {
+                SwingUtilities.invokeLater(() -> emailField.requestFocusInWindow());
             }
         });
     }

@@ -5,6 +5,9 @@ spring:
     banner-mode: off
     # Disable web environment (disabled by default if no WebMVC or WebFlux)
     web-application-type: none
+  threads:
+    virtual:
+      enabled: false
 app:
   # Theme color variant: light, dark
   theme-variant: dark
