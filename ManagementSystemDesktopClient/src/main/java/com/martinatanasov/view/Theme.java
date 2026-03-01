@@ -13,6 +13,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
 
 import javax.swing.*;
+import java.awt.*;
 
 public interface Theme {
 
@@ -46,6 +47,10 @@ public interface Theme {
             JFrame.setDefaultLookAndFeelDecorated(true);
             JDialog.setDefaultLookAndFeelDecorated(true);
         }
+    }
+
+    default Color errorColor() {
+        return UIManager.getColor("Component.error.focusedBorderColor");
     }
 
 }

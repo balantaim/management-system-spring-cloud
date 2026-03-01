@@ -18,9 +18,9 @@ public class UserServiceImpl implements UserService {
     private final UserToken userToken;
 
     @Override
-	public Integer login(String email, char[] password) {
+	public int login(String email, char[] password) {
         log.info("User email: {}, password: {}", email, new String(password));
-        ResponseEntity<Void> response = null;
+        ResponseEntity<Void> response;
         try {
             response = restClient.post()
                     .uri("/auth/login")
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getInfo() {
-        ResponseEntity<Void> response = null;
+        ResponseEntity<Void> response;
         try {
             response = restClient.get()
                     .uri("/api/users/info")

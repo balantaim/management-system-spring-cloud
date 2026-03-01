@@ -2,9 +2,9 @@ package com.martinatanasov.view;
 
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.martinatanasov.uicomponents.Toast;
 import com.martinatanasov.view.panels.HomePanel;
 import com.martinatanasov.view.panels.LoginPanel;
+import com.martinatanasov.view.panels.RegisterPanel;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
 import jakarta.annotation.PostConstruct;
@@ -26,11 +26,12 @@ import java.awt.event.WindowEvent;
 public class MainFrame extends JFrame implements Theme {
 
     private final ConfigurableApplicationContext context;
-    private final Toast toast;
     private final Environment environment;
+    //Centered layout
     private final GridBagLayout gridBagLayout = new GridBagLayout();
     private final JPanel rootPanel = new JPanel(gridBagLayout);
     private final LoginPanel loginPanel;
+    private final RegisterPanel registerPanel;
     private final HomePanel homePanel;
     private final Router router;
 
@@ -87,13 +88,14 @@ public class MainFrame extends JFrame implements Theme {
 
     private void registerViewsInRouter() {
         router.register(Routes.LOGIN, loginPanel.getView());
+        router.register(Routes.REGISTER, registerPanel.getView());
         router.register(Routes.HOME, homePanel.getView());
     }
 
     private Image getApplicationIcon() {
         FlatSVGIcon appIcon = new FlatSVGIcon("static/images/app-logo.svg", 64, 64);
-        Color accent = UIManager.getColor("Component.focusColor");
-        appIcon.setColorFilter(new FlatSVGIcon.ColorFilter(color -> accent));
+        Color focusColor = UIManager.getColor("Component.focusColor");
+        appIcon.setColorFilter(new FlatSVGIcon.ColorFilter(color -> focusColor));
         return appIcon.getImage();
     }
 

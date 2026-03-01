@@ -1,32 +1,31 @@
 package com.martinatanasov.view.panels;
 
-import com.martinatanasov.user.UserService;
+import com.martinatanasov.user.UserController;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
 import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
 
-@Lazy
 @Component
 public class HomePanel implements Theme {
 
     @Getter
-    private JPanel view;
-    private JButton logoutButton;
+    private final JPanel view;
+    private final JButton logoutButton;
     private final Router router;
-    private final UserService userService;
+    private final UserController userController;
 
     public HomePanel(@Value("${app.theme-variant}") String themeVariant,
-            @Value("${app.theme-name}") String themeName, Router router, UserService userService) {
-        this.userService = userService;
+            @Value("${app.theme-name}") String themeName,
+            Router router, UserController userController) {
+        this.userController = userController;
         this.router = router;
         setAppTheme(themeVariant, themeName);
         view = new JPanel(new MigLayout("wrap"));
@@ -36,7 +35,7 @@ public class HomePanel implements Theme {
 
         logoutButton = new JButton("Logout");
         logoutButton.setName("logout-button");
-        logoutButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        logoutButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         logoutButton.setPreferredSize(new Dimension(350, 45));
 
         view.add(logoutButton);
@@ -46,13 +45,13 @@ public class HomePanel implements Theme {
 
     private void addListeners() {
         logoutButton.addActionListener(e -> {
-            userService.logout();
+            userController.logout();
             router.navigateTo(Routes.LOGIN);
         });
 
         logoutButton.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && logoutButton.isShowing()) {
-                SwingUtilities.invokeLater(() -> logoutButton.requestFocusInWindow());
+                SwingUtilities.invokeLater(logoutButton::requestFocusInWindow);
             }
         });
     }

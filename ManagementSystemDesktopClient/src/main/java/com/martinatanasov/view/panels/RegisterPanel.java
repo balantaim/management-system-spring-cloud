@@ -16,20 +16,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 @Component
-public class LoginPanel implements Theme {
+public class RegisterPanel implements Theme {
 
     @Getter
     private final JPanel view;
-    private final JTextField emailField;
-    private final JPasswordField passwordField;
-    private final JButton loginButton;
-    private final JLabel emailErrorLabel;
-    private final JLabel passwordErrorLabel;
     private final Router router;
     private final UserController userController;
-    private final JLabel registerLink;
+    private final JTextField emailField;
+    private final JPasswordField passwordField;
+    private final JPasswordField rePasswordField;
+    private final JLabel emailErrorLabel;
+    private final JLabel passwordErrorLabel;
+    private final JLabel rePasswordErrorLabel;
+    private final JButton registerButton;
+    private final JLabel loginLink;
 
-    public LoginPanel(@Value("${app.theme-variant}") String themeVariant,
+    public RegisterPanel(@Value("${app.theme-variant}") String themeVariant,
             @Value("${app.theme-name}") String themeName,
             @Value("${flat.linux-decorations.enabled}") Boolean enableDecorations,
             Router router,
@@ -39,18 +41,17 @@ public class LoginPanel implements Theme {
         setAppTheme(themeVariant, themeName);
         enableDecorations(enableDecorations);
         view = new JPanel();
-        view.setName("login-panel");
-        view.setLayout(new MigLayout("insets 40 60 40 60, fillx, wrap, alignx center, aligny center", "[350!]"));
-        view.setPreferredSize(new Dimension(600, 600));
+        view.setName("register-panel");
+        view.setLayout(new MigLayout("insets 40 60 40 60, fillx, wrap, alignx center, aligny center", "[grow]"));
+        view.setMinimumSize(new Dimension(600, 600));
 
         // Header
-        JLabel header = new JLabel("Login Form");
+        JLabel header = new JLabel("Register Form");
         header.setFont(new Font("SansSerif", Font.BOLD, 32));
+        view.add(header, "alignx center, gapbottom 25, wrap");
 
-        view.add(header, "alignx center, gapbottom 35, wrap");
         // Email
-        JLabel emailLabel = new JLabel("Email");
-        // Email field
+        JLabel emailLabel = new JLabel("User email");
         emailField = new JTextField();
         emailField.setName("email-field");
         emailField.setPreferredSize(new Dimension(350, 45));
@@ -68,7 +69,6 @@ public class LoginPanel implements Theme {
 
         // Password
         JLabel passwordLabel = new JLabel("Password");
-        // Password field
         passwordField = new JPasswordField();
         passwordField.setName("password-field");
         passwordField.setPreferredSize(new Dimension(350, 45));
@@ -81,44 +81,52 @@ public class LoginPanel implements Theme {
         passwordErrorLabel.setVisible(false);
 
         view.add(passwordLabel, "alignx left");
-        view.add(passwordField, "w 350!, height 45!, alignx center");
-        view.add(passwordErrorLabel, "alignx left, gapbottom 25");
+        view.add(passwordField, "growx, height 45!");
+        view.add(passwordErrorLabel, "alignx left, gapbottom 15");
 
-        // Login button
-        loginButton = new JButton("Login");
-        loginButton.setName("login-button");
-        loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
-        loginButton.setPreferredSize(new Dimension(350, 45));
+        // Re-password
+        JLabel rePasswordLabel = new JLabel("Re-password");
+        rePasswordField = new JPasswordField();
+        rePasswordField.setName("re-password-field");
+        rePasswordField.setPreferredSize(new Dimension(350, 45));
+        rePasswordField.putClientProperty("JTextField.placeholderText", "Confirm your password");
+        // Re-password error label
+        rePasswordErrorLabel = new JLabel("Passwords do not match");
+        rePasswordErrorLabel.setName("error-re-pass");
+        rePasswordErrorLabel.setForeground(errorColor());
+        rePasswordErrorLabel.setFont(rePasswordErrorLabel.getFont().deriveFont(12f));
+        rePasswordErrorLabel.setVisible(false);
 
-        view.add(loginButton, "growx, height 45!, pushx, gapbottom 25");
+        view.add(rePasswordLabel, "alignx left");
+        view.add(rePasswordField, "growx, height 45!");
+        view.add(rePasswordErrorLabel, "alignx left, gapbottom 25");
 
-        registerLink = new JLabel("<html><a href='#'>Don't have an account? Register</a></html>");
-        registerLink.setName("register-link");
-        registerLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        view.add(registerLink, "alignx center, gapbottom 10");
+        // Register button
+        registerButton = new JButton("Register");
+        registerButton.setName("register-button");
+        registerButton.setPreferredSize(new Dimension(350, 45));
+        view.add(registerButton, "growx, height 45!, gapbottom 25");
 
-        //Set the view to the controller
-        userController.setLoginPanel(view);
+        // Login link
+        loginLink = new JLabel("<html><a href='#'>Already have an account? Go to Login</a></html>");
+        loginLink.setName("login-link");
+        loginLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        view.add(loginLink, "alignx center");
         addListeners();
     }
 
     private void addListeners() {
-        loginButton.addActionListener(e -> {
-            if (userController.login(emailField.getText(), passwordField.getPassword())) {
-                router.navigateTo(Routes.HOME);
-            }
-        });
-
         emailField.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && emailField.isShowing()) {
                 SwingUtilities.invokeLater(emailField::requestFocusInWindow);
             }
         });
 
-        registerLink.addMouseListener(new MouseAdapter() {
+        loginLink.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                router.navigateTo(Routes.REGISTER);
+                router.navigateTo(Routes.LOGIN);
             }
         });
     }
