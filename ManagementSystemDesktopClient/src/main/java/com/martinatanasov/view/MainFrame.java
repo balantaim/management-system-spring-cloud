@@ -36,7 +36,7 @@ public class MainFrame extends JFrame implements Theme {
 
     @PostConstruct
     public void init() {
-        setTitle("Management System");
+        setTitle(environment.getProperty("app.title", "Management System"));
         setName("main-frame");
         initFlatInspector();
         setAppTheme(environment.getProperty("app.theme-variant", "light"),
@@ -55,7 +55,6 @@ public class MainFrame extends JFrame implements Theme {
         //Add the root container
         add(rootPanel);
         setVisible(true);
-
         addAppCloseListener();
     }
 
@@ -93,7 +92,8 @@ public class MainFrame extends JFrame implements Theme {
 
     private Image getApplicationIcon() {
         FlatSVGIcon appIcon = new FlatSVGIcon("static/images/app-logo.svg", 64, 64);
-        appIcon.setColorFilter(new FlatSVGIcon.ColorFilter(color -> Color.decode("#5B2DA3")));
+        Color accent = UIManager.getColor("Component.focusColor");
+        appIcon.setColorFilter(new FlatSVGIcon.ColorFilter(color -> accent));
         return appIcon.getImage();
     }
 

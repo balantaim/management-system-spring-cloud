@@ -35,7 +35,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webclient</artifactId>
+            <artifactId>spring-boot-starter-restclient</artifactId>
         </dependency>
 
         <!-- Flatlaf - UI Themes for Swing -->
@@ -74,7 +74,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webclient-test</artifactId>
+            <artifactId>spring-boot-starter-restclient-test</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -82,13 +82,6 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-guava</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-swing</artifactId>
-            <version>3.17.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -108,30 +101,28 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-            <!-- Native image plugin -->
-            <plugin>
-                <groupId>org.graalvm.buildtools</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <!-- Enable Mockito as test agent and configure parallel unit testing -->
                 <configuration>
-                    <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
-                    <properties>
-                        <!-- JUnit 5 specific configuration -->
-                        <configurationParameters>
-                            junit.jupiter.execution.parallel.enabled = true
-                            junit.jupiter.execution.parallel.mode.default = concurrent
-                        </configurationParameters>
-                    </properties>
+<!--                    <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>-->
+                    <excludes>
+                        <exclude>**/*IT.java</exclude>
+                        <exclude>**/*E2E.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <jvmArguments>
+                        --add-opens java.desktop/javax.swing=ALL-UNNAMED
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --enable-native-access=ALL-UNNAMED
+                        -Djava.awt.headless=false
+                    </jvmArguments>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -139,15 +130,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-                <executions>
-                    <!-- Ahead Of Time (AOT) for fast startup -->
-                    <execution>
-                        <id>process-aot</id>
-                        <goals>
-                            <goal>process-aot</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

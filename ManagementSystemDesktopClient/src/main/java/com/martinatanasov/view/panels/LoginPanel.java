@@ -1,37 +1,41 @@
 package com.martinatanasov.view.panels;
 
-import com.martinatanasov.services.UserService;
+import com.martinatanasov.user.UserService;
+import com.martinatanasov.user.UserServiceImpl;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
 
+@Lazy
 @Component
 public class LoginPanel implements Theme {
 
     @Getter
     private JPanel view;
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
+    private final JTextField emailField;
+    private final JPasswordField passwordField;
+    private final JButton loginButton;
     private final Router router;
     private final UserService userService;
 
 
     public LoginPanel(@Value("${app.theme-variant}") String themeVariant,
             @Value("${app.theme-name}") String themeName,
+            @Value("${flat.linux-decorations.enabled}") Boolean enableDecorations,
             Router router,
-            UserService userService) {
+            UserServiceImpl userService) {
         this.router = router;
         this.userService = userService;
-
         setAppTheme(themeVariant, themeName);
+        enableDecorations(enableDecorations);
         view = new JPanel();
         view.setName("login-panel");
         view.setLayout(new BoxLayout(view, BoxLayout.Y_AXIS));
@@ -89,7 +93,6 @@ public class LoginPanel implements Theme {
         //loginButton.setForeground(Color.WHITE);
 
         view.add(loginButton);
-
         // Login click
         // loginButton.addActionListener(e -> toast.showToast("You are logged in", this));
         addListeners();
@@ -97,14 +100,19 @@ public class LoginPanel implements Theme {
 
     private void addListeners() {
         loginButton.addActionListener(e -> {
-            if (userService.login(emailField.getText(), passwordField.getPassword())) {
-                router.navigateTo(Routes.HOME);
+            int responseCode = userService.login(emailField.getText(), passwordField.getPassword());
+            switch (responseCode) {
+                case 200 ->  router.navigateTo(Routes.HOME);
+                case 401 -> {} //No role
+                case 403 -> {} //bad credentials
+                case 500, 504 -> {} //server problem
+                default -> {}
             }
         });
 
         emailField.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && emailField.isShowing()) {
-                SwingUtilities.invokeLater(() -> emailField.requestFocusInWindow());
+                SwingUtilities.invokeLater(emailField::requestFocusInWindow);
             }
         });
     }

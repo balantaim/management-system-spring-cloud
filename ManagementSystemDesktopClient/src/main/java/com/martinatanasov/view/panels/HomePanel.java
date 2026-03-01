@@ -1,17 +1,20 @@
 package com.martinatanasov.view.panels;
 
+import com.martinatanasov.user.UserService;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
 import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
 
+@Lazy
 @Component
 public class HomePanel implements Theme {
 
@@ -19,9 +22,11 @@ public class HomePanel implements Theme {
     private JPanel view;
     private JButton logoutButton;
     private final Router router;
+    private final UserService userService;
 
     public HomePanel(@Value("${app.theme-variant}") String themeVariant,
-            @Value("${app.theme-name}") String themeName, Router router) {
+            @Value("${app.theme-name}") String themeName, Router router, UserService userService) {
+        this.userService = userService;
         this.router = router;
         setAppTheme(themeVariant, themeName);
         view = new JPanel(new MigLayout("wrap"));
@@ -41,6 +46,7 @@ public class HomePanel implements Theme {
 
     private void addListeners() {
         logoutButton.addActionListener(e -> {
+            userService.logout();
             router.navigateTo(Routes.LOGIN);
         });
 

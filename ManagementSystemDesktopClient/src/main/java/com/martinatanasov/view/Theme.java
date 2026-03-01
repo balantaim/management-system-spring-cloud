@@ -10,6 +10,9 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDeep
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialLighterIJTheme;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.formdev.flatlaf.util.SystemInfo;
+
+import javax.swing.*;
 
 public interface Theme {
 
@@ -34,6 +37,14 @@ public interface Theme {
                 case "Orange-Ocean" -> FlatMTMaterialDeepOceanIJTheme.setup();
                 default -> FlatDarkLaf.setup();
             }
+        }
+    }
+
+    default void enableDecorations(Boolean isEnabledForLinux) {
+        if (SystemInfo.isLinux && isEnabledForLinux) {
+            // enable custom window decorations
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            JDialog.setDefaultLookAndFeelDecorated(true);
         }
     }
 

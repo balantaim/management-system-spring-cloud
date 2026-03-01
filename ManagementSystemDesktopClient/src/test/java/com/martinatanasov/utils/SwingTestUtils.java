@@ -65,4 +65,32 @@ public class SwingTestUtils {
         return null;
     }
 
+    public <T extends Component> T findComponentByName(Container container, String name, Class<T> type) {
+        if (!SwingUtilities.isEventDispatchThread()) {
+            final Object[] result = new Object[1];
+            try {
+                SwingUtilities.invokeAndWait(() ->
+                        result[0] = findComponentByName(container, name, type)
+                );
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            return type.cast(result[0]);
+        }
+        for (Component component : container.getComponents()) {
+
+            if (type.isInstance(component) && name.equals(component.getName())) {
+                return type.cast(component);
+            }
+
+            if (component instanceof Container child) {
+                T result = findComponentByName(child, name, type);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
 }

@@ -8,13 +8,22 @@ spring:
   threads:
     virtual:
       enabled: false
+  http:
+    clients:
+      connect-timeout: 5s
+      read-timeout: 30s
 app:
+  title: Management System
+  base-url: "http://localhost:5000"
   # Theme color variant: light, dark
   theme-variant: dark
   # Theme names: Flat, macOS, IntelliJ, Cyan-Purple, Material, Solarized-Carbon, Orange-Ocean
   theme-name: Material
 flat:
   inspector:
+    enabled: true
+  # Enable app icon for Linux (default is false)
+  linux-decorations:
     enabled: true
 screen:
   preferred-resolution:
