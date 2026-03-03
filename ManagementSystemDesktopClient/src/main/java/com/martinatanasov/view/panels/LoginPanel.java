@@ -59,13 +59,14 @@ public class LoginPanel implements Theme {
         emailField = new JTextField();
         emailField.setName("email-field");
         emailField.setPreferredSize(new Dimension(350, 45));
+        FlatSVGIcon emailIcon = new FlatSVGIcon("static/images/mail.svg", 0.55f);
+        emailIcon.setColorFilter(getColorFilter(getLabelColor()));
         emailField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
-        emailField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
-                new FlatSVGIcon("static/images/mail.svg", 0.55f));
+        emailField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, emailIcon);
         // Email error label
         emailErrorLabel = new JLabel("Invalid email address");
         emailErrorLabel.setName("error-email");
-        emailErrorLabel.setForeground(errorColor());
+        emailErrorLabel.setForeground(getErrorColor());
         emailErrorLabel.setFont(emailErrorLabel.getFont().deriveFont(12f));
         emailErrorLabel.setVisible(false);
 
@@ -80,12 +81,14 @@ public class LoginPanel implements Theme {
         passwordField.setName("password-field");
         passwordField.setPreferredSize(new Dimension(350, 45));
         passwordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
-        passwordField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
-                new FlatSVGIcon("static/images/lock.svg", 0.55f));
+        FlatSVGIcon passIcon = new FlatSVGIcon("static/images/lock.svg", 0.55f);
+        passIcon.setColorFilter(getColorFilter(getLabelColor()));
+        passwordField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, passIcon);
+        passwordField.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true;");
         // Password error label
         passwordErrorLabel = new JLabel("Password is too short");
         passwordErrorLabel.setName("error-password");
-        passwordErrorLabel.setForeground(errorColor());
+        passwordErrorLabel.setForeground(getErrorColor());
         passwordErrorLabel.setFont(passwordErrorLabel.getFont().deriveFont(12f));
         passwordErrorLabel.setVisible(false);
 

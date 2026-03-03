@@ -58,14 +58,15 @@ public class RegisterPanel implements Theme {
         emailField = new JTextField();
         emailField.setName("email-field");
         emailField.setPreferredSize(new Dimension(350, 45));
+        FlatSVGIcon emailIcon = new FlatSVGIcon("static/images/mail.svg", 0.55f);
+        emailIcon.setColorFilter(getColorFilter(getLabelColor()));
         emailField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
-        emailField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
-                new FlatSVGIcon("static/images/mail.svg", 0.55f));
+        emailField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, emailIcon);
         emailField.setToolTipText("Enter valid email");
         // Email error label
         emailErrorLabel = new JLabel("Invalid email address");
         emailErrorLabel.setName("error-email");
-        emailErrorLabel.setForeground(errorColor());
+        emailErrorLabel.setForeground(getErrorColor());
         emailErrorLabel.setFont(emailErrorLabel.getFont().deriveFont(12f));
         emailErrorLabel.setVisible(false);
 
@@ -79,7 +80,7 @@ public class RegisterPanel implements Theme {
         // Password error label
         passwordErrorLabel = new JLabel("Password is too short");
         passwordErrorLabel.setName("error-password");
-        passwordErrorLabel.setForeground(errorColor());
+        passwordErrorLabel.setForeground(getErrorColor());
         passwordErrorLabel.setFont(passwordErrorLabel.getFont().deriveFont(12f));
         passwordErrorLabel.setVisible(false);
 
@@ -93,7 +94,7 @@ public class RegisterPanel implements Theme {
         // Re-password error label
         rePasswordErrorLabel = new JLabel("Passwords do not match");
         rePasswordErrorLabel.setName("error-re-pass");
-        rePasswordErrorLabel.setForeground(errorColor());
+        rePasswordErrorLabel.setForeground(getErrorColor());
         rePasswordErrorLabel.setFont(rePasswordErrorLabel.getFont().deriveFont(12f));
         rePasswordErrorLabel.setVisible(false);
 
@@ -120,9 +121,11 @@ public class RegisterPanel implements Theme {
         JPasswordField customField = new JPasswordField();
         customField.setName(id);
         customField.setPreferredSize(new Dimension(350, 45));
+        FlatSVGIcon passIcon = new FlatSVGIcon("static/images/lock.svg", 0.55f);
+        passIcon.setColorFilter(getColorFilter(getLabelColor()));
         customField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, placeholder);
-        customField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
-                new FlatSVGIcon("static/images/lock.svg", 0.55f));
+        customField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, passIcon);
+        customField.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true;");
         customField.setToolTipText(tooltip);
         return customField;
     }

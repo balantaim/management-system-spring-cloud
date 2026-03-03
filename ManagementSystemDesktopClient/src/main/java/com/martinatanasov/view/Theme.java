@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.intellijthemes.*;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDarkerIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDeepOceanIJTheme;
@@ -49,8 +50,25 @@ public interface Theme {
         }
     }
 
-    default Color errorColor() {
+    default Color getErrorColor() {
         return UIManager.getColor("Component.error.focusedBorderColor");
     }
+
+    default Color getLabelColor() {
+        return UIManager.getColor("Label.foreground");
+    }
+
+    default Color getTextFieldColor() {
+        return UIManager.getColor("TextField.foreground");
+    }
+
+    default Color getAccentColor() {
+        return UIManager.getColor("Component.accentColor");
+    }
+
+    default FlatSVGIcon.ColorFilter getColorFilter(Color newColor) {
+        return new FlatSVGIcon.ColorFilter(color -> newColor);
+    }
+
 
 }
