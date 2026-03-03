@@ -1,5 +1,6 @@
 package com.martinatanasov;
 
+import com.martinatanasov.uicomponents.DefaultThemeAndFont;
 import com.martinatanasov.view.MainFrame;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,6 +12,8 @@ import javax.swing.*;
 public class ManagementSystemDesktopClientApplication {
 
     public static void main(String[] args) {
+        // Init the default theme and font
+        new DefaultThemeAndFont();
 
         // Enable GPU acceleration BEFORE Swing initializes
 //        System.setProperty("sun.java2d.opengl", "true");

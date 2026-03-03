@@ -1,5 +1,7 @@
 package com.martinatanasov.view.panels;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.martinatanasov.user.UserController;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
@@ -30,6 +32,7 @@ public class RegisterPanel implements Theme {
     private final JLabel rePasswordErrorLabel;
     private final JButton registerButton;
     private final JLabel loginLink;
+    private boolean isLoading = false;
 
     public RegisterPanel(@Value("${app.theme-variant}") String themeVariant,
             @Value("${app.theme-name}") String themeName,
@@ -55,7 +58,10 @@ public class RegisterPanel implements Theme {
         emailField = new JTextField();
         emailField.setName("email-field");
         emailField.setPreferredSize(new Dimension(350, 45));
-        emailField.putClientProperty("JTextField.placeholderText", "Enter your email");
+        emailField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
+        emailField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSVGIcon("static/images/mail.svg", 0.55f));
+        emailField.setToolTipText("Enter valid email");
         // Email error label
         emailErrorLabel = new JLabel("Invalid email address");
         emailErrorLabel.setName("error-email");
@@ -69,10 +75,7 @@ public class RegisterPanel implements Theme {
 
         // Password
         JLabel passwordLabel = new JLabel("Password");
-        passwordField = new JPasswordField();
-        passwordField.setName("password-field");
-        passwordField.setPreferredSize(new Dimension(350, 45));
-        passwordField.putClientProperty("JTextField.placeholderText", "Enter your password");
+        passwordField = createPasswordField("password-field", "Enter your password", "Enter strong password");
         // Password error label
         passwordErrorLabel = new JLabel("Password is too short");
         passwordErrorLabel.setName("error-password");
@@ -86,10 +89,7 @@ public class RegisterPanel implements Theme {
 
         // Re-password
         JLabel rePasswordLabel = new JLabel("Re-password");
-        rePasswordField = new JPasswordField();
-        rePasswordField.setName("re-password-field");
-        rePasswordField.setPreferredSize(new Dimension(350, 45));
-        rePasswordField.putClientProperty("JTextField.placeholderText", "Confirm your password");
+        rePasswordField = createPasswordField("re-password-field", "Repeat your password", "Enter the password again");
         // Re-password error label
         rePasswordErrorLabel = new JLabel("Passwords do not match");
         rePasswordErrorLabel.setName("error-re-pass");
@@ -114,6 +114,17 @@ public class RegisterPanel implements Theme {
 
         view.add(loginLink, "alignx center");
         addListeners();
+    }
+
+    private JPasswordField createPasswordField(String id, String placeholder, String tooltip) {
+        JPasswordField customField = new JPasswordField();
+        customField.setName(id);
+        customField.setPreferredSize(new Dimension(350, 45));
+        customField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, placeholder);
+        customField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSVGIcon("static/images/lock.svg", 0.55f));
+        customField.setToolTipText(tooltip);
+        return customField;
     }
 
     private void addListeners() {

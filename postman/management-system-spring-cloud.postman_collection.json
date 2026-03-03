@@ -231,26 +231,6 @@
           "response": []
         },
         {
-          "name": "logout",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{GATEWAY_BASE_URL}}/logout",
-              "host": [
-                "{{GATEWAY_BASE_URL}}"
-              ],
-              "path": [
-                "logout"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "register",
           "event": [
             {

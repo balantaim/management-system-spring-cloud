@@ -1,10 +1,13 @@
 package com.martinatanasov.view.panels;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.martinatanasov.user.UserController;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,6 +18,7 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+@Slf4j
 @Component
 public class LoginPanel implements Theme {
 
@@ -28,6 +32,7 @@ public class LoginPanel implements Theme {
     private final Router router;
     private final UserController userController;
     private final JLabel registerLink;
+    private boolean isLoading = false;
 
     public LoginPanel(@Value("${app.theme-variant}") String themeVariant,
             @Value("${app.theme-name}") String themeName,
@@ -54,7 +59,9 @@ public class LoginPanel implements Theme {
         emailField = new JTextField();
         emailField.setName("email-field");
         emailField.setPreferredSize(new Dimension(350, 45));
-        emailField.putClientProperty("JTextField.placeholderText", "Enter your email");
+        emailField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
+        emailField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSVGIcon("static/images/mail.svg", 0.55f));
         // Email error label
         emailErrorLabel = new JLabel("Invalid email address");
         emailErrorLabel.setName("error-email");
@@ -72,7 +79,9 @@ public class LoginPanel implements Theme {
         passwordField = new JPasswordField();
         passwordField.setName("password-field");
         passwordField.setPreferredSize(new Dimension(350, 45));
-        passwordField.putClientProperty("JTextField.placeholderText", "Enter your password");
+        passwordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
+        passwordField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON,
+                new FlatSVGIcon("static/images/lock.svg", 0.55f));
         // Password error label
         passwordErrorLabel = new JLabel("Password is too short");
         passwordErrorLabel.setName("error-password");
@@ -104,8 +113,8 @@ public class LoginPanel implements Theme {
 
     private void addListeners() {
         loginButton.addActionListener(e -> {
-            if (userController.login(emailField.getText(), passwordField.getPassword())) {
-                router.navigateTo(Routes.HOME);
+            if (!isLoading) {
+                tryLoginInTheBackground();
             }
         });
 
@@ -118,9 +127,59 @@ public class LoginPanel implements Theme {
         registerLink.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                router.navigateTo(Routes.REGISTER);
+                if (!isLoading) {
+                    router.navigateTo(Routes.REGISTER);
+                }
             }
         });
+    }
+
+    private void tryLoginInTheBackground() {
+        //                 //isLoading = true;
+//                setOrResetBusyness();
+//                boolean successLogin = userController.login(emailField.getText(), passwordField.getPassword());
+//                if (successLogin) {
+//                    setOrResetBusyness();
+//                    router.navigateTo(Routes.HOME);
+//                }
+//                setOrResetBusyness();
+
+        new SwingWorker<Boolean, Void>() {
+
+            @Override
+            protected Boolean doInBackground() {
+                setOrResetBusyness();
+                // Runs in background thread
+                return userController.login(emailField.getText(), passwordField.getPassword());
+            }
+
+            @Override
+            protected void done() {
+                // Back on EDT (safe to update UI)
+                try {
+                    boolean successLogin = get();
+                    if (successLogin) {
+                        router.navigateTo(Routes.HOME);
+                    }
+                } catch (Exception ex) {
+                    log.error(ex.getMessage());
+                } finally {
+                    setOrResetBusyness();
+                }
+            }
+        }.execute();
+    }
+
+    private void setOrResetBusyness() {
+        if (isLoading) {
+            isLoading = false;
+            loginButton.setText("Login");
+            loginButton.setEnabled(true);
+        } else {
+            isLoading = true;
+            loginButton.setText("Loading");
+            loginButton.setEnabled(false);
+        }
     }
 
 }

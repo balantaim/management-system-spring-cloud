@@ -30,6 +30,7 @@
         <java.version>21</java.version>
         <flatlaf.version>3.7</flatlaf.version>
         <miglayout.version>11.4.2</miglayout.version>
+        <font.roboto.version>2.137</font.roboto.version>
     </properties>
 
     <dependencies>
@@ -56,6 +57,12 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-intellij-themes</artifactId>
             <version>${flatlaf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-fonts-roboto</artifactId>
+            <version>${font.roboto.version}</version>
         </dependency>
 
         <!-- MigLayout - Java Layout Manager -->
