@@ -49,6 +49,7 @@ public class MainFrame extends JFrame implements Theme {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         //Init the Router
         router.init(rootPanel);
+        router.setMainFrame(this);
         //Register all views inside the Router
         registerViewsInRouter();
         //Load the Login screen
@@ -93,7 +94,7 @@ public class MainFrame extends JFrame implements Theme {
     }
 
     private Image getApplicationIcon() {
-        FlatSVGIcon appIcon = new FlatSVGIcon("static/images/app-logo.svg", 64, 64);
+        FlatSVGIcon appIcon = new FlatSVGIcon("static/images/app-logo-36.svg", 64, 64);
         Color focusColor = UIManager.getColor("Component.focusColor");
         appIcon.setColorFilter(new FlatSVGIcon.ColorFilter(color -> focusColor));
         return appIcon.getImage();

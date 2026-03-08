@@ -3,6 +3,7 @@ package com.martinatanasov.view.panels;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.martinatanasov.user.UserController;
+import com.martinatanasov.utils.AsyncExecutor;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
@@ -14,9 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 @Slf4j
 @Component
@@ -59,7 +58,7 @@ public class LoginPanel implements Theme {
         emailField = new JTextField();
         emailField.setName("email-field");
         emailField.setPreferredSize(new Dimension(350, 45));
-        FlatSVGIcon emailIcon = new FlatSVGIcon("static/images/mail.svg", 0.55f);
+        FlatSVGIcon emailIcon = new FlatSVGIcon("static/images/mail-36.svg", 0.55f);
         emailIcon.setColorFilter(getColorFilter(getLabelColor()));
         emailField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your email");
         emailField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, emailIcon);
@@ -81,12 +80,12 @@ public class LoginPanel implements Theme {
         passwordField.setName("password-field");
         passwordField.setPreferredSize(new Dimension(350, 45));
         passwordField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
-        FlatSVGIcon passIcon = new FlatSVGIcon("static/images/lock.svg", 0.55f);
+        FlatSVGIcon passIcon = new FlatSVGIcon("static/images/lock-36.svg", 0.55f);
         passIcon.setColorFilter(getColorFilter(getLabelColor()));
         passwordField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, passIcon);
         passwordField.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true;");
         // Password error label
-        passwordErrorLabel = new JLabel("Password is too short");
+        passwordErrorLabel = new JLabel("Password 8 or more uppercase, lowercase, number, and special characters");
         passwordErrorLabel.setName("error-password");
         passwordErrorLabel.setForeground(getErrorColor());
         passwordErrorLabel.setFont(passwordErrorLabel.getFont().deriveFont(12f));
@@ -107,11 +106,47 @@ public class LoginPanel implements Theme {
         registerLink = new JLabel("<html><a href='#'>Don't have an account? Register</a></html>");
         registerLink.setName("register-link");
         registerLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        makeLabelFocusable(registerLink);
         view.add(registerLink, "alignx center, gapbottom 10");
 
-        //Set the view to the controller
-        userController.setLoginPanel(view);
         addListeners();
+    }
+
+    private void makeLabelFocusable(JLabel label) {
+        //Enable focusable element
+        label.setFocusable(true);
+        //Add transparent border
+        label.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        //Add mouse listener
+        label.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                label.requestFocusInWindow();
+            }
+        });
+        //Add focus listener
+        label.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                //Replace empty border with default accent color
+                label.setBorder(BorderFactory.createLineBorder(getAccentColor(), 2));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                //Back to empty border
+                label.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+            }
+        });
+        //Add keyboard support
+        label.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    navigateToRegisterForm();
+                }
+            }
+        });
     }
 
     private void addListeners() {
@@ -131,58 +166,91 @@ public class LoginPanel implements Theme {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (!isLoading) {
-                    router.navigateTo(Routes.REGISTER);
+                    navigateToRegisterForm();
                 }
             }
         });
     }
 
     private void tryLoginInTheBackground() {
-        //                 //isLoading = true;
-//                setOrResetBusyness();
-//                boolean successLogin = userController.login(emailField.getText(), passwordField.getPassword());
-//                if (successLogin) {
-//                    setOrResetBusyness();
-//                    router.navigateTo(Routes.HOME);
-//                }
-//                setOrResetBusyness();
+        boolean isEmailValid = userController.isEmailValid(emailField.getText());
+        boolean isPasswordValid = userController.isPasswordValid(new String(passwordField.getPassword()));
+        SwingUtilities.invokeLater(() -> {
+            emailErrorLabel.setVisible(!isEmailValid);
+            passwordErrorLabel.setVisible(!isPasswordValid);
+        });
 
-        new SwingWorker<Boolean, Void>() {
-
-            @Override
-            protected Boolean doInBackground() {
-                setOrResetBusyness();
-                // Runs in background thread
-                return userController.login(emailField.getText(), passwordField.getPassword());
-            }
-
-            @Override
-            protected void done() {
-                // Back on EDT (safe to update UI)
-                try {
-                    boolean successLogin = get();
-                    if (successLogin) {
-                        router.navigateTo(Routes.HOME);
+        if (isEmailValid && isPasswordValid) {
+            AsyncExecutor.run(
+                    loginButton,
+                    this::setOrResetBusyness,
+                    () -> userController.login(emailField.getText(), passwordField.getPassword()),
+                    success -> {
+                        if (success) router.navigateTo(Routes.HOME);
                     }
-                } catch (Exception ex) {
-                    log.error(ex.getMessage());
-                } finally {
-                    setOrResetBusyness();
-                }
-            }
-        }.execute();
+            );
+        }
+
+
+//        SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
+//            @Override
+//            protected Boolean doInBackground() {
+//                setOrResetBusyness();
+//                // Runs in background thread
+//                return userController.login(emailField.getText(), passwordField.getPassword());
+//            }
+//
+//            @Override
+//            protected void done() {
+//                // Back on EDT (safe to update UI)
+//                try {
+//                    boolean successLogin = get();
+//                    if (successLogin) {
+//                        router.navigateTo(Routes.HOME);
+//                    }
+//                } catch (Exception ex) {
+//                    // Clear focus from any component
+//                    KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
+//                    log.error(ex.getMessage());
+//                } finally {
+//                    SwingUtilities.invokeLater(() -> {
+//                        setOrResetBusyness();
+//                    });
+//                }
+//            }
+//        };
+//
+//        worker.execute();
+//
+//        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+//
+//        scheduler.schedule(() -> {
+//            if (!worker.isDone()) {
+//                worker.cancel(true);
+//
+//                SwingUtilities.invokeLater(() -> {
+//                    log.error("Login request timed out after 30 seconds.");
+//                    loginButton.requestFocusInWindow();
+//                });
+//            }
+//            scheduler.shutdown();
+//        }, 30000, TimeUnit.MILLISECONDS);
+    }
+
+    private void navigateToRegisterForm() {
+        router.navigateTo(Routes.REGISTER);
     }
 
     private void setOrResetBusyness() {
-        if (isLoading) {
-            isLoading = false;
-            loginButton.setText("Login");
-            loginButton.setEnabled(true);
-        } else {
-            isLoading = true;
-            loginButton.setText("Loading");
-            loginButton.setEnabled(false);
-        }
+        SwingUtilities.invokeLater(() -> {
+            if (isLoading) {
+                isLoading = false;
+                loginButton.setText("Login");
+            } else {
+                isLoading = true;
+                loginButton.setText("Loading");
+            }
+        });
     }
 
 }

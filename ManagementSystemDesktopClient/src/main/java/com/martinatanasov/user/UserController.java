@@ -1,24 +1,18 @@
 package com.martinatanasov.user;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-import java.util.Arrays;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Component
 public class UserController {
 
-    @Setter
-    private JPanel loginPanel;
-    @Setter
-    private JPanel registerPanel;
     private final UserService userService;
 
     public boolean login(String email, char[] password) {
-        return switch (userService.login(email, password)) {
+        return switch (userService.login(email, new String(password))) {
             case 200 -> true;
             case 401 -> false; //No role
             case 403 -> false; //bad credentials
@@ -27,39 +21,37 @@ public class UserController {
         };
     }
 
-    public void logout() {
-        userService.logout();
+    public boolean register(String email, String fullName, String password) {
+        return switch (userService.register(email, fullName, password)) {
+            case 201 -> true;
+            case 401 -> false; //No role
+            case 403 -> false; //bad credentials
+            case 500, 504 -> false; //server problem
+            default -> false;
+        };
     }
 
-    private boolean validateFields(JTextField emailField,
-            JPasswordField passwordField,
-            JPasswordField rePasswordField) {
-        boolean valid = true;
+    public boolean isFullNameValid(String fullName) {
+        Pattern FULL_NAME_PATTERN = Pattern.compile("^[A-Za-z]+(?: [A-Za-z]+)*$");
+        return fullName != null && FULL_NAME_PATTERN.matcher(fullName).matches() && fullName.length() >= 2 && fullName.length() <= 150;
+    }
 
-        if (emailField.getText().isBlank() || !emailField.getText().contains("@")) {
-            //emailError.setVisible(true);
-            valid = false;
-        } else {
-            //emailError.setVisible(false);
-        }
+    public boolean isPasswordsEqual(String userPassword, String rePassword) {
+        return userPassword.equals(rePassword);
+    }
 
-        if (new String(passwordField.getPassword()).length() < 8) {
-            //passwordError.setVisible(true);
-            valid = false;
-        } else {
-            //passwordError.setVisible(false);
-        }
+    public boolean isEmailValid(String email) {
+        Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    }
 
-        if (!Arrays.equals(passwordField.getPassword(), rePasswordField.getPassword())) {
-            //rePasswordError.setVisible(true);
-            valid = false;
-        } else {
-            //rePasswordError.setVisible(false);
-        }
+    public boolean isPasswordValid(String userPassword) {
+        Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,50}$");
+        return userPassword != null && PASSWORD_PATTERN.matcher(userPassword).matches();
+    }
 
-//        view.revalidate();
-//        view.repaint();
-        return valid;
+    public void logout() {
+        userService.logout();
     }
 
 }

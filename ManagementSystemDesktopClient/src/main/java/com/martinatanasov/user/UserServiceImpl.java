@@ -18,13 +18,13 @@ public class UserServiceImpl implements UserService {
     private final UserToken userToken;
 
     @Override
-	public int login(String email, char[] password) {
-        log.info("User email: {}, password: {}", email, new String(password));
+	public int login(String email, String password) {
+        log.info("User email: {} password: {}", email, password);
         ResponseEntity<Void> response;
         try {
             response = restClient.post()
                     .uri("/auth/login")
-                    .body(new LoginRequest(email, new String(password)))
+                    .body(new LoginCredentialsDto(email, password))
                     .retrieve()
                     .toBodilessEntity();
 
@@ -63,6 +63,28 @@ public class UserServiceImpl implements UserService {
     public void logout() {
         log.info("Clear the token and logout!");
         userToken.clear();
+    }
+
+    @Override
+    public int register(String email, String fullName, String password) {
+        log.info("User email: {} password: {} full name: {}", email, password, fullName);
+        ResponseEntity<Void> response;
+        try {
+            response = restClient.post()
+                    .uri("/api/users/register")
+                    .body(new RegisterCredentialsDto(email, fullName, password))
+                    .retrieve()
+                    .toBodilessEntity();
+
+            log.info("Register with status code: {}", response.getStatusCode());
+            return response.getStatusCode().value();
+        } catch (HttpStatusCodeException ex) {
+            log.error("Server returned status: {}", ex.getStatusCode());
+            return ex.getStatusCode().value();
+        } catch (RestClientException ex) {
+            log.error("Request failed: {}", ex.getMessage());
+        }
+        return 500;
     }
 
 }

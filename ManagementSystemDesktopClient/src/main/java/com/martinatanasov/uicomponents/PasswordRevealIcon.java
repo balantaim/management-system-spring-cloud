@@ -15,7 +15,7 @@ public class PasswordRevealIcon implements AnimatedIcon {
     private final Color iconColor;
 
     public PasswordRevealIcon() {
-        this(new FlatSVGIcon("static/images/eye.svg", 0.65f).setColorFilter(
+        this(new FlatSVGIcon("static/images/eye-36.svg", 0.65f).setColorFilter(
                 new FlatSVGIcon.ColorFilter(color -> UIManager.getColor("Label.foreground"))
         ), 3, UIManager.getColor("Label.foreground"));
     }

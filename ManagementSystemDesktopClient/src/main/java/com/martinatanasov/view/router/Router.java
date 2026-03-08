@@ -1,5 +1,7 @@
 package com.martinatanasov.view.router;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -10,6 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class Router {
 
+    @Getter
+    @Setter
+    private JFrame mainFrame;
     private JPanel root;
     private final Map<Routes, JPanel> routes = new ConcurrentHashMap<>();
 
