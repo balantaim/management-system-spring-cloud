@@ -13,22 +13,25 @@ public class UserController {
 
     public boolean login(String email, char[] password) {
         return switch (userService.login(email, new String(password))) {
-            case 200 -> true;
+            case 200 -> true; //Login success
             case 401 -> false; //No role
-            case 403 -> false; //bad credentials
-            case 500, 504 -> false; //server problem
+            case 403 -> false; //Bad credentials
+            case 500, 504 -> false; //Server problem
             default -> false;
         };
     }
 
     public boolean register(String email, String fullName, String password) {
         return switch (userService.register(email, fullName, password)) {
-            case 201 -> true;
-            case 401 -> false; //No role
-            case 403 -> false; //bad credentials
-            case 500, 504 -> false; //server problem
+            case 201 -> true; //User created
+            case 409 -> false; //User already exists
+            case 500, 504 -> false; //Server problem
             default -> false;
         };
+    }
+
+    public void logout() {
+        userService.logout();
     }
 
     public boolean isFullNameValid(String fullName) {
@@ -48,10 +51,6 @@ public class UserController {
     public boolean isPasswordValid(String userPassword) {
         Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,50}$");
         return userPassword != null && PASSWORD_PATTERN.matcher(userPassword).matches();
-    }
-
-    public void logout() {
-        userService.logout();
     }
 
 }

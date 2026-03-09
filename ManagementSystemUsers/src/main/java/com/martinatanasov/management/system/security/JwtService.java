@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class JwtService {
+public class JwtService implements SymmetricJwtService {
 
     @Value("${token.secret-key}")
     private String SECRET_KEY;
@@ -30,16 +30,19 @@ public class JwtService {
     private Long TOKEN_EXPIRATION_TIME;
 
     //Generate SecretKey from the secret
-    private SecretKey getSigningKey() {
+    @Override
+    public SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
     }
 
     //Generate random SecretKey
+    @Override
     public SecretKey generateRandomSecretKey() {
         return Jwts.SIG.HS512.key().build();
     }
 
     //Extract Claims
+    @Override
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -48,28 +51,34 @@ public class JwtService {
                 .getPayload();
     }
 
+    @Override
     public String extractSubject(String token) {
         return extractAllClaims(token).getSubject();
     }
 
+    @Override
     public String extractSubjectFromClaims(Claims claims) {
         return claims.getSubject();
     }
 
+    @Override
     public Date extractExpiration(Claims claims) {
         return claims.getExpiration();
     }
 
+    @Override
     public String extractIssuer(Claims claims) {
         return claims.getIssuer();
     }
 
+    @Override
     public <T> T extractClaim(Claims claims, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(claims);
     }
 
     //Get Authorities
     @SuppressWarnings("unchecked")
+    @Override
     public List<GrantedAuthority> extractAuthorities(Claims claims) {
         List<String> authorities = claims.get("authorities", List.class);
 
@@ -86,10 +95,12 @@ public class JwtService {
     }
 
     //Validate token
+    @Override
     public boolean isTokenExpired(Claims claims) {
         return extractExpiration(claims).before(new Date());
     }
 
+    @Override
     public boolean isTokenValid(String token) {
         try {
             Claims claims = extractAllClaims(token);
@@ -101,10 +112,12 @@ public class JwtService {
     }
 
     //Token Generation
+    @Override
     public String generateToken(String subject, List<String> authorities) {
         return generateToken(subject, authorities, Collections.emptyMap());
     }
 
+    @Override
     public String generateToken(String subject, List<String> authorities, Map<String, Object> extraClaims) {
         Instant timeNow = Instant.now();
         return Jwts.builder()

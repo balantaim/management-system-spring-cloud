@@ -197,8 +197,9 @@ public class RegisterPanel implements Theme {
                     this::setOrResetBusyness,
                     () -> userController.register(emailField.getText(), fullNameField.getText(), new String(passwordField.getPassword())),
                     success -> {
-                        if (success)
+                        if (success) {
                             toast.showToast("User " + emailField.getText() + " is registered!", router.getMainFrame());
+                        }
                     }
             );
         }

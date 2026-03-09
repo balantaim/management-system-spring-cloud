@@ -37,6 +37,18 @@ public class GlobalExceptionHandler {
                         LocalDateTime.now()));
     }
 
+    //User Exceptions
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex, HttpServletRequest request) {
+        log.warn("User already exists: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(409,
+                        "Conflict",
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
     @ExceptionHandler(MalformedJwtException.class)
     public ResponseEntity<ErrorResponse> handleMalformedJwt(MalformedJwtException ex, HttpServletRequest request) {
         log.warn("Malformed JWT: {}", ex.getMessage());
@@ -138,6 +150,17 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(404,
                         "Not Found",
                         "Resource not found: " + request.getRequestURI(),
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
+        log.warn("Resource not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(404,
+                        "Not Found",
+                        ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now()));
     }

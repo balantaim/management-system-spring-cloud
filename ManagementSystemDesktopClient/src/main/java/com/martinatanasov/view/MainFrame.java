@@ -48,8 +48,7 @@ public class MainFrame extends JFrame implements Theme {
         setIconImage(getApplicationIcon());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         //Init the Router
-        router.init(rootPanel);
-        router.setMainFrame(this);
+        router.init(this);
         //Register all views inside the Router
         registerViewsInRouter();
         //Load the Login screen
@@ -58,6 +57,10 @@ public class MainFrame extends JFrame implements Theme {
         add(rootPanel);
         setVisible(true);
         addAppCloseListener();
+    }
+
+    public JPanel getRoot() {
+        return rootPanel;
     }
 
     private void addAppCloseListener() {
@@ -88,9 +91,9 @@ public class MainFrame extends JFrame implements Theme {
     }
 
     private void registerViewsInRouter() {
-        router.register(Routes.LOGIN, loginPanel.getView());
-        router.register(Routes.REGISTER, registerPanel.getView());
-        router.register(Routes.HOME, homePanel.getView());
+        router.registerRoutes(Routes.LOGIN, loginPanel.getView());
+        router.registerRoutes(Routes.REGISTER, registerPanel.getView());
+        router.registerRoutes(Routes.HOME, homePanel.getView());
     }
 
     private Image getApplicationIcon() {

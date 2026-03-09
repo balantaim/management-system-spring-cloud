@@ -11,7 +11,7 @@ public class Toast {
     public void showToast(final String message, final Frame frame) {
         JDialog toast = new JDialog(frame);
         toast.setUndecorated(true);
-        toast.setSize(200, 60);
+        toast.setSize(300, 200);
         toast.setLayout(new BorderLayout(45, 45));
 
         JLabel label = new JLabel(message, SwingConstants.CENTER);

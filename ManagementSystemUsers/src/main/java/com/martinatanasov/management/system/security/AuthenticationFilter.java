@@ -70,12 +70,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         Instant timeNow = Instant.now();
 
-//        List<String> authorities = authResult.getAuthorities()
-//                .stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .filter(auth -> !auth.startsWith("FACTOR_"))
-//                .collect(Collectors.toCollection(ArrayList::new));
-
         List<String> permissions = userDetailsDto.roles()
                 .stream()
                 .flatMap(role ->

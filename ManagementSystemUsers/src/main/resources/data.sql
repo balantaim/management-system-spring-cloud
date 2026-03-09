@@ -2,8 +2,8 @@
 
 -- Insert authorities
 INSERT INTO authorities (id, name)
-VALUES (1, 'READ'),
-       (2, 'WRITE'),
+VALUES (1, 'CUSTOMER_READ'),
+       (2, 'CUSTOMER_WRITE'),
        (3, 'ADMIN_READ'),
        (4, 'ADMIN_WRITE');
 
