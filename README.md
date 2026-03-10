@@ -37,8 +37,7 @@ Supported implementations:
 
 Setup Config Server: [Guide](ManagementSystemConfigServer/README.md)
 
-
-### Init HashiCorp Vault
+### Init HashiCorp Vault and RabbitMQ services
 
 
 ```bash
@@ -102,7 +101,7 @@ export VAULT_TOKEN="<YOUR_ROOT_TOKEN>"
 vault secrets enable -path=secret kv-v2
 ```
 
-Create add new secrets:
+Add new secrets for local testing:
 
 ```bash
 vault kv put secret/management-system \
@@ -113,7 +112,7 @@ spring.rabbitmq.username="user" \
 spring.rabbitmq.password="password"
 ```
 
-TEST
+Add new secrets for docker network:
 
 ```bash
 vault kv put secret/management-system-docker \
@@ -131,7 +130,7 @@ vault kv get secret/management-system
 ```
 
 
-**Variant 2: Use the UI via browser and generate:**
+**Variant 2: Use the UI via browser and unseal the vault:**
 
 - Root Token (At least 1)
 - Unseal Keys (At least 1, but recommended 3 or more for production)
@@ -151,6 +150,8 @@ Credentials Example:
   "root_token": "ala.asdfwe423523345235"
 }
 ```
+### Create Vault's engine and store the secrets
+
 Login to the Vault and create a new secret engine:
 
  - engine: kv
@@ -158,7 +159,6 @@ Login to the Vault and create a new secret engine:
  - url: management-system
 
 TODO variables...
-
 
 ### Service endpoints
 
@@ -169,9 +169,23 @@ TODO variables...
 - RabbitMQ: http://localhost:5672/
 - RabbitMQ UI: http://localhost:15672/
 
+### Endpoints Startup Order (Local)
+
+1. Startup Vault and RabbitMQ (via Docker)
+2. Unseal the Vault
+3. Start Config Server
+4. Start Eureka Discovery
+5. Start microservices (Users)
+
 ### Validate Token
 
 https://www.jwt.io/
+
+### Postman's collections
+
+*Postman locale env:* [locale env](postman/management-system-local.postman_environment.json)
+
+*Postman collection:* [collection](postman/management-system-spring-cloud.postman_collection.json)
 
 
 ## Contact me
