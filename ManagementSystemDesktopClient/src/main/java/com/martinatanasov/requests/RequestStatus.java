@@ -1,0 +1,20 @@
+package com.martinatanasov.requests;
+
+public enum RequestStatus {
+
+    SUCCESS, //200
+    RESOURCE_CREATED, //201
+    NO_CONTENT, //204
+    REDIRECTED, //302
+    BAD_REQUEST, //400
+    UNAUTHORIZED_ACCESS, //401
+    INVALID_CREDENTIALS, //403
+    RESOURCE_NOT_FOUND, //404
+    TIMEOUT, //408
+    USER_ALREADY_EXIST, //409
+    ACCOUNT_LOCKED, //423
+    SERVER_ERROR, //500
+    NETWORK_ERROR, //Unavailable
+    UNKNOWN_ERROR
+
+}

@@ -4,7 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.martinatanasov.uicomponents.Toast;
 import com.martinatanasov.user.UserController;
-import com.martinatanasov.utils.AsyncExecutor;
+import com.martinatanasov.requests.AsyncExecutor;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
@@ -92,7 +92,7 @@ public class RegisterPanel implements Theme {
         passwordField = createPasswordField("password-field", "Enter your password",
                 "Password must contain at least 8 characters with uppercase, lowercase, number, and special characters");
         // Password error label
-        passwordErrorLabel = new JLabel("Password 8 or more uppercase, lowercase, number, and special characters");
+        passwordErrorLabel = new JLabel("Min 8 or more uppercase, lowercase, number, and special characters");
         passwordErrorLabel.setName("error-password");
         passwordErrorLabel.setForeground(getErrorColor());
         passwordErrorLabel.setFont(passwordErrorLabel.getFont().deriveFont(12f));
@@ -196,9 +196,15 @@ public class RegisterPanel implements Theme {
                     registerButton,
                     this::setOrResetBusyness,
                     () -> userController.register(emailField.getText(), fullNameField.getText(), new String(passwordField.getPassword())),
-                    success -> {
-                        if (success) {
-                            toast.showToast("User " + emailField.getText() + " is registered!", router.getMainFrame());
+                    status -> {
+                        switch (status) {
+                            case RESOURCE_CREATED -> toast.showToast("User " + emailField.getText() + " is registered!", router.getMainFrame());
+                            case INVALID_CREDENTIALS, BAD_REQUEST -> toast.showToast("Invalid user input", router.getMainFrame());
+                            case ACCOUNT_LOCKED -> toast.showToast("Your account has been locked", router.getMainFrame());
+                            case TIMEOUT -> toast.showToast("Timeout has been reached", router.getMainFrame());
+                            case NETWORK_ERROR -> toast.showToast("Network error. Please check your connection", router.getMainFrame());
+                            case SERVER_ERROR -> toast.showToast("Server is unavailable. Please try again later", router.getMainFrame());
+                            default -> toast.showToast("Unknown error. Please try again later", router.getMainFrame());
                         }
                     }
             );

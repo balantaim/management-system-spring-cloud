@@ -2,8 +2,9 @@ package com.martinatanasov.view.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.martinatanasov.uicomponents.Toast;
 import com.martinatanasov.user.UserController;
-import com.martinatanasov.utils.AsyncExecutor;
+import com.martinatanasov.requests.AsyncExecutor;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
@@ -31,13 +32,15 @@ public class LoginPanel implements Theme {
     private final Router router;
     private final UserController userController;
     private final JLabel registerLink;
+    private final Toast toast;
     private boolean isLoading = false;
 
     public LoginPanel(@Value("${app.theme-variant}") String themeVariant,
             @Value("${app.theme-name}") String themeName,
             @Value("${flat.linux-decorations.enabled}") Boolean enableDecorations,
             Router router,
-            UserController userController) {
+            UserController userController, Toast toast) {
+        this.toast = toast;
         this.router = router;
         this.userController = userController;
         setAppTheme(themeVariant, themeName);
@@ -85,7 +88,7 @@ public class LoginPanel implements Theme {
         passwordField.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, passIcon);
         passwordField.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true;");
         // Password error label
-        passwordErrorLabel = new JLabel("Password 8 or more uppercase, lowercase, number, and special characters");
+        passwordErrorLabel = new JLabel("Min 8 or more uppercase, lowercase, number, and special characters");
         passwordErrorLabel.setName("error-password");
         passwordErrorLabel.setForeground(getErrorColor());
         passwordErrorLabel.setFont(passwordErrorLabel.getFont().deriveFont(12f));
@@ -185,8 +188,16 @@ public class LoginPanel implements Theme {
                     loginButton,
                     this::setOrResetBusyness,
                     () -> userController.login(emailField.getText(), passwordField.getPassword()),
-                    success -> {
-                        if (success) router.navigateTo(Routes.HOME);
+                    status -> {
+                        switch (status) {
+                            case SUCCESS -> router.navigateTo(Routes.HOME);
+                            case INVALID_CREDENTIALS, BAD_REQUEST -> toast.showToast("Invalid email or password", router.getMainFrame());
+                            case ACCOUNT_LOCKED -> toast.showToast("Your account has been locked", router.getMainFrame());
+                            case TIMEOUT -> toast.showToast("Timeout has been reached", router.getMainFrame());
+                            case NETWORK_ERROR -> toast.showToast("Network error. Please check your connection", router.getMainFrame());
+                            case SERVER_ERROR -> toast.showToast("Server is unavailable. Please try again later", router.getMainFrame());
+                            default -> toast.showToast("Unknown error. Please try again later", router.getMainFrame());
+                        }
                     }
             );
         }

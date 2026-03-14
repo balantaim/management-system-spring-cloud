@@ -19,6 +19,7 @@ app:
   theme-variant: dark
   # Theme names: Flat, macOS, IntelliJ, Cyan-Purple, Material, Solarized-Carbon, Orange-Ocean
   theme-name: Material
+# Use Ctrl + Alt + Shift + X to activete/decativate inspect mode
 flat:
   inspector:
     enabled: true

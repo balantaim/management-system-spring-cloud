@@ -1,5 +1,6 @@
 package com.martinatanasov.user;
 
+import com.martinatanasov.requests.RequestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,22 +12,27 @@ public class UserController {
 
     private final UserService userService;
 
-    public boolean login(String email, char[] password) {
+    public RequestStatus login(String email, char[] password) {
         return switch (userService.login(email, new String(password))) {
-            case 200 -> true; //Login success
-            case 401 -> false; //No role
-            case 403 -> false; //Bad credentials
-            case 500, 504 -> false; //Server problem
-            default -> false;
+            case 200 -> RequestStatus.SUCCESS; //Login success
+            case 401 -> RequestStatus.UNAUTHORIZED_ACCESS; //No role
+            case 403 -> RequestStatus.INVALID_CREDENTIALS; //Bad credentials
+            case 408 -> RequestStatus.TIMEOUT; //Timeout
+            case 423 -> RequestStatus.ACCOUNT_LOCKED; //Account locked
+            case 500, 504 -> RequestStatus.SERVER_ERROR; //Server problem
+            default -> RequestStatus.UNKNOWN_ERROR;
         };
     }
 
-    public boolean register(String email, String fullName, String password) {
+    public RequestStatus register(String email, String fullName, String password) {
         return switch (userService.register(email, fullName, password)) {
-            case 201 -> true; //User created
-            case 409 -> false; //User already exists
-            case 500, 504 -> false; //Server problem
-            default -> false;
+            case 201 -> RequestStatus.RESOURCE_CREATED; //User created
+            case 400 -> RequestStatus.BAD_REQUEST; //Bad request
+            case 408 -> RequestStatus.TIMEOUT; //Timeout
+            case 409 -> RequestStatus.USER_ALREADY_EXIST; //User already exists
+            case 423 -> RequestStatus.ACCOUNT_LOCKED; //Account locked
+            case 500, 504 -> RequestStatus.SERVER_ERROR; //Server problem
+            default -> RequestStatus.UNKNOWN_ERROR;
         };
     }
 

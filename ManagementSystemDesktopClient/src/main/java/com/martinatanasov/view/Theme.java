@@ -19,24 +19,24 @@ import java.awt.*;
 public interface Theme {
 
     default void setAppTheme(String themeVariant, String themeName) {
-        if (themeVariant.equals("light")) {
-            switch (themeName) {
-                case "macOS" -> FlatMacLightLaf.setup();
-                case "IntelliJ" -> FlatIntelliJLaf.setup();
-                case "Cyan-Purple" -> FlatCyanLightIJTheme.setup();
-                case "Material" -> FlatMTMaterialLighterIJTheme.setup();
-                case "Solarized-Carbon" -> FlatSolarizedDarkIJTheme.setup();
-                case "Orange-Ocean" -> FlatArcOrangeIJTheme.setup();
+        if (themeVariant.equalsIgnoreCase("light")) {
+            switch (themeName.toLowerCase()) {
+                case "macos" -> FlatMacLightLaf.setup();
+                case "intellij" -> FlatIntelliJLaf.setup();
+                case "cyan-purple" -> FlatCyanLightIJTheme.setup();
+                case "material" -> FlatMTMaterialLighterIJTheme.setup();
+                case "solarized-carbon" -> FlatSolarizedDarkIJTheme.setup();
+                case "orange-ocean" -> FlatArcOrangeIJTheme.setup();
                 default -> FlatLightLaf.setup();
             }
         } else {
-            switch (themeName) {
-                case "macOS" -> FlatMacDarkLaf.setup();
-                case "IntelliJ" -> FlatDarculaLaf.setup();
-                case "Cyan-Purple" -> FlatDarkPurpleIJTheme.setup();
-                case "Material" -> FlatMTMaterialDarkerIJTheme.setup();
-                case "Solarized-Carbon" -> FlatCarbonIJTheme.setup();
-                case "Orange-Ocean" -> FlatMTMaterialDeepOceanIJTheme.setup();
+            switch (themeName.toLowerCase()) {
+                case "macos" -> FlatMacDarkLaf.setup();
+                case "intellij" -> FlatDarculaLaf.setup();
+                case "cyan-purple" -> FlatDarkPurpleIJTheme.setup();
+                case "material" -> FlatMTMaterialDarkerIJTheme.setup();
+                case "solarized-carbon" -> FlatCarbonIJTheme.setup();
+                case "orange-ocean" -> FlatMTMaterialDeepOceanIJTheme.setup();
                 default -> FlatDarkLaf.setup();
             }
         }

@@ -1,4 +1,4 @@
-package com.martinatanasov.utils;
+package com.martinatanasov.requests;
 
 import javax.swing.*;
 import java.util.concurrent.Executors;
