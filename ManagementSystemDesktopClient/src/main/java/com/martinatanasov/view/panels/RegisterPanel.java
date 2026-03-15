@@ -173,7 +173,7 @@ public class RegisterPanel implements Theme {
         loginLink.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                router.navigateTo(Routes.LOGIN);
+                router.navigateBackTo(Routes.LOGIN);
             }
         });
     }

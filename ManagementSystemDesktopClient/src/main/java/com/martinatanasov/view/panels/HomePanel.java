@@ -46,7 +46,7 @@ public class HomePanel implements Theme {
     private void addListeners() {
         logoutButton.addActionListener(e -> {
             userController.logout();
-            router.navigateTo(Routes.LOGIN);
+            router.navigateBackTo(Routes.LOGIN);
         });
 
         logoutButton.addHierarchyListener(e -> {

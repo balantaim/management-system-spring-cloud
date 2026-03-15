@@ -48,7 +48,7 @@ public class MainFrame extends JFrame implements Theme {
         setIconImage(getApplicationIcon());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         //Init the Router
-        router.init(this);
+        router.init(this, loginPanel.getView());
         //Register all views inside the Router
         registerViewsInRouter();
         //Load the Login screen
