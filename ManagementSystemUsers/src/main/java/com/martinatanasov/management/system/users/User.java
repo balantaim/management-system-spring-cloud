@@ -29,10 +29,10 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", length = 150, nullable = false)
     private String fullName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String password;
 
     @Column(name = "user_id", unique = true, nullable = false, updatable = false, length = 36)

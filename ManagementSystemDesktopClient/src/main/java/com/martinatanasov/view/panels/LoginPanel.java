@@ -2,9 +2,9 @@ package com.martinatanasov.view.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.martinatanasov.uicomponents.Toast;
-import com.martinatanasov.user.UserController;
 import com.martinatanasov.requests.AsyncExecutor;
+import com.martinatanasov.uicomponents.toast.Toast;
+import com.martinatanasov.user.UserController;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
@@ -191,12 +191,11 @@ public class LoginPanel implements Theme {
                     status -> {
                         switch (status) {
                             case SUCCESS -> router.navigateTo(Routes.HOME);
-                            case INVALID_CREDENTIALS, BAD_REQUEST -> toast.showToast("Invalid email or password", router.getMainFrame());
-                            case ACCOUNT_LOCKED -> toast.showToast("Your account has been locked", router.getMainFrame());
-                            case TIMEOUT -> toast.showToast("Timeout has been reached", router.getMainFrame());
-                            case NETWORK_ERROR -> toast.showToast("Network error. Please check your connection", router.getMainFrame());
-                            case SERVER_ERROR -> toast.showToast("Server is unavailable. Please try again later", router.getMainFrame());
-                            default -> toast.showToast("Unknown error. Please try again later", router.getMainFrame());
+                            case INVALID_CREDENTIALS, BAD_REQUEST -> toast.showErrorToast("Invalid email or password", router.getMainFrame());
+                            case ACCOUNT_LOCKED -> toast.showErrorToast("Your account has been locked", router.getMainFrame());
+                            case TIMEOUT -> toast.showErrorToast("Timeout has been reached", router.getMainFrame());
+                            case SERVER_ERROR -> toast.showErrorToast("Server is unavailable. Please try again later", router.getMainFrame());
+                            default -> toast.showErrorToast("Unknown error. Please try again later", router.getMainFrame());
                         }
                     }
             );

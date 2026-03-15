@@ -38,7 +38,7 @@ public class AsyncExecutor {
             }
         };
 
-        // show spinner
+        //Enable or disable load status
         spinnerToggle.run();
 
         worker.execute();

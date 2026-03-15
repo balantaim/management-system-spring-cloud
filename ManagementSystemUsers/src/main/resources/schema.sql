@@ -3,8 +3,8 @@ CREATE TABLE users
 (
     id                      BIGSERIAL PRIMARY KEY,
     email                   VARCHAR(255) NOT NULL UNIQUE,
-    full_name               VARCHAR(255) NOT NULL,
-    password                VARCHAR(255) NOT NULL,
+    full_name               VARCHAR(150) NOT NULL,
+    password                VARCHAR(50) NOT NULL,
     user_id                 VARCHAR(36)  NOT NULL UNIQUE,
     account_non_expired     BOOLEAN      NOT NULL DEFAULT FALSE,
     account_non_locked      BOOLEAN      NOT NULL DEFAULT FALSE,

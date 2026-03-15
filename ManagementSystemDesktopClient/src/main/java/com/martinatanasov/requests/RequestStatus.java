@@ -14,7 +14,6 @@ public enum RequestStatus {
     USER_ALREADY_EXIST, //409
     ACCOUNT_LOCKED, //423
     SERVER_ERROR, //500
-    NETWORK_ERROR, //Unavailable
     UNKNOWN_ERROR
 
 }
