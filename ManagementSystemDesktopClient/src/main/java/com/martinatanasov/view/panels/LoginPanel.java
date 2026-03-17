@@ -158,10 +158,14 @@ public class LoginPanel implements Theme {
                 tryLoginInTheBackground();
             }
         });
-
+        //Focus email field on view load
         emailField.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && emailField.isShowing()) {
-                SwingUtilities.invokeLater(emailField::requestFocusInWindow);
+                SwingUtilities.invokeLater(() -> {
+                    if (emailField.isFocusable() && !emailField.isFocusOwner()) {
+                        emailField.requestFocusInWindow();
+                    }
+                });
             }
         });
 
@@ -191,60 +195,19 @@ public class LoginPanel implements Theme {
                     status -> {
                         switch (status) {
                             case SUCCESS -> router.navigateTo(Routes.HOME);
-                            case INVALID_CREDENTIALS, BAD_REQUEST -> toast.showErrorToast("Invalid email or password", router.getMainFrame());
-                            case ACCOUNT_LOCKED -> toast.showErrorToast("Your account has been locked", router.getMainFrame());
+                            case INVALID_CREDENTIALS, BAD_REQUEST ->
+                                    toast.showErrorToast("Invalid email or password", router.getMainFrame());
+                            case ACCOUNT_LOCKED ->
+                                    toast.showErrorToast("Your account has been locked", router.getMainFrame());
                             case TIMEOUT -> toast.showErrorToast("Timeout has been reached", router.getMainFrame());
-                            case SERVER_ERROR -> toast.showErrorToast("Server is unavailable. Please try again later", router.getMainFrame());
-                            default -> toast.showErrorToast("Unknown error. Please try again later", router.getMainFrame());
+                            case SERVER_ERROR ->
+                                    toast.showErrorToast("Server is unavailable. Please try again later", router.getMainFrame());
+                            default ->
+                                    toast.showErrorToast("Unknown error. Please try again later", router.getMainFrame());
                         }
                     }
             );
         }
-
-
-//        SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
-//            @Override
-//            protected Boolean doInBackground() {
-//                setOrResetBusyness();
-//                // Runs in background thread
-//                return userController.login(emailField.getText(), passwordField.getPassword());
-//            }
-//
-//            @Override
-//            protected void done() {
-//                // Back on EDT (safe to update UI)
-//                try {
-//                    boolean successLogin = get();
-//                    if (successLogin) {
-//                        router.navigateTo(Routes.HOME);
-//                    }
-//                } catch (Exception ex) {
-//                    // Clear focus from any component
-//                    KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
-//                    log.error(ex.getMessage());
-//                } finally {
-//                    SwingUtilities.invokeLater(() -> {
-//                        setOrResetBusyness();
-//                    });
-//                }
-//            }
-//        };
-//
-//        worker.execute();
-//
-//        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-//
-//        scheduler.schedule(() -> {
-//            if (!worker.isDone()) {
-//                worker.cancel(true);
-//
-//                SwingUtilities.invokeLater(() -> {
-//                    log.error("Login request timed out after 30 seconds.");
-//                    loginButton.requestFocusInWindow();
-//                });
-//            }
-//            scheduler.shutdown();
-//        }, 30000, TimeUnit.MILLISECONDS);
     }
 
     private void navigateToRegisterForm() {

@@ -28,7 +28,7 @@ public class HomePanel implements Theme {
         this.userController = userController;
         this.router = router;
         setAppTheme(themeVariant, themeName);
-        view = new JPanel(new MigLayout("wrap"));
+        view = new JPanel(new MigLayout("insets 40 60 40 60, wrap, alignx center, aligny center"));
         view.setName("home-panel");
         JLabel header = new JLabel("Management System - Home");
         view.add(header);
@@ -51,7 +51,11 @@ public class HomePanel implements Theme {
 
         logoutButton.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && logoutButton.isShowing()) {
-                SwingUtilities.invokeLater(logoutButton::requestFocusInWindow);
+                SwingUtilities.invokeLater(() -> {
+                    if (logoutButton.isFocusable() && !logoutButton.isFocusOwner()) {
+                        logoutButton.requestFocusInWindow();
+                    }
+                });
             }
         });
     }

@@ -9,6 +9,7 @@ import com.martinatanasov.management.system.roles.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -89,6 +91,27 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return userMapper.userToUserDataDto(user);
+    }
+
+    @Override
+    public void changeUserPassword(UserChangePasswordDto userChangePasswordDto) {
+        User user = userRepository.findByEmail(userChangePasswordDto.email())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        if (!passwordEncoder.matches(userChangePasswordDto.oldPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect");
+        }
+        //Encode and set new password
+        String encodedNewPassword = passwordEncoder.encode(userChangePasswordDto.newPassword());
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void changeUserFullName(String email, String newFullName) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setFullName(newFullName);
+        userRepository.save(user);
     }
 
     @Override

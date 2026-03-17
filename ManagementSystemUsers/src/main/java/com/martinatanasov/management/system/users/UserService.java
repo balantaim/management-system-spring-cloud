@@ -16,4 +16,8 @@ public interface UserService extends UserDetailsService {
 
     UserDetailsDto findByEmailAndFullEnabled(String email);
 
+    void changeUserPassword(UserChangePasswordDto userChangePasswordDto);
+
+    void changeUserFullName(String email, String newFullName);
+
 }

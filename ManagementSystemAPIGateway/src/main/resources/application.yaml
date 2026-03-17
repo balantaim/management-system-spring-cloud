@@ -30,8 +30,16 @@ spring:
             - id: management-system-users-post
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
-                - Path=/api/users/register,/auth/login
+                - Path=/api/users/register,/auth/login,/api/users/update-password/{userId}
                 - Method=POST
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+            - id: management-system-users-put
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/update-fullname/{userId}
+                - Method=PUT
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
                 - RemoveRequestHeader=Cookie

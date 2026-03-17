@@ -19,7 +19,7 @@ public class UserController {
             case 403 -> RequestStatus.INVALID_CREDENTIALS; //Bad credentials
             case 408 -> RequestStatus.TIMEOUT; //Timeout
             case 423 -> RequestStatus.ACCOUNT_LOCKED; //Account locked
-            case 500, 504 -> RequestStatus.SERVER_ERROR; //Server problem
+            case 500, 503, 504 -> RequestStatus.SERVER_ERROR; //Server problem
             default -> RequestStatus.UNKNOWN_ERROR;
         };
     }
@@ -31,7 +31,7 @@ public class UserController {
             case 408 -> RequestStatus.TIMEOUT; //Timeout
             case 409 -> RequestStatus.USER_ALREADY_EXIST; //User already exists
             case 423 -> RequestStatus.ACCOUNT_LOCKED; //Account locked
-            case 500, 504 -> RequestStatus.SERVER_ERROR; //Server problem
+            case 500, 503, 504 -> RequestStatus.SERVER_ERROR; //Server problem
             default -> RequestStatus.UNKNOWN_ERROR;
         };
     }

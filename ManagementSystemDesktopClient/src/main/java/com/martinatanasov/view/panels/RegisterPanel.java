@@ -163,10 +163,14 @@ public class RegisterPanel implements Theme {
                 tryRegisterInTheBackground();
             }
         });
-
+        //Focus email field on view load
         emailField.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && emailField.isShowing()) {
-                SwingUtilities.invokeLater(emailField::requestFocusInWindow);
+                SwingUtilities.invokeLater(() -> {
+                    if (emailField.isFocusable() && !emailField.isFocusOwner()) {
+                        emailField.requestFocusInWindow();
+                    }
+                });
             }
         });
 
@@ -198,13 +202,19 @@ public class RegisterPanel implements Theme {
                     () -> userController.register(emailField.getText(), fullNameField.getText(), new String(passwordField.getPassword())),
                     status -> {
                         switch (status) {
-                            case RESOURCE_CREATED -> toast.showSuccessToast("User " + emailField.getText() + " is registered!", router.getMainFrame());
-                            case INVALID_CREDENTIALS, BAD_REQUEST -> toast.showErrorToast("Invalid user input", router.getMainFrame());
-                            case ACCOUNT_LOCKED -> toast.showErrorToast("Your account has been locked", router.getMainFrame());
-                            case USER_ALREADY_EXIST -> toast.showErrorToast("Account already exists", router.getMainFrame());
+                            case RESOURCE_CREATED ->
+                                    toast.showSuccessToast("User " + emailField.getText() + " is registered!", router.getMainFrame());
+                            case INVALID_CREDENTIALS, BAD_REQUEST ->
+                                    toast.showErrorToast("Invalid user input", router.getMainFrame());
+                            case ACCOUNT_LOCKED ->
+                                    toast.showErrorToast("Your account has been locked", router.getMainFrame());
+                            case USER_ALREADY_EXIST ->
+                                    toast.showErrorToast("Account already exists", router.getMainFrame());
                             case TIMEOUT -> toast.showErrorToast("Timeout has been reached", router.getMainFrame());
-                            case SERVER_ERROR -> toast.showErrorToast("Server is unavailable. Please try again later", router.getMainFrame());
-                            default -> toast.showErrorToast("Unknown error. Please try again later", router.getMainFrame());
+                            case SERVER_ERROR ->
+                                    toast.showErrorToast("Server is unavailable. Please try again later", router.getMainFrame());
+                            default ->
+                                    toast.showErrorToast("Unknown error. Please try again later", router.getMainFrame());
                         }
                     }
             );
@@ -249,7 +259,7 @@ public class RegisterPanel implements Theme {
     }
 
     private void navigateToLoginForm() {
-        router.navigateTo(Routes.LOGIN);
+        router.navigateBackTo(Routes.LOGIN);
     }
 
     private void setOrResetBusyness() {
