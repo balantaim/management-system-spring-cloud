@@ -1,64 +1,15 @@
 server:
   port: ${PORT:0}
 spring:
+  profiles:
+    active: local
   application:
     name: management-system-users
-  config:
-    import: configserver:http://localhost:8888
   main:
     banner-mode: off
-  cloud:
-#    refresh:
-      # Disable refresh for AOT compilation
-#      enabled: false
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      # Do NOT use in production (Allow h2 connection from API Gateway)
-      settings:
-        web-allow-others: true
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        format_sql: false
-        use_sql_comments: true
-    database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
-  sql:
-    init:
-      mode: always
-      platform: postgresql
-      schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
-  datasource:
-    name: users
-    url: jdbc:h2:mem:users;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: sa
   threads:
     virtual:
       enabled: false
-
-eureka:
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,mappings
-  endpoint:
-    health:
-      show-details: always
-
 login:
   url: /auth/login
 token:
@@ -70,21 +21,9 @@ authorization:
     header:
       name: Authorization
       prefix: "Bearer "
-
 encrypt:
   key-store:
     location: classpath:management-system.p12
     password: ${KEYSTORE-PASSWORD}
     alias: management-system-key
     secret: ${KEYSTORE-SECRET-PASSWORD}
-
-logging:
-  level:
-    org:
-      hibernate:
-        sql: DEBUG
-      springframework:
-        security: TRACE
-        jdbc: TRACE
-        h2: TRACE
-

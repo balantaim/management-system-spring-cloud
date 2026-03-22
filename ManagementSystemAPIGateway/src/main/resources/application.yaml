@@ -1,70 +1,12 @@
 server:
   port: 5000
-
 spring:
+  profiles:
+    active: local
   application:
     name: management-system-api-gateway
-  config:
-    import: configserver:http://localhost:8888
   main:
     banner-mode: off
-  cloud:
-    gateway:
-      server:
-        webflux:
-          discovery:
-            locator:
-              # Enable auto created locator (Keep false if you have custom routes)
-              enabled: false
-              # Disable upper case name for services
-              lower-case-service-id: true
-          routes:
-            - id: management-system-users-get
-              uri: ${USERS_SERVICE_URL:lb://management-system-users}
-              predicates:
-                - Path=/api/users/info,/api/users,/api/users/email/**,/api/users/{userId}
-                - Method=GET
-              filters:
-                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
-                - RemoveRequestHeader=Cookie
-            - id: management-system-users-post
-              uri: ${USERS_SERVICE_URL:lb://management-system-users}
-              predicates:
-                - Path=/api/users/register,/auth/login,/api/users/update-password/{userId}
-                - Method=POST
-              filters:
-                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
-                - RemoveRequestHeader=Cookie
-            - id: management-system-users-put
-              uri: ${USERS_SERVICE_URL:lb://management-system-users}
-              predicates:
-                - Path=/api/users/update-fullname/{userId}
-                - Method=PUT
-              filters:
-                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
-                - RemoveRequestHeader=Cookie
-            - id: management-system-users-h2
-              uri: ${USERS_SERVICE_URL:lb://management-system-users}
-              predicates:
-                - Path=/h2-console/**
-                - Method=POST,GET,PUT,PATCH,DELETE
-              filters:
-                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
-management:
-  endpoint:
-    gateway:
-      access: read_only
-  endpoints:
-    web:
-      exposure:
-        include: health,info,gateway
-
 authorization:
   token:
     header:
@@ -73,13 +15,3 @@ authorization:
 token:
   expiration-time: 3600000
   secret-key: ${TOKEN_SECRET_KEY}
-
-logging:
-  level:
-    org:
-      springframework:
-        security: TRACE
-        cloud:
-          gateway: DEBUG
-      web:
-        reactive: DEBUG

@@ -200,6 +200,8 @@ public class LoginPanel implements Theme {
                             case ACCOUNT_LOCKED ->
                                     toast.showErrorToast("Your account has been locked", router.getMainFrame());
                             case TIMEOUT -> toast.showErrorToast("Timeout has been reached", router.getMainFrame());
+                            case TOO_MANY_REQUESTS ->
+                                    toast.showErrorToast("Server is busy. Please try again later", router.getMainFrame());
                             case SERVER_ERROR ->
                                     toast.showErrorToast("Server is unavailable. Please try again later", router.getMainFrame());
                             default ->

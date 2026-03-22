@@ -15,7 +15,8 @@ services:
     restart: unless-stopped
 
   rabbitmq:
-    image: rabbitmq:3-management
+#    Use "rabbitmq:x.x.x-management-alpine" for management UI support
+    image: rabbitmq:4.2.5-alpine
     container_name: management-system-rabbitmq
     ports:
       - "5672:5672"
@@ -31,3 +32,14 @@ services:
 #      interval: 10s
 #      timeout: 5s
 #      retries: 5
+  redis:
+    image: redis:8.6.1-alpine
+    container_name: management-system-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+volumes:
+  redis-data:

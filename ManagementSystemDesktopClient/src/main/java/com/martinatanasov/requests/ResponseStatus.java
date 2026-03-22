@@ -1,6 +1,6 @@
 package com.martinatanasov.requests;
 
-public enum RequestStatus {
+public enum ResponseStatus {
 
     SUCCESS, //200
     RESOURCE_CREATED, //201
@@ -11,8 +11,9 @@ public enum RequestStatus {
     INVALID_CREDENTIALS, //403
     RESOURCE_NOT_FOUND, //404
     TIMEOUT, //408
-    USER_ALREADY_EXIST, //409
+    RESOURCE_ALREADY_EXIST, //409
     ACCOUNT_LOCKED, //423
+    TOO_MANY_REQUESTS, //429
     SERVER_ERROR, //500
     UNKNOWN_ERROR
 

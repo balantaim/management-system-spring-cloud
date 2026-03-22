@@ -63,7 +63,7 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
                         log.warn("Malformed JWT token: {}", ex.getMessage());
                         return writeErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "JWT token is malformed");
                     })
-                    .onErrorResume(SignatureException.class, ex -> {
+                    .onErrorResume(io.jsonwebtoken.security.SignatureException.class, ex -> {
                         log.warn("Invalid JWT signature: {}", ex.getMessage());
                         return writeErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "Invalid JWT signature");
                     })

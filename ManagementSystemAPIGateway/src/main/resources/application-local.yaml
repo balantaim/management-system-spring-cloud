@@ -1,0 +1,106 @@
+spring:
+  config:
+    import: configserver:http://localhost:8888
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              # Enable auto created locator (Keep false if you have custom routes)
+              enabled: false
+              # Disable upper case name for services
+              lower-case-service-id: true
+          routes:
+            # Get - Users Service
+            - id: management-system-users-get
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/info,/api/users,/api/users/email/**,/api/users/{userId}
+                - Method=GET
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 1
+            # Post Login/Register - Users Service
+            - id: management-system-users-post-auth
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/register,/auth/login
+                - Method=POST
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    # Customized resolver for anonymous user
+                    key-resolver: "#{@ipKeyResolver}"
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 1
+            # Post - Users Service
+            - id: management-system-users-post
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/update-password/{userId}
+                - Method=POST
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 3
+                    redis-rate-limiter.burstCapacity: 6
+                    redis-rate-limiter.requestedTokens: 1
+            # Put - Users Service
+            - id: management-system-users-put
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/update-fullname/{userId}
+                - Method=PUT
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 3
+                    redis-rate-limiter.burstCapacity: 6
+                    redis-rate-limiter.requestedTokens: 1
+            # H2 console - Users Service
+            - id: management-system-users-h2
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/h2-console/**
+                - Method=POST,GET,PUT,PATCH,DELETE
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+management:
+  endpoint:
+    gateway:
+      access: read_only
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+        cloud:
+          gateway: DEBUG
+      web:
+        reactive: DEBUG

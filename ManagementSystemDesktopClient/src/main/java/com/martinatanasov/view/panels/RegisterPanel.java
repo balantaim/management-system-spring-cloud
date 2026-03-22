@@ -208,9 +208,11 @@ public class RegisterPanel implements Theme {
                                     toast.showErrorToast("Invalid user input", router.getMainFrame());
                             case ACCOUNT_LOCKED ->
                                     toast.showErrorToast("Your account has been locked", router.getMainFrame());
-                            case USER_ALREADY_EXIST ->
+                            case RESOURCE_ALREADY_EXIST ->
                                     toast.showErrorToast("Account already exists", router.getMainFrame());
                             case TIMEOUT -> toast.showErrorToast("Timeout has been reached", router.getMainFrame());
+                            case TOO_MANY_REQUESTS ->
+                                    toast.showErrorToast("Server is busy. Please try again later", router.getMainFrame());
                             case SERVER_ERROR ->
                                     toast.showErrorToast("Server is unavailable. Please try again later", router.getMainFrame());
                             default ->

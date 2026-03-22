@@ -1,6 +1,6 @@
 package com.martinatanasov.user;
 
-import com.martinatanasov.requests.RequestStatus;
+import com.martinatanasov.requests.ResponseStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,27 +12,29 @@ public class UserController {
 
     private final UserService userService;
 
-    public RequestStatus login(String email, char[] password) {
+    public ResponseStatus login(String email, char[] password) {
         return switch (userService.login(email, new String(password))) {
-            case 200 -> RequestStatus.SUCCESS; //Login success
-            case 401 -> RequestStatus.UNAUTHORIZED_ACCESS; //No role
-            case 403 -> RequestStatus.INVALID_CREDENTIALS; //Bad credentials
-            case 408 -> RequestStatus.TIMEOUT; //Timeout
-            case 423 -> RequestStatus.ACCOUNT_LOCKED; //Account locked
-            case 500, 503, 504 -> RequestStatus.SERVER_ERROR; //Server problem
-            default -> RequestStatus.UNKNOWN_ERROR;
+            case 200 -> ResponseStatus.SUCCESS; //Login success
+            case 401 -> ResponseStatus.UNAUTHORIZED_ACCESS; //No role
+            case 403 -> ResponseStatus.INVALID_CREDENTIALS; //Bad credentials
+            case 408 -> ResponseStatus.TIMEOUT; //Timeout
+            case 423 -> ResponseStatus.ACCOUNT_LOCKED; //Account locked
+            case 429 -> ResponseStatus.TOO_MANY_REQUESTS; //Too many requests
+            case 500, 503, 504 -> ResponseStatus.SERVER_ERROR; //Server problem
+            default -> ResponseStatus.UNKNOWN_ERROR;
         };
     }
 
-    public RequestStatus register(String email, String fullName, String password) {
+    public ResponseStatus register(String email, String fullName, String password) {
         return switch (userService.register(email, fullName, password)) {
-            case 201 -> RequestStatus.RESOURCE_CREATED; //User created
-            case 400 -> RequestStatus.BAD_REQUEST; //Bad request
-            case 408 -> RequestStatus.TIMEOUT; //Timeout
-            case 409 -> RequestStatus.USER_ALREADY_EXIST; //User already exists
-            case 423 -> RequestStatus.ACCOUNT_LOCKED; //Account locked
-            case 500, 503, 504 -> RequestStatus.SERVER_ERROR; //Server problem
-            default -> RequestStatus.UNKNOWN_ERROR;
+            case 201 -> ResponseStatus.RESOURCE_CREATED; //User created
+            case 400 -> ResponseStatus.BAD_REQUEST; //Bad request
+            case 408 -> ResponseStatus.TIMEOUT; //Timeout
+            case 409 -> ResponseStatus.RESOURCE_ALREADY_EXIST; //User already exists
+            case 423 -> ResponseStatus.ACCOUNT_LOCKED; //Account locked
+            case 429 -> ResponseStatus.TOO_MANY_REQUESTS; //Too many requests
+            case 500, 503, 504 -> ResponseStatus.SERVER_ERROR; //Server problem
+            default -> ResponseStatus.UNKNOWN_ERROR;
         };
     }
 

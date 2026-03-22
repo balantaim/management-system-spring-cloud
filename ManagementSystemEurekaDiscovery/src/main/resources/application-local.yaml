@@ -1,0 +1,14 @@
+spring:
+  config:
+    import: configserver:http://localhost:8888
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    # Update eureka clients (default value 30 seconds)
+    registry-fetch-interval-seconds: 10
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

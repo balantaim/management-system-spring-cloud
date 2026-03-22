@@ -292,8 +292,12 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [],
-                "type": "text/javascript"
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -421,11 +425,10 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "localhost:8888/config/default",
+              "raw": "{{CONFIG_SERVER_URL}}/config/default",
               "host": [
-                "localhost"
+                "{{CONFIG_SERVER_URL}}"
               ],
-              "port": "8888",
               "path": [
                 "config",
                 "default"
@@ -464,11 +467,10 @@
               }
             },
             "url": {
-              "raw": "localhost:8888/encrypt",
+              "raw": "{{CONFIG_SERVER_URL}}/encrypt",
               "host": [
-                "localhost"
+                "{{CONFIG_SERVER_URL}}"
               ],
-              "port": "8888",
               "path": [
                 "encrypt"
               ]
@@ -506,13 +508,40 @@
               }
             },
             "url": {
-              "raw": "localhost:8888/decrypt",
+              "raw": "{{CONFIG_SERVER_URL}}/decrypt",
               "host": [
-                "localhost"
+                "{{CONFIG_SERVER_URL}}"
               ],
-              "port": "8888",
               "path": [
                 "decrypt"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "busrefresh",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/actuator/busrefresh",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "actuator",
+                "busrefresh"
               ]
             }
           },
