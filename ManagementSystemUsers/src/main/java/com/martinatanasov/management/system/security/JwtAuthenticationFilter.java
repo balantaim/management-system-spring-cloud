@@ -5,9 +5,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,27 +20,27 @@ import java.util.List;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final Environment environment;
+    private final String headerName;
+    private final String prefix;
     private final JwtService jwtService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader(environment.getProperty("authorization.token.header.name"));
-        String secret = environment.getProperty("token.secret-key");
-        String prefix = environment.getProperty("authorization.token.header.prefix");
-        assert secret != null;
-        assert prefix != null;
+    public JwtAuthenticationFilter(JwtService jwtService, @Value("${authorization.token.header.name}") String headerName, @Value("${authorization.token.header.prefix}") String prefix) {
+        this.jwtService = jwtService;
+        this.headerName = headerName;
+        this.prefix = prefix;
+    }
 
-        if (authHeader == null || !authHeader.startsWith(prefix)) {
-            log.error("JWT header config is missing in environment properties or Authorization prefix is not presented");
+    @Override
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+        String authorizationHeader = request.getHeader(headerName);
+        if (authorizationHeader == null || !authorizationHeader.startsWith(prefix)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authHeader.substring(prefix.length());
+        String token = authorizationHeader.substring(prefix.length());
 
         try {
             Claims claims = jwtService.extractAllClaims(token);
@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (MalformedJwtException ex) {
             log.warn("Malformed JWT token: {}", ex.getMessage());
             SecurityContextHolder.clearContext();
-        } catch (SignatureException ex) {
+        } catch (io.jsonwebtoken.security.SignatureException ex) {
             log.warn("Invalid JWT signature: {}", ex.getMessage());
             SecurityContextHolder.clearContext();
         } catch (UnsupportedJwtException ex) {

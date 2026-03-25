@@ -2,7 +2,6 @@ package com.martinatanasov.management.system.security;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,36 +21,33 @@ import java.util.List;
 @Slf4j
 public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
 
+    private final String headerName;
+    private final String prefix;
     private final JwtService jwtService;
 
-    public JwtAuthorizationWebFilter(JwtReactiveAuthenticationManager jwtReactiveAuthenticationManager,
-            Environment environment,
+    public JwtAuthorizationWebFilter(
+            JwtReactiveAuthenticationManager jwtReactiveAuthenticationManager,
+            String headerName,
+            String prefix,
             JwtService jwtService) {
         super(jwtReactiveAuthenticationManager);
         this.jwtService = jwtService;
-        setServerAuthenticationConverter(converter(environment));
+        this.headerName = headerName;
+        this.prefix = prefix;
+        setServerAuthenticationConverter(converter());
         setAuthenticationFailureHandler(authenticationFailureHandler());
     }
 
-    private ServerAuthenticationConverter converter(Environment environment) {
+    private ServerAuthenticationConverter converter() {
         return exchange -> {
-            String headerName = environment.getProperty("authorization.token.header.name");
-            String prefix = environment.getProperty("authorization.token.header.prefix");
-
-            if (headerName == null || prefix == null) {
-                log.error("JWT header config is missing in environment properties");
-                return Mono.empty();
-            }
-
             String authorizationHeader = exchange.getRequest().getHeaders().getFirst(headerName);
 
             if (authorizationHeader == null || !authorizationHeader.startsWith(prefix)) {
-                log.debug("No JWT token found in request headers for path: {}",
-                        exchange.getRequest().getPath());
+                log.debug("No JWT token found in request headers for path: {}", exchange.getRequest().getPath());
                 return Mono.empty();
             }
 
-            String token = authorizationHeader.replace(prefix, "").trim();
+            String token = authorizationHeader.substring(prefix.length());
 
             return Mono.just(token)
                     .flatMap(t -> extractAndValidateClaims(t, exchange))
@@ -116,7 +112,7 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
         String path = exchange.getRequest().getPath().value();
         String timestamp = LocalDateTime.now().toString();
 
-        // Build JSON string directly — no ObjectMapper needed
+        // Build JSON string directly
         String body = """
                 {
                     "status": %d,
@@ -130,4 +126,5 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer)).then(Mono.empty());
     }
+
 }

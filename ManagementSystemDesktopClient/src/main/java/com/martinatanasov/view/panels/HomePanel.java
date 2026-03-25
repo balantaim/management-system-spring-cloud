@@ -31,14 +31,15 @@ public class HomePanel implements Theme {
         view = new JPanel(new MigLayout("insets 40 60 40 60, wrap, alignx center, aligny center"));
         view.setName("home-panel");
         JLabel header = new JLabel("Management System - Home");
-        view.add(header);
+        header.setFont(new Font("SansSerif", Font.BOLD, 32));
+        view.add(header, "alignx center, gapbottom 35, wrap");
 
         logoutButton = new JButton("Logout");
         logoutButton.setName("logout-button");
         logoutButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         logoutButton.setPreferredSize(new Dimension(350, 45));
 
-        view.add(logoutButton);
+        view.add(logoutButton, "alignx center, w 350!, h 45!, wrap");
 
         addListeners();
     }

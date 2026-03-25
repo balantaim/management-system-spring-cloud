@@ -24,11 +24,12 @@ spring:
                 - Method=GET
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                # Discard Cookie headers since authentication is handled via JWT
                 - RemoveRequestHeader=Cookie
                 - name: RequestRateLimiter
                   args:
-                    redis-rate-limiter.replenishRate: 10
-                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.replenishRate: 20
+                    redis-rate-limiter.burstCapacity: 40
                     redis-rate-limiter.requestedTokens: 1
             # Post Login/Register - Users Service
             - id: management-system-users-post-auth
@@ -45,7 +46,7 @@ spring:
                     key-resolver: "#{@ipKeyResolver}"
                     redis-rate-limiter.replenishRate: 5
                     redis-rate-limiter.burstCapacity: 10
-                    redis-rate-limiter.requestedTokens: 1
+                    redis-rate-limiter.requestedTokens: 2
             # Post - Users Service
             - id: management-system-users-post
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
@@ -57,9 +58,9 @@ spring:
                 - RemoveRequestHeader=Cookie
                 - name: RequestRateLimiter
                   args:
-                    redis-rate-limiter.replenishRate: 3
-                    redis-rate-limiter.burstCapacity: 6
-                    redis-rate-limiter.requestedTokens: 1
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 2
             # Put - Users Service
             - id: management-system-users-put
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
@@ -71,9 +72,9 @@ spring:
                 - RemoveRequestHeader=Cookie
                 - name: RequestRateLimiter
                   args:
-                    redis-rate-limiter.replenishRate: 3
-                    redis-rate-limiter.burstCapacity: 6
-                    redis-rate-limiter.requestedTokens: 1
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 2
             # H2 console - Users Service
             - id: management-system-users-h2
               uri: ${USERS_SERVICE_URL:lb://management-system-users}

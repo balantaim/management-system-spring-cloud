@@ -18,13 +18,14 @@ The architecture is designed to be modular and extensible, making it easy to add
 - Dynamic configuration refresh with Spring Cloud Bus and RabbitMQ
 - Service discovery with Eureka
 - API Gateway for routing and load balancing
+- Redis RateLimiter for the API Gateway
 - Decoupled and scalable microservice design
 
 **Software Architecture:** Microservice architecture with layered design, organized and packaged by feature.
 
 ## Software and Requirements
 
-Tools/libraries: Java, Spring (Cloud, Config Server, WebFlux), Maven, Docker, RabbitMQ, git
+Tools/libraries: Java, Spring (Cloud, Config Server, Security, JPA, WebFlux), Maven, Docker, RabbitMQ, Redis, git
 
 Requirements: Java, Docker, git
 
@@ -37,8 +38,17 @@ Supported implementations:
 
 Setup Config Server: [Guide](ManagementSystemConfigServer/README.md)
 
-### Init HashiCorp Vault and RabbitMQ services
+### Client side usage
 
+Supported implementations:
+
+- [ ] Web frontend (Planned release)
+- [x] Desktop client (Java, Swing, Flatlaf and MigLayout)
+- [x] Postman as UI client
+- [ ] Mobile application
+- [ ] OpenAPI/Swagger
+
+### Init HashiCorp Vault and RabbitMQ services
 
 ```bash
 cd vault/
@@ -171,7 +181,7 @@ TODO variables...
 
 ### Endpoints Startup Order (Local)
 
-1. Startup Vault and RabbitMQ (via Docker)
+1. Startup Vault, Redis, RabbitMQ (via Docker)
 2. Unseal the Vault
 3. Start Config Server
 4. Start Eureka Discovery
@@ -181,7 +191,7 @@ TODO variables...
 
 https://www.jwt.io/
 
-### Postman's collections
+### Postman's resources
 
 *Postman locale env:* [locale env](postman/management-system-local.postman_environment.json)
 

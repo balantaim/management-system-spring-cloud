@@ -1,9 +1,9 @@
 package com.martinatanasov.management.system.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -39,8 +39,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthorizationWebFilter jwtAuthorizationWebFilter(Environment environment, JwtService jwtService) {
-        return new JwtAuthorizationWebFilter(new JwtReactiveAuthenticationManager(jwtService), environment, jwtService);
+    public JwtAuthorizationWebFilter jwtAuthorizationWebFilter(
+            @Value("${authorization.token.header.name}") String headerName,
+            @Value("${authorization.token.header.prefix}") String prefix, JwtService jwtService) {
+        return new JwtAuthorizationWebFilter(new JwtReactiveAuthenticationManager(jwtService), headerName, prefix, jwtService);
     }
 
 }
