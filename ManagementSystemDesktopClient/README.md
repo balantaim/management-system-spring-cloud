@@ -17,15 +17,18 @@ This is a desktop client that can completely replace the web application used fo
 - **Default app.theme-variant:** `dark`
 - **Default app.theme-name:** `material`
 - **Default flat.inspector.enabled:** `true`
+    - Use `Ctrl` + `Alt` + `Shift` + `X` to activete/decativate inspect mode when the app is running
 
 ### Supported themes
 
 **Theme variants:**
 
-- light
-- dark
+- `light`
+- `dark`
 
-**Theme names:** Flat, macOS, IntelliJ, Cyan-Purple, Material, Solarized-Carbon, Orange-Ocean
+**Theme names:** `Flat`, `macOS`, `IntelliJ`, `Cyan-Purple`, `Material`, `Solarized-Carbon`, `Orange-Ocean`
+
+Theme variants and names are not case-sensitive!
 
 ### Useful guides
 
@@ -37,10 +40,10 @@ This is a desktop client that can completely replace the web application used fo
 
 ### Start the application
 
-- Via terminal:
-    ```bash
-    mvn spring-boot:run
-    ```
+
+```bash
+mvn spring-boot:run
+```
 
 
 ## Gallery
