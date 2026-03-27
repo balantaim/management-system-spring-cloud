@@ -7,3 +7,6 @@ spring:
     name: management-system-discovery-server
   main:
     banner-mode: off
+  threads:
+    virtual:
+      enabled: false
