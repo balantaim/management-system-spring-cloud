@@ -42,7 +42,7 @@ public interface Theme {
         }
     }
 
-    default void enableDecorations(Boolean isEnabledForLinux) {
+    default void enableDecorations(boolean isEnabledForLinux) {
         if (SystemInfo.isLinux && isEnabledForLinux) {
             // enable custom window decorations
             JFrame.setDefaultLookAndFeelDecorated(true);

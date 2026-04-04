@@ -2,6 +2,10 @@ package com.martinatanasov.animations.transition;
 
 public class TransitionFactory {
 
+    private TransitionFactory() {
+        /* This utility class should not be instantiated */
+    }
+
     public static PanelTransition getTransition(TransitionType type) {
         return switch (type) {
             case CROSSFADE -> new CrossfadeTransition(700);

@@ -32,7 +32,7 @@ public class SymmetricTokenUtils {
     }
 
     @Bean
-    public String SecretKeyToString() {
+    public String secretKeyToString() {
         //In order to get the raw string you need to paste SecretKey or you can use getTokenAsSecretKey() in order to get the raw string
         return Base64.getEncoder().encodeToString(getTokenAsSecretKey().getEncoded());
     }

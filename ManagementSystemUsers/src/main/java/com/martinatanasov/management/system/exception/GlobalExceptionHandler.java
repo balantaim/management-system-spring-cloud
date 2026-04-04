@@ -25,13 +25,17 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    private static final String UNAUTHORIZED = "Unauthorized";
+    private static final String NOT_FOUND = "Not Found";
+    private static final String BAD_REQUEST = "Bad Request";
+
     //JWT Exceptions
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handleExpiredJwt(ExpiredJwtException ex, HttpServletRequest request) {
         log.warn("JWT expired: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(401,
-                        "Unauthorized",
+                        UNAUTHORIZED,
                         "JWT token has expired",
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -54,7 +58,7 @@ public class GlobalExceptionHandler {
         log.warn("Malformed JWT: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(401,
-                        "Unauthorized",
+                        UNAUTHORIZED,
                         "JWT token is malformed",
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -65,7 +69,7 @@ public class GlobalExceptionHandler {
         log.warn("Unsupported JWT: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(401,
-                        "Unauthorized",
+                        UNAUTHORIZED,
                         "JWT token is unsupported",
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -76,7 +80,7 @@ public class GlobalExceptionHandler {
         log.warn("Invalid JWT signature: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(401,
-                        "Unauthorized",
+                        UNAUTHORIZED,
                         "Invalid JWT signature",
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -87,7 +91,7 @@ public class GlobalExceptionHandler {
         log.warn("JWT error: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(401,
-                        "Unauthorized",
+                        UNAUTHORIZED,
                         "JWT token error",
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -110,7 +114,7 @@ public class GlobalExceptionHandler {
         log.warn("Authentication failed: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorResponse(401,
-                        "Unauthorized",
+                        UNAUTHORIZED,
                         ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -124,7 +128,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(400,
-                        "Bad Request",
+                        BAD_REQUEST,
                         message,
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -137,7 +141,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(400,
-                        "Bad Request",
+                        BAD_REQUEST,
                         message,
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -148,7 +152,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(404,
-                        "Not Found",
+                        NOT_FOUND,
                         "Resource not found: " + request.getRequestURI(),
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -159,7 +163,7 @@ public class GlobalExceptionHandler {
         log.warn("Resource not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(404,
-                        "Not Found",
+                        NOT_FOUND,
                         ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now()));

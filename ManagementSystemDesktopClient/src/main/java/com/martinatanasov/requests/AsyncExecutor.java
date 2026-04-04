@@ -9,6 +9,10 @@ import java.util.function.Supplier;
 
 public class AsyncExecutor {
 
+    private AsyncExecutor() {
+        /* This utility class should not be instantiated */
+    }
+
     private static final int TIMEOUT_SECONDS = 30;
 
     public static <T> void run(

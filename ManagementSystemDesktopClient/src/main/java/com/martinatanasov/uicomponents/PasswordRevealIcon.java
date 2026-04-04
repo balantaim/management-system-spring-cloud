@@ -32,10 +32,10 @@ public class PasswordRevealIcon implements AnimatedIcon {
         int s = UIScale.scale(space);
         icon.paintIcon(component, graphics2D, x, y);
         if (animatedValue > 0) {
-            float startX = x + s;
-            float startY = y + getIconHeight() - s;
-            float endX = x + getIconWidth() - s;
-            float endY = y + s;
+            float startX = (float) x + s;
+            float startY = (float) y + getIconHeight() - s;
+            float endX = (float) x + getIconWidth() - s;
+            float endY = (float) y + s;
 
             graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             graphics2D.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);

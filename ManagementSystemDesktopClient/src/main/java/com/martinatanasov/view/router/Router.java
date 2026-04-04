@@ -20,7 +20,7 @@ public class Router {
     private JFrame mainFrame;
     private JPanel root;
     private JPanel currentPanel;
-    private final TransitionType transitionType = TransitionType.SLIDE_RIGHT;
+    private static final TransitionType transitionType = TransitionType.SLIDE_RIGHT;
     private final Map<Routes, JPanel> routes = new ConcurrentHashMap<>();
 
     public void init(MainFrame mainFrame, JPanel currentPanel) {
@@ -71,9 +71,7 @@ public class Router {
     private void showTransitionAnimation(JPanel panel, TransitionType transition) {
         PanelTransition panelTransition = TransitionFactory.getTransition(transition);
         if (panelTransition != null) {
-            panelTransition.animate(root, currentPanel, panel, () -> {
-                showNewPanel(panel);
-            });
+            panelTransition.animate(root, currentPanel, panel, () -> showNewPanel(panel));
         }
     }
 
