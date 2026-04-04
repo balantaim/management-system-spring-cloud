@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private static final String USER_NOT_FOUND = "User not found";
 
     @Override
     public List<UserDetailsDto> findAll() {
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
         }
         return StreamSupport.stream(users.spliterator(), false)
                 .map(userMapper::userToUserDataDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
@@ -75,28 +76,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailsDto findByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         return userMapper.userToUserDataDto(user);
     }
 
     @Override
     public UserDetailsDto findByUserId(String userId) {
         User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         return userMapper.userToUserDataDto(user);
     }
 
     @Override
     public UserDetailsDto findByEmailAndFullEnabled(String email) {
         User user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         return userMapper.userToUserDataDto(user);
     }
 
     @Override
     public void changeUserPassword(UserChangePasswordDto userChangePasswordDto) {
         User user = userRepository.findByEmail(userChangePasswordDto.email())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         if (!passwordEncoder.matches(userChangePasswordDto.oldPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect");
         }
@@ -109,11 +110,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeUserFullName(String email, String newFullName) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         user.setFullName(newFullName);
         userRepository.save(user);
     }
 
+    @NonNull
     @Override
     public UserDetails loadUserByUsername(@NonNull String username) {
         User user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(username)

@@ -2,6 +2,7 @@ package com.martinatanasov.view;
 
 import com.formdev.flatlaf.extras.FlatInspector;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.martinatanasov.requests.AsyncExecutor;
 import com.martinatanasov.view.panels.HomePanel;
 import com.martinatanasov.view.panels.LoginPanel;
 import com.martinatanasov.view.panels.RegisterPanel;
@@ -18,7 +19,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,6 +67,7 @@ public class MainFrame extends JFrame implements Theme {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                AsyncExecutor.shutdown();
                 context.close();
                 System.exit(0);
             }

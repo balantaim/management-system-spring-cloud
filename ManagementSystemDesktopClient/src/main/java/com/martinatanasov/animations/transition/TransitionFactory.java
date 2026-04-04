@@ -2,9 +2,8 @@ package com.martinatanasov.animations.transition;
 
 public class TransitionFactory {
 
-    private TransitionFactory() {
-        /* This utility class should not be instantiated */
-    }
+    /* This utility class should not be instantiated */
+    private TransitionFactory() {}
 
     public static PanelTransition getTransition(TransitionType type) {
         return switch (type) {

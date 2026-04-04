@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -25,101 +26,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private static final String UNAUTHORIZED = "Unauthorized";
-    private static final String NOT_FOUND = "Not Found";
-    private static final String BAD_REQUEST = "Bad Request";
-
-    //JWT Exceptions
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<ErrorResponse> handleExpiredJwt(ExpiredJwtException ex, HttpServletRequest request) {
-        log.warn("JWT expired: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(401,
-                        UNAUTHORIZED,
-                        "JWT token has expired",
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
-    //User Exceptions
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex, HttpServletRequest request) {
-        log.warn("User already exists: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse(409,
-                        "Conflict",
-                        ex.getMessage(),
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
-    @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<ErrorResponse> handleMalformedJwt(MalformedJwtException ex, HttpServletRequest request) {
-        log.warn("Malformed JWT: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(401,
-                        UNAUTHORIZED,
-                        "JWT token is malformed",
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
-    @ExceptionHandler(UnsupportedJwtException.class)
-    public ResponseEntity<ErrorResponse> handleUnsupportedJwt(UnsupportedJwtException ex, HttpServletRequest request) {
-        log.warn("Unsupported JWT: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(401,
-                        UNAUTHORIZED,
-                        "JWT token is unsupported",
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
-    @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidSignature(SignatureException ex, HttpServletRequest request) {
-        log.warn("Invalid JWT signature: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(401,
-                        UNAUTHORIZED,
-                        "Invalid JWT signature",
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<ErrorResponse> handleJwtException(JwtException ex, HttpServletRequest request) {
-        log.warn("JWT error: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(401,
-                        UNAUTHORIZED,
-                        "JWT token error",
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
-    //Spring Security Exceptions
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
-        log.warn("Access denied: {}", request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new ErrorResponse(403,
-                        "Forbidden",
-                        "You don't have permission to access this resource",
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex, HttpServletRequest request) {
-        log.warn("Authentication failed: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(401,
-                        UNAUTHORIZED,
-                        ex.getMessage(),
-                        request.getRequestURI(),
-                        LocalDateTime.now()));
-    }
-
     //Validation Exceptions
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -128,7 +34,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(400,
-                        BAD_REQUEST,
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
                         message,
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -141,8 +47,99 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(400,
-                        BAD_REQUEST,
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
                         message,
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    //Request body is missing or malformed
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(400,
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        "Request body is missing or malformed",
+                        request.getRequestURI(),
+                        LocalDateTime.now()
+                ));
+    }
+
+    //JWT Exceptions
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwt(ExpiredJwtException ex, HttpServletRequest request) {
+        log.warn("JWT expired: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        "JWT token has expired",
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<ErrorResponse> handleMalformedJwt(MalformedJwtException ex, HttpServletRequest request) {
+        log.warn("Malformed JWT: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        "JWT token is malformed",
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(UnsupportedJwtException.class)
+    public ResponseEntity<ErrorResponse> handleUnsupportedJwt(UnsupportedJwtException ex, HttpServletRequest request) {
+        log.warn("Unsupported JWT: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        "JWT token is unsupported",
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidSignature(SignatureException ex, HttpServletRequest request) {
+        log.warn("Invalid JWT signature: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        "Invalid JWT signature",
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponse> handleJwtException(JwtException ex, HttpServletRequest request) {
+        log.warn("JWT error: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        "JWT token error",
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex, HttpServletRequest request) {
+        log.warn("Authentication failed: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(401,
+                        HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    //Spring Security Exceptions
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
+        log.warn("Access denied: {}", request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(403,
+                        HttpStatus.FORBIDDEN.getReasonPhrase(),
+                        "You don't have permission to access this resource",
                         request.getRequestURI(),
                         LocalDateTime.now()));
     }
@@ -152,7 +149,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(404,
-                        NOT_FOUND,
+                        HttpStatus.NOT_FOUND.getReasonPhrase(),
                         "Resource not found: " + request.getRequestURI(),
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -163,7 +160,7 @@ public class GlobalExceptionHandler {
         log.warn("Resource not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(404,
-                        NOT_FOUND,
+                        HttpStatus.NOT_FOUND.getReasonPhrase(),
                         ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -173,7 +170,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(new ErrorResponse(405,
-                        "Method Not Allowed",
+                        HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase(),
+                        ex.getMessage(),
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
+
+    //User Exceptions
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex, HttpServletRequest request) {
+        log.warn("User already exists: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(409,
+                        HttpStatus.CONFLICT.getReasonPhrase(),
                         ex.getMessage(),
                         request.getRequestURI(),
                         LocalDateTime.now()));
@@ -185,7 +194,7 @@ public class GlobalExceptionHandler {
         log.error("Unhandled exception at {}: {}", request.getRequestURI(), ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(500,
-                        "Internal Server Error",
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                         "An unexpected error occurred",
                         request.getRequestURI(),
                         LocalDateTime.now()));

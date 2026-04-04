@@ -53,23 +53,23 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
                     .flatMap(t -> extractAndValidateClaims(t, exchange))
                     .onErrorResume(ExpiredJwtException.class, ex -> {
                         log.warn("JWT token expired: {}", ex.getMessage());
-                        return writeErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "JWT token has expired");
+                        return writeErrorResponse(exchange, "JWT token has expired");
                     })
                     .onErrorResume(MalformedJwtException.class, ex -> {
                         log.warn("Malformed JWT token: {}", ex.getMessage());
-                        return writeErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "JWT token is malformed");
+                        return writeErrorResponse(exchange, "JWT token is malformed");
                     })
                     .onErrorResume(io.jsonwebtoken.security.SignatureException.class, ex -> {
                         log.warn("Invalid JWT signature: {}", ex.getMessage());
-                        return writeErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "Invalid JWT signature");
+                        return writeErrorResponse(exchange, "Invalid JWT signature");
                     })
                     .onErrorResume(UnsupportedJwtException.class, ex -> {
                         log.warn("Unsupported JWT token: {}", ex.getMessage());
-                        return writeErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "JWT token is unsupported");
+                        return writeErrorResponse(exchange, "JWT token is unsupported");
                     })
                     .onErrorResume(JwtException.class, ex -> {
                         log.warn("JWT error: {}", ex.getMessage());
-                        return writeErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "Invalid JWT token");
+                        return writeErrorResponse(exchange, "Invalid JWT token");
                     });
         };
     }
@@ -90,23 +90,21 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
             exchange.getAttributes().put("jwt_subject", subject);
 
             // Use your authenticated constructor
-            return (Authentication) new JwtAuthenticationToken(subject, authorities);
+            return new JwtAuthenticationToken(subject, authorities);
         });
     }
 
     private ServerAuthenticationFailureHandler authenticationFailureHandler() {
         return (webFilterExchange, ex) -> {
             log.warn("Authentication failed: {}", ex.getMessage());
-            return writeErrorResponse(webFilterExchange.getExchange(),
-                    HttpStatus.UNAUTHORIZED, ex.getMessage());
+            return writeErrorResponse(webFilterExchange.getExchange(), ex.getMessage());
         };
     }
 
     private <T> Mono<T> writeErrorResponse(ServerWebExchange exchange,
-            HttpStatus status,
             String message) {
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(status);
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
         String path = exchange.getRequest().getPath().value();
@@ -121,7 +119,7 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
                     "path": "%s",
                     "timestamp": "%s"
                 }
-                """.formatted(status.value(), status.getReasonPhrase(), message, path, timestamp);
+                """.formatted(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), message, path, timestamp);
 
         DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer)).then(Mono.empty());

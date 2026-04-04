@@ -10,9 +10,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -40,6 +42,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.environment = environment;
     }
 
+    @NonNull
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
@@ -54,14 +57,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             );
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AuthenticationServiceException("Failed to parse authentication request", e);
         }
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request,
+    protected void successfulAuthentication(@NonNull HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain chain,
+            @NonNull FilterChain chain,
             Authentication authResult) throws IOException {
         //Get username
         String username = ((User) authResult.getPrincipal()).getUsername();
