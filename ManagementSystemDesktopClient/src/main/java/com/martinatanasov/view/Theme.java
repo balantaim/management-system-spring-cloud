@@ -12,6 +12,7 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialLigh
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.SystemInfo;
+import com.martinatanasov.utils.OS;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,10 @@ import java.awt.*;
 public interface Theme {
 
     default void setAppTheme(String themeVariant, String themeName) {
+        if (themeVariant.equalsIgnoreCase("system")) {
+            themeVariant = OS.isSystemDarkMode() ? "dark":"light";
+        }
+
         if (themeVariant.equalsIgnoreCase("light")) {
             switch (themeName.toLowerCase()) {
                 case "macos" -> FlatMacLightLaf.setup();
@@ -40,6 +45,10 @@ public interface Theme {
                 default -> FlatDarkLaf.setup();
             }
         }
+    }
+
+    default boolean isFlatlafDarkTheme() {
+        return UIManager.getBoolean("laf.dark");
     }
 
     default void enableDecorations(boolean isEnabledForLinux) {
