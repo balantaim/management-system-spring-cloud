@@ -8,7 +8,7 @@ import com.martinatanasov.user.UserController;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
-import io.micronaut.context.annotation.Property;
+import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +35,9 @@ public class LoginPanel implements Theme {
     private final Toast toast;
     private boolean isLoading = false;
 
-    public LoginPanel(@Property(name = "app.theme-variant") String themeVariant,
-            @Property(name = "app.theme-name") String themeName,
-            @Property(name = "flat.linux-decorations.enabled") Boolean enableDecorations,
+    public LoginPanel(@Value("${app.theme-variant}") String themeVariant,
+            @Value("${app.theme-name}") String themeName,
+            @Value("${flat.linux-decorations.enabled}") Boolean enableDecorations,
             Router router,
             UserController userController, Toast toast) {
         this.toast = toast;

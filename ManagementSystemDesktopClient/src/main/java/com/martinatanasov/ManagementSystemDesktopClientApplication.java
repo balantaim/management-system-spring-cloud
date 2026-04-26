@@ -48,8 +48,7 @@ public class ManagementSystemDesktopClientApplication {
         // Close context when Swing exits
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log.info("Shutting down application context");
-            context.close();
-        }));
+        }, "shutdown-hook"));
     }
 
 }
