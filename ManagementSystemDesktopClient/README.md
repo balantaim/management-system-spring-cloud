@@ -63,3 +63,11 @@ mvn spring-boot:run
 ![Theme light macOS](images/light_macos.png)
 ![Theme light material](images/light_material.png)
 ![Theme light orange](images/light_orange.png)
+
+### Upgrade Maven wrapper guide (Optional)
+
+**Add latest version instead `x.x.x`**
+
+```bash
+./mvnw -N wrapper:wrapper -Dmaven=x.x.x
+```
