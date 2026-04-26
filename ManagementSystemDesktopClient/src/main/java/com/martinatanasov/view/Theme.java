@@ -20,6 +20,22 @@ import java.awt.*;
 public interface Theme {
 
     default void setAppTheme(String themeVariant, String themeName) {
+        applyThemeNameAndVariant(themeVariant, themeName);
+    }
+
+    default void updateAppTheme(String themeVariant, String themeName) {
+        applyThemeNameAndVariant(themeVariant, themeName);
+
+        // Notify all components to repaint with the new theme
+        for (Window window : Window.getWindows()) {
+            // Update all windows
+            SwingUtilities.updateComponentTreeUI(window);
+            // No pack() — size and position are preserved automatically
+            window.repaint();
+        }
+    }
+
+    private static void applyThemeNameAndVariant(String themeVariant, String themeName) {
         if (themeVariant.equalsIgnoreCase("system")) {
             themeVariant = OS.isSystemDarkMode() ? "dark":"light";
         }

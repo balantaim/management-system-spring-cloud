@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
     <groupId>com.martinatanasov</groupId>
     <artifactId>management-system-desktop-client</artifactId>
     <version>1.0.0</version>
-    <name>management-system-desktop-client</name>
-    <description>Management System - Desktop Client</description>
+    <packaging>${packaging}</packaging>
+
+    <parent>
+        <groupId>io.micronaut.platform</groupId>
+        <artifactId>micronaut-parent</artifactId>
+        <version>4.10.12</version>
+    </parent>
+
+    <properties>
+        <flatlaf.version>3.7</flatlaf.version>
+        <miglayout.version>11.4.2</miglayout.version>
+        <font.roboto.version>2.137</font.roboto.version>
+        <assertj.guava.version>3.27.7</assertj.guava.version>
+
+        <packaging>jar</packaging>
+        <jdk.version>25</jdk.version>
+        <release.version>25</release.version>
+        <micronaut.version>4.10.12</micronaut.version>
+        <micronaut.runtime>none</micronaut.runtime>
+        <micronaut.aot.enabled>true</micronaut.aot.enabled>
+        <micronaut.aot.packageName>com.martinatanasov.aot.generated</micronaut.aot.packageName>
+        <micronaut.runtime>netty</micronaut.runtime>
+        <exec.mainClass>com.martinatanasov.ManagementSystemDesktopClientApplication</exec.mainClass>
+    </properties>
 
     <licenses>
         <license>
             <name>Apache 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
     <developers>
@@ -26,18 +43,14 @@
         </developer>
     </developers>
 
-    <properties>
-        <java.version>25</java.version>
-        <flatlaf.version>3.7</flatlaf.version>
-        <miglayout.version>11.4.2</miglayout.version>
-        <font.roboto.version>2.137</font.roboto.version>
-    </properties>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-restclient</artifactId>
-        </dependency>
 
         <!-- Flatlaf - UI Themes for Swing -->
         <dependency>
@@ -50,7 +63,7 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
             <version>${flatlaf.version}</version>
-<!--            <scope>compile</scope>-->
+            <!-- <scope>compile</scope>-->
         </dependency>
 
         <dependency>
@@ -70,18 +83,61 @@
             <groupId>com.miglayout</groupId>
             <artifactId>miglayout-swing</artifactId>
             <version>${miglayout.version}</version>
-<!--            <scope>compile</scope>-->
+            <!-- <scope>compile</scope>-->
+        </dependency>
+
+        <!-- yml file extension -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.yaml</groupId>-->
+        <!--            <artifactId>snakeyaml</artifactId>-->
+        <!--            <scope>runtime</scope>-->
+        <!--        </dependency>-->
+
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-http-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-http-server-netty</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micronaut.serde</groupId>
+            <artifactId>micronaut-serde-jackson</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-restclient-test</artifactId>
+            <groupId>io.micronaut.test</groupId>
+            <artifactId>micronaut-test-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -89,56 +145,138 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-guava</artifactId>
+            <version>${assertj.guava.version}</version>
             <scope>test</scope>
         </dependency>
 
     </dependencies>
 
     <build>
+
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <groupId>io.micronaut.maven</groupId>
+                <artifactId>micronaut-maven-plugin</artifactId>
                 <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
+                    <configFile>aot-${packaging}.properties</configFile>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <!-- Enable Mockito as test agent and configure parallel unit testing -->
                 <configuration>
-<!--                    <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>-->
+                    <!--  <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>-->
                     <excludes>
                         <exclude>**/*IT.java</exclude>
                         <exclude>**/*E2E.java</exclude>
                     </excludes>
+
+                    <argLine>-Djava.awt.headless=false</argLine>
+                    <!-- Prevent parallel test runs from fighting over the Swing EDT -->
+                    <forkCount>1</forkCount>
+                    <reuseForks>true</reuseForks>
                 </configuration>
             </plugin>
+
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <jvmArguments>
-                        --add-opens java.desktop/javax.swing=ALL-UNNAMED
-                        --add-opens java.base/java.lang=ALL-UNNAMED
-                        --enable-native-access=ALL-UNNAMED
-                        -Djava.awt.headless=false
-                    </jvmArguments>
-                    <excludes>
-                        <exclude>
+                    <!-- Uncomment to enable incremental compilation -->
+                    <!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+
+                    <annotationProcessorPaths combine.self="override">
+                        <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-inject-java</artifactId>
+                            <version>${micronaut.core.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-graal</artifactId>
+                            <version>${micronaut.core.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut</groupId>
+                            <artifactId>micronaut-http-validation</artifactId>
+                            <version>${micronaut.core.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.micronaut.serde</groupId>
+                            <artifactId>micronaut-serde-processor</artifactId>
+                            <version>${micronaut.serialization.version}</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>io.micronaut</groupId>
+                                    <artifactId>micronaut-inject</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-Amicronaut.processing.group=com.martinatanasov</arg>
+                        <arg>-Amicronaut.processing.module=management-system-desktop-client</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
+
+        <!--        <plugins>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+        <!--                <configuration>-->
+        <!--                    <annotationProcessorPaths>-->
+        <!--                        <path>-->
+        <!--                            <groupId>org.projectlombok</groupId>-->
+        <!--                            <artifactId>lombok</artifactId>-->
+        <!--                        </path>-->
+        <!--                    </annotationProcessorPaths>-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-surefire-plugin</artifactId>-->
+        <!--                &lt;!&ndash; Enable Mockito as test agent and configure parallel unit testing &ndash;&gt;-->
+        <!--                <configuration>-->
+        <!--&lt;!&ndash;                    <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>&ndash;&gt;-->
+        <!--                    <excludes>-->
+        <!--                        <exclude>**/*IT.java</exclude>-->
+        <!--                        <exclude>**/*E2E.java</exclude>-->
+        <!--                    </excludes>-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.springframework.boot</groupId>-->
+        <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+        <!--                <configuration>-->
+        <!--                    <jvmArguments>-->
+        <!--                        &#45;&#45;add-opens java.desktop/javax.swing=ALL-UNNAMED-->
+        <!--                        &#45;&#45;add-opens java.base/java.lang=ALL-UNNAMED-->
+        <!--                        &#45;&#45;enable-native-access=ALL-UNNAMED-->
+        <!--                        -Djava.awt.headless=false-->
+        <!--                    </jvmArguments>-->
+        <!--                    <excludes>-->
+        <!--                        <exclude>-->
+        <!--                            <groupId>org.projectlombok</groupId>-->
+        <!--                            <artifactId>lombok</artifactId>-->
+        <!--                        </exclude>-->
+        <!--                    </excludes>-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <!--        </plugins>-->
     </build>
 
 </project>

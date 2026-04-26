@@ -8,12 +8,10 @@ import com.martinatanasov.view.panels.LoginPanel;
 import com.martinatanasov.view.panels.RegisterPanel;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import io.micronaut.context.ApplicationContext;
+import io.micronaut.context.env.Environment;
+import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,11 +19,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 @Slf4j
-@RequiredArgsConstructor
-@Component
+@Singleton
 public class MainFrame extends JFrame implements Theme {
 
-    private final ConfigurableApplicationContext context;
+    private final ApplicationContext context;
     private final Environment environment;
     //Centered layout
     private final GridBagLayout gridBagLayout = new GridBagLayout();
@@ -35,13 +32,28 @@ public class MainFrame extends JFrame implements Theme {
     private final HomePanel homePanel;
     private final Router router;
 
-    @PostConstruct
+    public MainFrame(ApplicationContext context,
+            Environment environment,
+            LoginPanel loginPanel,
+            RegisterPanel registerPanel,
+            HomePanel homePanel,
+            Router router) {
+        this.context = context;
+        this.environment = environment;
+        this.loginPanel = loginPanel;
+        this.registerPanel = registerPanel;
+        this.homePanel = homePanel;
+        this.router = router;
+    }
+
     public void init() {
-        setTitle(environment.getProperty("app.title", "Management System"));
+        setTitle(environment.getProperty("app.title", String.class).orElse("Management System"));
         setName("main-frame");
         initFlatInspector();
-        setAppTheme(environment.getProperty("app.theme-variant", "light"),
-                environment.getProperty("app.theme-name", "Material"));
+        setAppTheme(
+                environment.getProperty("app.theme-variant", String.class).orElse("light"),
+                environment.getProperty("app.theme-name", String.class).orElse("Material")
+        );
         setPreferredSize();
         setDefaultMinSize();
         setLocationRelativeTo(null);
@@ -75,20 +87,27 @@ public class MainFrame extends JFrame implements Theme {
     }
 
     private void initFlatInspector() {
-        if (Boolean.parseBoolean(environment.getProperty("flat.inspector.enabled", "false"))) {
+        boolean enabled = environment.getProperty("flat.inspector.enabled", Boolean.class)
+                .orElse(false);
+        if (enabled) {
             FlatInspector.install("ctrl shift alt X");
         }
     }
 
     private void setDefaultMinSize() {
-        setMinimumSize(new Dimension(
-                Integer.parseInt(environment.getProperty("screen.minimum-resolution.width", "800")),
-                Integer.parseInt(environment.getProperty("screen.minimum-resolution.height", "500"))));
+        int width = environment.getProperty("screen.minimum-resolution.width", Integer.class)
+                .orElse(800);
+        int height = environment.getProperty("screen.minimum-resolution.height", Integer.class)
+                .orElse(500);
+        setMinimumSize(new Dimension(width, height));
     }
 
     private void setPreferredSize() {
-        setSize(Integer.parseInt(environment.getProperty("screen.preferred-resolution.width", "1024")),
-                Integer.parseInt(environment.getProperty("screen.preferred-resolution.height", "800")));
+        int width = environment.getProperty("screen.preferred-resolution.width", Integer.class)
+                .orElse(1024);
+        int height = environment.getProperty("screen.preferred-resolution.height", Integer.class)
+                .orElse(800);
+        setSize(width, height);
     }
 
     private void registerViewsInRouter() {
@@ -103,5 +122,4 @@ public class MainFrame extends JFrame implements Theme {
         appIcon.setColorFilter(new FlatSVGIcon.ColorFilter(color -> focusColor));
         return appIcon.getImage();
     }
-
 }

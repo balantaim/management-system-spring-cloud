@@ -1,9 +1,8 @@
 package com.martinatanasov.uicomponents.toast;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import jakarta.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,9 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Component
+@Singleton
 public class Toast {
 
+    private static final boolean TRANSLUCENCY_SUPPORTED = checkTranslucency();
     public static final int TOAST_WIDTH = 350;
     public static final int TOAST_HEIGHT = 64;
     public static final int TOAST_SPACING = 10;
@@ -31,6 +31,12 @@ public class Toast {
     private Frame trackedFrame = null;
     private ComponentAdapter frameComponentListener = null;
     private ToastPosition trackedPosition = null;
+
+    private static boolean checkTranslucency() {
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice();
+        return gd.isWindowTranslucencySupported(GraphicsDevice.WindowTranslucency.TRANSLUCENT);
+    }
 
     public void showToast(String message, Frame frame, ToastType type, ToastPosition position) {
         SwingUtilities.invokeLater(() -> {
@@ -106,8 +112,14 @@ public class Toast {
 
     private JWindow createToast(String message, Frame frame, ToastType type, ToastPosition position) {
         JWindow toast = new JWindow(frame);
+        // prevents focus steal
+        toast.setFocusableWindowState(false);
+        // belt and suspenders
+        toast.setAutoRequestFocus(false);
         toast.setSize(TOAST_WIDTH, TOAST_HEIGHT);
-        toast.setOpacity(0.95f);
+        if (TRANSLUCENCY_SUPPORTED) {
+            toast.setOpacity(0.95f);
+        }
 
         JPanel panel = getAnimatedJPanel(type);
 
@@ -131,7 +143,7 @@ public class Toast {
         return toast;
     }
 
-    private static @NonNull JPanel getAnimatedJPanel(ToastType type) {
+    private static JPanel getAnimatedJPanel(ToastType type) {
         JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -267,6 +279,15 @@ public class Toast {
     }
 
     private void fadeOutAndClose(JWindow toast, Frame frame, ToastPosition position) {
+        if (!TRANSLUCENCY_SUPPORTED) {
+            // No fade — just close immediately
+            toast.setVisible(false);
+            toast.dispose();
+            activeToasts.remove(toast);
+            animateToastsToPosition(frame, position);
+            return;
+        }
+
         Timer fadeTimer = new Timer(30, null);
         fadeTimer.addActionListener(e -> {
             float opacity = toast.getOpacity();

@@ -1,22 +1,29 @@
 package com.martinatanasov.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.client.RestClient;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Property;
+import io.micronaut.http.client.DefaultHttpClientConfiguration;
+import io.micronaut.http.client.HttpClient;
+import jakarta.inject.Singleton;
 
-@Configuration
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+
+@Factory
 public class RestClientConfig {
 
-    @Bean
-    public RestClient restClient(@Value("${app.base-url}") String baseUrl) {
-        return RestClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .build();
+    @Singleton
+    public HttpClient httpClient(
+            @Property(name = "app.base-url") String baseUrl) throws MalformedURLException {
+
+        DefaultHttpClientConfiguration config = new DefaultHttpClientConfiguration();
+        config.setDefaultCharset(StandardCharsets.UTF_8);
+        config.setReadTimeout(Duration.ofSeconds(30));
+        config.setConnectTimeout(Duration.ofSeconds(10));
+
+        return HttpClient.create(URI.create(baseUrl).toURL(), config);
     }
 
 }

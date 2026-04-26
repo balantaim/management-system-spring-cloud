@@ -1,9 +1,11 @@
 package com.martinatanasov.utils;
 
+import jakarta.inject.Singleton;
+
 import javax.swing.*;
 import java.awt.*;
 
-@org.springframework.stereotype.Component
+@Singleton
 public class SwingTestUtils {
 
     public JLabel findLabelWithText(Container container, String text) {

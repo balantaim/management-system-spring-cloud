@@ -4,16 +4,16 @@ import com.martinatanasov.user.UserController;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
+import io.micronaut.context.annotation.Property;
+import jakarta.inject.Singleton;
 import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyEvent;
 
-@Component
+@Singleton
 public class HomePanel implements Theme {
 
     @Getter
@@ -22,12 +22,12 @@ public class HomePanel implements Theme {
     private final Router router;
     private final UserController userController;
 
-    public HomePanel(@Value("${app.theme-variant}") String themeVariant,
-            @Value("${app.theme-name}") String themeName,
+    public HomePanel(@Property(name = "app.theme-variant") String themeVariant,
+            @Property(name = "app.theme-name") String themeName,
             Router router, UserController userController) {
         this.userController = userController;
         this.router = router;
-        setAppTheme(themeVariant, themeName);
+//        setAppTheme(themeVariant, themeName);
         view = new JPanel(new MigLayout("insets 40 60 40 60, wrap, alignx center, aligny center"));
         view.setName("home-panel");
         JLabel header = new JLabel("Management System - Home");

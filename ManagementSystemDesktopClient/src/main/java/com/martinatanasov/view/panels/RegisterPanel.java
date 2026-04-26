@@ -8,16 +8,16 @@ import com.martinatanasov.user.UserController;
 import com.martinatanasov.view.Theme;
 import com.martinatanasov.view.router.Router;
 import com.martinatanasov.view.router.Routes;
+import io.micronaut.context.annotation.Property;
+import jakarta.inject.Singleton;
 import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-@Component
+@Singleton
 public class RegisterPanel implements Theme {
 
     @Getter
@@ -37,16 +37,16 @@ public class RegisterPanel implements Theme {
     private final Toast toast;
     private boolean isLoading = false;
 
-    public RegisterPanel(@Value("${app.theme-variant}") String themeVariant,
-            @Value("${app.theme-name}") String themeName,
-            @Value("${flat.linux-decorations.enabled}") Boolean enableDecorations,
+    public RegisterPanel(@Property(name = "app.theme-variant") String themeVariant,
+            @Property(name = "app.theme-name") String themeName,
+            @Property(name = "flat.linux-decorations.enabled") Boolean enableDecorations,
             Router router,
             UserController userController, Toast toast) {
         this.toast = toast;
         this.router = router;
         this.userController = userController;
-        setAppTheme(themeVariant, themeName);
-        enableDecorations(enableDecorations);
+        //setAppTheme(themeVariant, themeName);
+        //enableDecorations(enableDecorations);
         view = new JPanel();
         view.setName("register-panel");
         view.setLayout(new MigLayout("insets 40 60 40 60, fillx, wrap, alignx center, aligny center", "[350!]"));

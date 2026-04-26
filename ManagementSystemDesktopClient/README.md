@@ -40,9 +40,16 @@ Theme variants and names are not case-sensitive!
 
 ### Start the application
 
+Micronaut
 
 ```bash
-mvn spring-boot:run
+./mvnw mn:run
+```
+
+Spring
+
+```bash
+./mvnw  spring-boot:run
 ```
 
 
@@ -66,7 +73,8 @@ mvn spring-boot:run
 
 ### Upgrade Maven wrapper guide (Optional)
 
-**Add latest version instead `x.x.x`**
+1. Get the latest version from [Maven central](https://mvnrepository.com/artifact/org.apache.maven/maven-core)
+2. Add latest version instead `x.x.x`
 
 ```bash
 ./mvnw -N wrapper:wrapper -Dmaven=x.x.x

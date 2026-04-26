@@ -1,60 +1,57 @@
 package com.martinatanasov.user;
 
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.client.HttpClient;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
+import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestClientException;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service
+@Singleton
 public class UserServiceImpl implements UserService {
 
-    private final RestClient restClient;
+    private final HttpClient httpClient;
     private final UserToken userToken;
 
     @Override
-	public int login(String email, String password) {
+    public int login(String email, String password) {
         log.info("User email: {} password: {}", email, password);
-        ResponseEntity<Void> response;
         try {
-            response = restClient.post()
-                    .uri("/auth/login")
-                    .body(new LoginCredentialsDto(email, password))
-                    .retrieve()
-                    .toBodilessEntity();
-
-            userToken.setToken(response.getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
-
-            log.info("Login with status code: {}", response.getStatusCode());
+            HttpResponse<Void> response = httpClient.toBlocking()
+                    .exchange(
+                            HttpRequest.POST("/auth/login", new LoginCredentialsDto(email, password)),
+                            Void.class
+                    );
+            userToken.setToken(response.getHeaders().get("Authorization"));
+            log.info("Login with status code: {}", response.getStatus().getCode());
             log.info("Has token: {}", userToken.hasToken());
-            return response.getStatusCode().value();
-        } catch (HttpStatusCodeException ex) {
-            log.error("Server returned status: {}", ex.getStatusCode());
-            return ex.getStatusCode().value();
-        } catch (RestClientException ex) {
+            return response.getStatus().getCode();
+
+        } catch (HttpClientResponseException ex) {
+            log.error("Server returned status: {}", ex.getStatus().getCode());
+            return ex.getStatus().getCode();
+        } catch (Exception ex) {
             log.error("Request failed: {}", ex.getMessage());
         }
         return 500;
-	}
+    }
 
     @Override
     public void getInfo() {
-        ResponseEntity<Void> response;
         try {
-            response = restClient.get()
-                    .uri("/api/users/info")
-                    .retrieve()
-                    .toBodilessEntity();
-
+            HttpResponse<Void> response = httpClient.toBlocking()
+                    .exchange(
+                            HttpRequest.GET("/api/users/info"),
+                            Void.class
+                    );
             log.info("Response: {}", response);
-        }catch (HttpStatusCodeException ex) {
-            log.error("Server returned status: {}", ex.getStatusCode());
-        } catch (RestClientException ex) {
+
+        } catch (HttpClientResponseException ex) {
+            log.error("Server returned status: {}", ex.getStatus().getCode());
+        } catch (Exception ex) {
             log.error("Request failed: {}", ex.getMessage());
         }
     }
@@ -68,20 +65,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public int register(String email, String fullName, String password) {
         log.info("User email: {} password: {} full name: {}", email, password, fullName);
-        ResponseEntity<Void> response;
         try {
-            response = restClient.post()
-                    .uri("/api/users/register")
-                    .body(new RegisterCredentialsDto(email, fullName, password))
-                    .retrieve()
-                    .toBodilessEntity();
+            HttpResponse<Void> response = httpClient.toBlocking()
+                    .exchange(
+                            HttpRequest.POST("/api/users/register",
+                                    new RegisterCredentialsDto(email, fullName, password)),
+                            Void.class
+                    );
+            log.info("Register with status code: {}", response.getStatus().getCode());
+            return response.getStatus().getCode();
 
-            log.info("Register with status code: {}", response.getStatusCode());
-            return response.getStatusCode().value();
-        } catch (HttpStatusCodeException ex) {
-            log.error("Server returned status: {}", ex.getStatusCode());
-            return ex.getStatusCode().value();
-        } catch (RestClientException ex) {
+        } catch (HttpClientResponseException ex) {
+            log.error("Server returned status: {}", ex.getStatus().getCode());
+            return ex.getStatus().getCode();
+        } catch (Exception ex) {
             log.error("Request failed: {}", ex.getMessage());
         }
         return 500;
