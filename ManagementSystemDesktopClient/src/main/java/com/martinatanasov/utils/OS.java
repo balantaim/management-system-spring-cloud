@@ -41,7 +41,7 @@ public class OS {
         });
         String output = new String(process.getInputStream().readAllBytes()).trim();
         if (!output.isEmpty()) {
-            log.info("Linux (Gnome) Dark Mode: {}", output.contains("dark"));
+            log.info("Linux (Gnome/Cosmic) Dark Mode: {}", output.contains("dark"));
             return output.contains("dark");
         }
         // Fallback: check gtk-theme name

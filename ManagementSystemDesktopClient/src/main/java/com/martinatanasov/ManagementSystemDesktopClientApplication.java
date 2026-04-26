@@ -15,8 +15,13 @@ public class ManagementSystemDesktopClientApplication {
         // Init the default theme and font
         new DefaultThemeAndFont();
 
+        System.setProperty("flatlaf.useSystemTheme", "true");
+        System.setProperty("flatlaf.useWindowDecorations", "true");
+        // Enable UI scale
+        System.setProperty("sun.java2d.uiScale.enabled", "true");
+        System.setProperty("sun.java2d.uiScale", "1x");
+        System.setProperty("flatlaf.uiScale", "1x");
         // Enable GPU acceleration BEFORE Swing initializes
-//        System.setProperty("sun.java2d.opengl", "true");
         System.setProperty("sun.java2d.d3d", "true");
         System.setProperty("sun.java2d.metal", "true");
 
