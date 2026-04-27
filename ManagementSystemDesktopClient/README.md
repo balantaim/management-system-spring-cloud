@@ -38,18 +38,30 @@ Theme variants and names are not case-sensitive!
 - [JFormDesigner](https://github.com/JFormDesigner/FlatLaf#demo)
 - [MigLayout](http://www.miglayout.com/)
 
-### Start the application
+### Set up the application
 
-Micronaut
+Micronaut:
 
 ```bash
 ./mvnw mn:run
 ```
 
-Spring
+Spring variant [Spring archive branch](https://github.com/balantaim/management-system-spring-cloud/tree/spring-archive/ManagementSystemDesktopClient):
 
 ```bash
 ./mvnw  spring-boot:run
+```
+
+Build via Maven wrapper:
+
+```bash
+./mvnw package
+```
+
+Run it via jar (Change x.x.x with your version number):
+
+```bash
+java -Dmicronaut.environments=prod -jar management-system-desktop-client-x.x.x.jar
 ```
 
 
@@ -74,7 +86,7 @@ Spring
 ### Upgrade Maven wrapper guide (Optional)
 
 1. Get the latest version from [Maven central](https://mvnrepository.com/artifact/org.apache.maven/maven-core)
-2. Add latest version instead `x.x.x`
+2. Add latest version instead of `x.x.x`
 
 ```bash
 ./mvnw -N wrapper:wrapper -Dmaven=x.x.x
