@@ -2,12 +2,12 @@ package com.martinatanasov;
 
 import com.martinatanasov.utils.SwingTestUtils;
 import com.martinatanasov.view.panels.LoginPanel;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,17 +15,19 @@ import java.awt.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
-@SpringBootTest
+@MicronautTest
 class LoginPanelE2E {
 
-    @Autowired
+    @Inject
     private LoginPanel loginPanel;
-    @Autowired
+    @Inject
     private SwingTestUtils utils;
+
+    private JFrame testFrame;
 
     //Disable Headless mode (Show UI in tests)
     @BeforeAll
-    public static void saveProperty() {
+    static void saveProperty() {
         System.setProperty("java.awt.headless", "false");
     }
 
@@ -39,6 +41,8 @@ class LoginPanelE2E {
     @Test
     void loginScreenDetailsShouldAppear() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
+            initializeTestFrame();
+
             //Init view
             JPanel view = loginPanel.getView();
             JLabel header = utils.findLabelWithText(view, "Login Form");
@@ -80,6 +84,17 @@ class LoginPanelE2E {
 
             loginButton.doClick();
         });
+    }
+
+    private void initializeTestFrame() {
+        if (testFrame == null) {
+            testFrame = new JFrame("Test Panel");
+        }
+        testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        testFrame.setSize(800, 600);
+        testFrame.add(loginPanel.getView());
+        testFrame.setLocationRelativeTo(null);
+        testFrame.setVisible(true);
     }
 
 }

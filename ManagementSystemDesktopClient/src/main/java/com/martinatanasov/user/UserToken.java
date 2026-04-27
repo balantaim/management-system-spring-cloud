@@ -1,12 +1,12 @@
 package com.martinatanasov.user;
 
+import jakarta.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
-@Component
+@Singleton
 public class UserToken {
 
     private String token;

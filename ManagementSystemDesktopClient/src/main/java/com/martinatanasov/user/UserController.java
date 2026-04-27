@@ -1,13 +1,13 @@
 package com.martinatanasov.user;
 
 import com.martinatanasov.requests.ResponseStatus;
+import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
-@Component
+@Singleton
 public class UserController {
 
     private final UserService userService;

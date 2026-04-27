@@ -4,16 +4,15 @@ import com.martinatanasov.animations.transition.PanelTransition;
 import com.martinatanasov.animations.transition.TransitionFactory;
 import com.martinatanasov.animations.transition.TransitionType;
 import com.martinatanasov.view.MainFrame;
+import jakarta.inject.Singleton;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+@Singleton
 public class Router {
 
     @Getter
@@ -58,7 +57,7 @@ public class Router {
         currentPanel = panel;
     }
 
-    private @NonNull TransitionType getReverseTransitionType() {
+    private TransitionType getReverseTransitionType() {
         return switch (transitionType) {
             case TransitionType.SLIDE_RIGHT -> TransitionType.SLIDE_LEFT;
             case TransitionType.SLIDE_LEFT -> TransitionType.SLIDE_RIGHT;
