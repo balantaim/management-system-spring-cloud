@@ -4,9 +4,6 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTMaterialDarkerIJTheme;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class DefaultThemeAndFont {
 
     public DefaultThemeAndFont() {
@@ -21,7 +18,7 @@ public class DefaultThemeAndFont {
         //Setup initial theme
         FlatMTMaterialDarkerIJTheme.setup();
         //Set global app font
-        UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 15));
+//        UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 15));
     }
 
 }

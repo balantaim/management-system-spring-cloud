@@ -51,7 +51,7 @@ public class MainFrame extends JFrame implements Theme {
         setName("main-frame");
         initFlatInspector();
         setAppTheme(
-                environment.getProperty("app.theme-variant", String.class).orElse("light"),
+                environment.getProperty("app.theme-variant", String.class).orElse("system"),
                 environment.getProperty("app.theme-name", String.class).orElse("Material")
         );
         setPreferredSize();

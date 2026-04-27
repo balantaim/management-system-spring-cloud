@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Property;
 import io.micronaut.http.client.DefaultHttpClientConfiguration;
 import io.micronaut.http.client.HttpClient;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 
 import java.net.MalformedURLException;
@@ -15,13 +16,17 @@ import java.time.Duration;
 public class RestClientConfig {
 
     @Singleton
-    public HttpClient httpClient(
-            @Property(name = "app.base-url") String baseUrl) throws MalformedURLException {
+    // Set id of the client
+    @Named("rest-client")
+    public HttpClient httpClient(@Property(name = "app.base-url") String baseUrl) throws MalformedURLException {
+        if(baseUrl == null || baseUrl.isEmpty()) {
+            throw new RuntimeException("Base URL is not set");
+        }
 
         DefaultHttpClientConfiguration config = new DefaultHttpClientConfiguration();
         config.setDefaultCharset(StandardCharsets.UTF_8);
         config.setReadTimeout(Duration.ofSeconds(30));
-        config.setConnectTimeout(Duration.ofSeconds(10));
+        config.setConnectTimeout(Duration.ofSeconds(5));
 
         return HttpClient.create(URI.create(baseUrl).toURL(), config);
     }

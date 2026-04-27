@@ -4,6 +4,8 @@ import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton
 public class UserServiceImpl implements UserService {
 
-    private final HttpClient httpClient;
+    @Inject
+    // Get the specific rest client by id
+    @Named("rest-client")
+    private HttpClient httpClient;
     private final UserToken userToken;
 
     @Override
