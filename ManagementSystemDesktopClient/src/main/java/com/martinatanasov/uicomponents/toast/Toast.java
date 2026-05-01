@@ -280,7 +280,7 @@ public class Toast {
 
     private void fadeOutAndClose(JWindow toast, Frame frame, ToastPosition position) {
         if (!TRANSLUCENCY_SUPPORTED) {
-            // No fade — just close immediately
+            // No fade animation — just close immediately
             toast.setVisible(false);
             toast.dispose();
             activeToasts.remove(toast);
