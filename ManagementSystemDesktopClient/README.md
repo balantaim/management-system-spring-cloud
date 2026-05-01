@@ -104,9 +104,9 @@ Change or remove `--java-options` if needed.
     --main-jar management-system-desktop-client-1.0.0.jar \
     --main-class com.martinatanasov.ManagementSystemDesktopClientApplication \
     --dest dist/ \
-    --icon src/main/resources/static/images/logo/logo.png \
+    --icon logo/logo.png \
     --java-options "-Dmicronaut.environments=prod" \
-    --license-file ../LICENSE
+    --license-file ../LICENSE \
     --linux-shortcut \
     --linux-menu-group "Applications" \
     --linux-app-category "Utility"
@@ -124,7 +124,7 @@ Change or remove `--java-options` if needed.
     --main-jar management-system-desktop-client-1.0.0.jar \
     --main-class com.martinatanasov.ManagementSystemDesktopClientApplication \
     --dest dist/ \
-    --icon src/main/resources/static/images/logo/logo.png \
+    --icon logo/logo.png \
     --license-file ../LICENSE \
     --java-options "-Dmicronaut.environments=prod" \
     --linux-shortcut \
@@ -144,7 +144,7 @@ Change or remove `--java-options` if needed.
     --main-jar management-system-desktop-client-1.0.0.jar \
     --main-class com.martinatanasov.ManagementSystemDesktopClientApplication \
     --dest dist/ \
-    --icon src/main/resources/static/images/logo/logo.ico \
+    --icon logo/logo.ico \
     --license-file ../LICENSE \
     --java-options "-Dmicronaut.environments=prod" \
     --win-shortcut \
@@ -165,7 +165,7 @@ Change or remove `--java-options` if needed.
     --main-jar management-system-desktop-client-1.0.0.jar \
     --main-class com.martinatanasov.ManagementSystemDesktopClientApplication \
     --dest dist/ \
-    --icon src/main/resources/static/images/logo/logo.ico \
+    --icon logo/logo.ico \
     --license-file ../LICENSE \
     --java-options "-Dmicronaut.environments=prod" \
     --win-shortcut \
@@ -187,7 +187,7 @@ Change or remove `--java-options` if needed.
     --main-jar management-system-desktop-client-1.0.0.jar \
     --main-class com.martinatanasov.ManagementSystemDesktopClientApplication \
     --dest dist/ \
-    --icon src/main/resources/static/images/logo/logo.icns \
+    --icon logo/logo.icns \
     --license-file ../LICENSE \
     --java-options "-Dmicronaut.environments=prod" \
     --mac-package-name "ManagementSystem"
