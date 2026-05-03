@@ -1,4 +1,4 @@
-# Management System
+# Management System - 5 projects in 1 project
 
 [License: Apache 2.0](LICENSE)
 
@@ -23,7 +23,7 @@ additional cloud components in the future.
 **Included projects:**
 
 1. Config server - [Setup guide](./ManagementSystemConfigServer/README.md) (Required)
-2. Eureka Discovery server - [Readme](./ManagementSystemEurekaDiscovery/README.md)
+2. Eureka Discovery server - [Readme](./ManagementSystemEurekaDiscovery/README.md) (Required)
 3. API Gateway - [Setup guide](./ManagementSystemAPIGateway/README.md) (Required)
 4. Users Service - [Setup guide](./ManagementSystemUsers/README.md) (Required)
 5. Web frontend (Planned for future release)

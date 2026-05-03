@@ -3,49 +3,71 @@ package com.martinatanasov.management.system.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
-import java.time.Instant;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
+import java.security.cert.CertificateFactory;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class JwtService implements SymmetricJwtService {
+public class JwtService implements JwtVerifier {
 
-    @Value("${token.secret-key}")
-    private String SECRET_KEY;
-    @Value("${token.expiration-time}")
-    private Long TOKEN_EXPIRATION_TIME;
+    @Value("${token.public-key-location}")
+    private Resource publicKeyResource;
 
-    //Generate SecretKey from the secret
-    @Override
-    public SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+    private PublicKey publicKey;
+
+    @RefreshScope
+    @PostConstruct
+    public void init() {
+        this.publicKey = loadPublicKey();
+        log.info("JWT public key loaded successfully for token verification");
     }
 
-    //Generate random SecretKey
-    @Override
-    public SecretKey generateRandomSecretKey() {
-        return Jwts.SIG.HS512.key().build();
+    private PublicKey loadPublicKey() {
+        try {
+            byte[] pemBytes = publicKeyResource.getInputStream().readAllBytes();
+
+            String pem = new String(pemBytes, StandardCharsets.UTF_8)
+                    .replace("-----BEGIN CERTIFICATE-----", "")
+                    .replace("-----END CERTIFICATE-----", "")
+                    .replaceAll("[\\r\\n\\s]+", "")
+                    .trim();
+
+            byte[] decoded = Base64.getDecoder().decode(pem);
+
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            return cf.generateCertificate(new ByteArrayInputStream(decoded)).getPublicKey();
+
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to load JWT public key from: " + publicKeyResource.getFilename(), e);
+        }
     }
 
-    //Extract Claims
+    @Override
+    public PublicKey getVerificationKey() {
+        return publicKey;
+    }
+
     @Override
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSigningKey())
+                .verifyWith(publicKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -77,8 +99,8 @@ public class JwtService implements SymmetricJwtService {
     }
 
     //Get Authorities
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public List<GrantedAuthority> extractAuthorities(Claims claims) {
         List<String> authorities = claims.get("authorities", List.class);
 
@@ -109,25 +131,6 @@ public class JwtService implements SymmetricJwtService {
             log.warn("Token validation failed: {}", e.getMessage());
             return false;
         }
-    }
-
-    //Token Generation
-    @Override
-    public String generateToken(String subject, List<String> authorities) {
-        return generateToken(subject, authorities, Collections.emptyMap());
-    }
-
-    @Override
-    public String generateToken(String subject, List<String> authorities, Map<String, Object> extraClaims) {
-        Instant timeNow = Instant.now();
-        return Jwts.builder()
-                .claims(extraClaims)
-                .subject(subject)
-                .claim("authorities", authorities)
-                .issuedAt(Date.from(timeNow))
-                .expiration(Date.from(timeNow.plusMillis(TOKEN_EXPIRATION_TIME)))
-                .signWith(getSigningKey())
-                .compact();
     }
 
 }

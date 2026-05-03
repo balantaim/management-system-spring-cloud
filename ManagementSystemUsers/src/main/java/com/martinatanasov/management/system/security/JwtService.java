@@ -3,15 +3,20 @@ package com.martinatanasov.management.system.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
+import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
@@ -22,30 +27,66 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class JwtService implements SymmetricJwtService {
+public class JwtService implements AsymmetricJwtService {
 
-    @Value("${token.secret-key}")
-    private String SECRET_KEY;
+    @Value("${encrypt.key-store.location}")
+    private Resource KEY_STORE_LOCATION;
+
+    @Value("${encrypt.key-store.password}")
+    private String KEY_STORE_PASSWORD;
+
+    @Value("${encrypt.key-store.alias}")
+    private String KEY_STORE_ALIAS;
+
+    @Value("${encrypt.key-store.secret}")
+    private String KEY_STORE_SECRET;
+
     @Value("${token.expiration-time}")
+    @Getter
     private Long TOKEN_EXPIRATION_TIME;
 
-    //Generate SecretKey from the secret
-    @Override
-    public SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+    @Value("${token.issuer}")
+    private String TOKEN_ISSUER;
+    private KeyPair keyPair;
+
+    @RefreshScope
+    @PostConstruct
+    public void init() {
+        this.keyPair = loadKeyPair();
+        log.info("RSA key pair loaded from keystore alias '{}'", KEY_STORE_ALIAS);
     }
 
-    //Generate random SecretKey
+    private KeyPair loadKeyPair() {
+        try {
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            keyStore.load(KEY_STORE_LOCATION.getInputStream(), KEY_STORE_PASSWORD.toCharArray());
+
+            PrivateKey privateKey = (PrivateKey) keyStore.getKey(KEY_STORE_ALIAS, KEY_STORE_SECRET.toCharArray());
+
+            PublicKey publicKey = keyStore.getCertificate(KEY_STORE_ALIAS).getPublicKey();
+
+            return new KeyPair(publicKey, privateKey);
+
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to load JWT key pair from keystore", e);
+        }
+    }
+
     @Override
-    public SecretKey generateRandomSecretKey() {
-        return Jwts.SIG.HS512.key().build();
+    public PrivateKey getSigningKey() {
+        return keyPair.getPrivate();
+    }
+
+    @Override
+    public PublicKey getVerificationKey() {
+        return keyPair.getPublic();
     }
 
     //Extract Claims
     @Override
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSigningKey())
+                .verifyWith(getVerificationKey())   // ← PublicKey, not SecretKey
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -123,10 +164,11 @@ public class JwtService implements SymmetricJwtService {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(subject)
+                .issuer(TOKEN_ISSUER)
                 .claim("authorities", authorities)
                 .issuedAt(Date.from(timeNow))
                 .expiration(Date.from(timeNow.plusMillis(TOKEN_EXPIRATION_TIME)))
-                .signWith(getSigningKey())
+                .signWith(getSigningKey(), Jwts.SIG.RS256)
                 .compact();
     }
 

@@ -14,7 +14,7 @@ login:
   url: /auth/login
 token:
   expiration-time: 3600000
-  secret-key: ${TOKEN_SECRET_KEY}
+  issuer: "Management system"
 
 authorization:
   token:
