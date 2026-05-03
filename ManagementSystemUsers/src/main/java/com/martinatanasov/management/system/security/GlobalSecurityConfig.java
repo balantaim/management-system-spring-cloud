@@ -37,6 +37,7 @@ public class GlobalSecurityConfig {
      */
 
     private final UserService userService;
+    private final JwtService jwtService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final Environment environment;
 
@@ -95,7 +96,7 @@ public class GlobalSecurityConfig {
     }
 
     private AuthenticationFilter getAuthenticationFilter(AuthenticationManager authenticationManager) {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, userService, environment);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, userService, jwtService);
         //Change the default url: "/login"
         authenticationFilter.setFilterProcessesUrl(environment.getProperty("login.url", "/auth/login"));
         return authenticationFilter;

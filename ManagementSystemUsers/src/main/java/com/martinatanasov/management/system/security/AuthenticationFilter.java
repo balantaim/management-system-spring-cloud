@@ -4,14 +4,11 @@ import com.martinatanasov.management.system.users.UserDetailsDto;
 import com.martinatanasov.management.system.users.UserLoginDto;
 import com.martinatanasov.management.system.users.UserService;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -33,13 +30,13 @@ import java.util.stream.Stream;
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final Environment environment;
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, Environment environment) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, JwtService jwtService) {
         super(authenticationManager);
         this.userService = userService;
-        this.environment = environment;
+        this.jwtService = jwtService;
     }
 
     @NonNull
@@ -90,25 +87,24 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         log.info("\t\nUser Roles and Authorities: {}", permissions);
 
         //Generate Token
-        String token = Jwts.builder()                       // (1)
+        String token = Jwts.builder()
                 //Set Optional header
-                .header()                                   // (2) optional
+                .header()
                 .keyId("KeyId")
                 .and()
-                .expiration(Date.from(timeNow.plusMillis(Long.parseLong(environment.getProperty("token.expiration-time")))))
+                .expiration(Date.from(timeNow.plusMillis(jwtService.getTOKEN_EXPIRATION_TIME())))
                 .issuedAt(Date.from(timeNow))
-                .subject(userDetailsDto.userId())           // (3) JSON Claims, or
+                .subject(userDetailsDto.userId())
                 //Add user's authorities
                 .claim("authorities", permissions)
-                //.content(aByteArray, "text/plain")        //     any byte[] content, with media type
+                //.content(aByteArray, "text/plain") //any byte[] content, with media type
                 //Add SecretKey (token) and algorithm
                 .signWith(
                         //Set SecretKey from the token
-                        Keys.hmacShaKeyFor(Decoders.BASE64.decode(environment.getProperty("token.secret-key"))),
-                        //Set the Algorithm
-                        Jwts.SIG.HS512
-                )                                           // (4) if signing, or
-                //.encryptWith(key, keyAlg, encryptionAlg)  //     if encrypting
+                        jwtService.getSigningKey(),
+                        //Set the Algorithm RSA-2048
+                        Jwts.SIG.RS256
+                )
                 .compact();
 
         //Add the token to the response as header

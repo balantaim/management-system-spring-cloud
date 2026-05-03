@@ -102,6 +102,6 @@ logging:
       springframework:
         security: TRACE
         cloud:
-          gateway: DEBUG
+          gateway: INFO
       web:
         reactive: DEBUG

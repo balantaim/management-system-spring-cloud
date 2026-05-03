@@ -14,4 +14,4 @@ authorization:
       prefix: "Bearer "
 token:
   expiration-time: 3600000
-  secret-key: ${TOKEN_SECRET_KEY}
+  public-key-location: classpath:public.pem

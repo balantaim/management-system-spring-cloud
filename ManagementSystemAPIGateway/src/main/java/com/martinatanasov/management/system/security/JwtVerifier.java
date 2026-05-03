@@ -3,17 +3,14 @@ package com.martinatanasov.management.system.security;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.crypto.SecretKey;
+import java.security.PublicKey;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
-public interface SymmetricJwtService {
+public interface JwtVerifier {
 
-    SecretKey getSigningKey();
-
-    SecretKey generateRandomSecretKey();
+    PublicKey getVerificationKey();
 
     Claims extractAllClaims(String token);
 
@@ -32,9 +29,5 @@ public interface SymmetricJwtService {
     boolean isTokenExpired(Claims claims);
 
     boolean isTokenValid(String token);
-
-    String generateToken(String subject, List<String> authorities);
-
-    String generateToken(String subject, List<String> authorities, Map<String, Object> extraClaims);
 
 }

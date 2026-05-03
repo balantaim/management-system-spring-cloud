@@ -3,17 +3,18 @@ package com.martinatanasov.management.system.security;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.crypto.SecretKey;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public interface SymmetricJwtService {
+public interface AsymmetricJwtService {
 
-    SecretKey getSigningKey();
+    PrivateKey getSigningKey();
 
-    SecretKey generateRandomSecretKey();
+    PublicKey getVerificationKey();
 
     Claims extractAllClaims(String token);
 

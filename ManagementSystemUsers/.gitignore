@@ -1,3 +1,6 @@
+src/main/resources/management-system.p12
+src/main/resources/private.pem
+src/main/resources/public.pem
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
