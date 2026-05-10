@@ -24,9 +24,9 @@ VALUES (2, 3),
 
 -- Create base Customer and Admin role
 INSERT INTO users (email, full_name, password, user_id, account_non_expired, account_non_locked, credentials_non_expired, enabled)
-VALUES ('abv@abv.bg', 'Customer', '$2a$10$D8vmo9/vGXaTIA0vOHGRlu0UDSCYl54PLoRuI3U7J0A5ay86/5CEy',
+VALUES ('abv@abv.bg', 'Customer', '$argon2id$v=19$m=16384,t=2,p=1$/0Ptv5DAJ09JkecEvopO4A$faI+y5fEs8sm2/5PFjQ95dtT4oBaOYVSssgXx6qAiq0',
         gen_random_uuid(), TRUE, TRUE, TRUE, TRUE),
-       ('admin@abv.bg', 'Admin', '$2a$10$D8vmo9/vGXaTIA0vOHGRlu0UDSCYl54PLoRuI3U7J0A5ay86/5CEy',
+       ('admin@abv.bg', 'Admin', '$argon2id$v=19$m=16384,t=2,p=1$/0Ptv5DAJ09JkecEvopO4A$faI+y5fEs8sm2/5PFjQ95dtT4oBaOYVSssgXx6qAiq0',
         gen_random_uuid(), TRUE, TRUE, TRUE, TRUE);
 
 -- Assign roles to the users (1: CUSTOMER, 2: ADMIN)

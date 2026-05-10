@@ -21,9 +21,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/info")
-    public String getUsers() {
+    public String getInfo() {
         String value = environment.getProperty("private.key");
-        return "Lallala: " + value;
+        return "Private value: " + value;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

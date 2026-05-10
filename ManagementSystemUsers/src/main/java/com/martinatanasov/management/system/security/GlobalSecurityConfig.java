@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -30,15 +30,15 @@ import java.util.List;
 public class GlobalSecurityConfig {
 
     /**
+     * Argon2id is used instead of bcryptPasswordEncoder (for more control over passwordEncoder add dependency for artifactId `password4j`)
      * ToDo: Implement the following security configurations:
-     * Argon2 instead of bcryptPasswordEncoder
      * OneTimeToken
      * webAuthn() -> Passkey
      */
 
     private final UserService userService;
     private final JwtService jwtService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final Environment environment;
 
     @Bean

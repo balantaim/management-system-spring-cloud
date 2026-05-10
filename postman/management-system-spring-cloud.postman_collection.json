@@ -438,6 +438,72 @@
           "response": []
         },
         {
+          "name": "application-default",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/application/default",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "application",
+                "default"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users default",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/management-system-users/default",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "management-system-users",
+                "default"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "config-encrypt",
           "event": [
             {

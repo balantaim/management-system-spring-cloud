@@ -7,10 +7,10 @@ spring:
           port: 8200
           scheme: http
           backend: secret
-          default-key: ${VAULT_KEY:management-system}
-          profile-separator: ","
-          kv-version: 2
-          skip-ssl-validation: true
+          defaultKey: application
+          profileSeparator: ","
+          kvVersion: 2
+          skipSslValidation: true
           timeout: 5
           authentication: TOKEN
           token: ${ROOT_TOKEN}

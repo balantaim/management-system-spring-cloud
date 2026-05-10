@@ -32,8 +32,7 @@ public class User {
     @Column(name = "full_name", length = 150, nullable = false)
     private String fullName;
 
-    //Default bcrypt 60 characters
-    @Column(nullable = false, length = 60, columnDefinition = "CHAR(60)")
+    @Column(nullable = false)
     private String password;
 
     @Column(name = "user_id", unique = true, nullable = false, updatable = false, length = 36)
