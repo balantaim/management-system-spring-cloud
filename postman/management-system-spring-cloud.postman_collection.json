@@ -405,7 +405,7 @@
       "name": "ConfigServer",
       "item": [
         {
-          "name": "config-default",
+          "name": "config default",
           "event": [
             {
               "listen": "test",
@@ -438,7 +438,7 @@
           "response": []
         },
         {
-          "name": "application-default",
+          "name": "application default",
           "event": [
             {
               "listen": "test",
@@ -497,6 +497,39 @@
               ],
               "path": [
                 "management-system-users",
+                "default"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "api-gateway default",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/management-system-api-gateway/default",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "management-system-api-gateway",
                 "default"
               ]
             }
