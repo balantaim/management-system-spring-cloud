@@ -43,7 +43,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,mappings
+        include: health,info,mappings,refresh
   endpoint:
     health:
       show-details: always

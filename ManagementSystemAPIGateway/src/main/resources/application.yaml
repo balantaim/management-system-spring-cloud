@@ -7,12 +7,6 @@ spring:
     name: management-system-api-gateway
   main:
     banner-mode: off
-  # Message broker required for busrefresh
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:user}
-    password: ${RABBITMQ_PASSWORD:password}
 authorization:
   token:
     header:
@@ -20,4 +14,5 @@ authorization:
       prefix: "Bearer "
 token:
   expiration-time: 3600000
+  # Load the public key from resources/
   public-key-location: classpath:public.pem
