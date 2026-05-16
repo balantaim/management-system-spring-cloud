@@ -9,6 +9,8 @@ import com.martinatanasov.management.system.roles.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,14 +38,12 @@ public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND = "User not found";
 
     @Override
-    public List<UserDetailsDto> findAll() {
-        Iterable<User> users = userRepository.findAll();
-        for (User user : users) {
+    public Page<UserDetailsDto> findAll(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(user -> {
             log.info("\n\tUser found: {}", user);
-        }
-        return StreamSupport.stream(users.spliterator(), false)
-                .map(userMapper::userToUserDataDto)
-                .toList();
+            return userMapper.userToUserDataDto(user);
+        });
     }
 
     @Transactional
@@ -94,6 +93,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDataDto(user);
     }
 
+    @Transactional
     @Override
     public void changeUserPassword(UserChangePasswordDto userChangePasswordDto) {
         User user = userRepository.findByEmail(userChangePasswordDto.email())
@@ -107,6 +107,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void changeUserFullName(String email, String newFullName) {
         User user = userRepository.findByEmail(email)

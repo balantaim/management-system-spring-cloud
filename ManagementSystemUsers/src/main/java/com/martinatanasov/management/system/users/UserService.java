@@ -1,12 +1,12 @@
 package com.martinatanasov.management.system.users;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
-    List<UserDetailsDto> findAll();
+    Page<UserDetailsDto> findAll(Pageable pageable);
 
     UserDetailsDto createUser(UserRegisterDto userRegisterDto);
 

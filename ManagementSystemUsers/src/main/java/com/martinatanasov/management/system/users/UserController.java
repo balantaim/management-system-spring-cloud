@@ -3,13 +3,14 @@ package com.martinatanasov.management.system.users;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RefreshScope
 @RequiredArgsConstructor
@@ -17,19 +18,13 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final Environment environment;
     private final UserService userService;
-
-    @GetMapping("/info")
-    public String getInfo() {
-        String value = environment.getProperty("private.key");
-        return "Private value: " + value;
-    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<UserDetailsDto>> getAllUsers() {
-        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    public ResponseEntity<Page<UserDetailsDto>> getAllUsers(
+            @PageableDefault(size = 24, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        return new ResponseEntity<>(userService.findAll(pageable), HttpStatus.OK);
     }
 
     // #userId == authentication.principal

@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RefreshScope
 @Service
 public class JwtService implements AsymmetricJwtService {
 
@@ -48,8 +49,7 @@ public class JwtService implements AsymmetricJwtService {
     @Value("${token.issuer}")
     private String TOKEN_ISSUER;
     private KeyPair keyPair;
-
-    @RefreshScope
+    
     @PostConstruct
     public void init() {
         this.keyPair = loadKeyPair();

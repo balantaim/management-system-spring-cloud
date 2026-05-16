@@ -1,5 +1,7 @@
 package com.martinatanasov.management.system.users;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +17,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByEmailAndEnabledTrue(String email);
 
     Optional<User> findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(String email);
+
+    Page<User> findAll(Pageable pageable);
 
 }

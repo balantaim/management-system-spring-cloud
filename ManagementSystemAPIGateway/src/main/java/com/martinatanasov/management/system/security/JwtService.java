@@ -24,6 +24,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RefreshScope
 @Service
 public class JwtService implements JwtVerifier {
 
@@ -32,7 +33,6 @@ public class JwtService implements JwtVerifier {
 
     private PublicKey publicKey;
 
-    @RefreshScope
     @PostConstruct
     public void init() {
         this.publicKey = loadPublicKey();
