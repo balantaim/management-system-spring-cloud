@@ -133,6 +133,9 @@ Add value for `ROOT_TOKEN` required for connection with Vault. (This could be ID
 > [!NOTE]
 > Vault should be unsealed before you start!
 
+> [!IMPORTANT]
+> Check the [Users microservice guide](../ManagementSystemUsers/README.md) in order to create public and private keys.
+
 1. Enter in to Vault's cli via Docker container (`management-system-vault` is the name of the container):
 
     ```bash
@@ -144,9 +147,6 @@ Add value for `ROOT_TOKEN` required for connection with Vault. (This could be ID
     ```bash
     vault login <YOUR_ROOT_TOKEN>
     ```
-
-    > [!IMPORTANT]
-    > Check the [Users microservice guide](../ManagementSystemUsers/README.md) in order to create public and private keys.
 
 3. Put secrets for `API Gateway` (public key location). If you need to add configuration only for `prod` profile use `"secret/management-system-api-gateway,prod"` where `,` is separator.
 
