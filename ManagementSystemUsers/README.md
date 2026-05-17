@@ -4,7 +4,9 @@
 
 The Users microservice is responsible for all functionalities related to users, as well as for generating a valid JWT token used to authenticate with the API Gateway.
 
-## Generate Public and Private keys via keytool
+## Set up the application:
+
+**Generate Public and Private keys via keytool:**
 
 1. Generate .p12 file via keytool in the `resources` directory
     ```bash
@@ -32,17 +34,12 @@ The Users microservice is responsible for all functionalities related to users, 
 
 3. Copy `public.pem` to APIGateway's `resources` directory
 
-### Test the application's endpoints
+### Check Redis connection (Optional)
 
-```bash
-curl http://localhost:5000/management-system-users/info
-```
-
--------------
-
-Connect to redis and check `KEYS "*"`
+Connect to redis cli via Docker container (`management-system-redis` is the name of the container)
 
 ```bash
 docker exec -it management-system-redis redis-cli
 ```
 
+Check all variables in Redis with following command: `KEYS "*"`

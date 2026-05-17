@@ -17,8 +17,7 @@ restarts.
 communicate with each other dynamically. An **API Gateway** acts as a single entry point for all client requests,
 providing routing, load balancing, and centralized request handling.
 
-The architecture is designed to be modular and extensible, making it easy to add new microservices or integrate
-additional cloud components in the future.
+**Software architecture:** Microservices-based architecture packaged by feature, using the MVC design pattern in the presentation layer.
 
 **Included projects:**
 
@@ -26,8 +25,9 @@ additional cloud components in the future.
 2. Eureka Discovery server - [Readme](./ManagementSystemEurekaDiscovery/README.md) (Required)
 3. API Gateway - [Setup guide](./ManagementSystemAPIGateway/README.md) (Required)
 4. Users Service - [Setup guide](./ManagementSystemUsers/README.md) (Required)
-5. Web frontend (Planned for future release)
-6. Desktop Client - [Readme](./ManagementSystemDesktopClient/README.md)
+5. Image Converter (Planned for future release)
+6. Web frontend (Planned for future release)
+7. Desktop Client - [Readme](./ManagementSystemDesktopClient/README.md)
 
 **Key Features:**
 

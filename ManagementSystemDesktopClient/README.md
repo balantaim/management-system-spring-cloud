@@ -90,7 +90,7 @@ java -Dmicronaut.environments=prod -jar management-system-desktop-client-x.x.x.j
 
 It is mandatory to build the application jar before running jpackage!
 Change the version of the application if needed.
-Change or remove `--java-options` if needed.
+Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObjectHeaders`).
 
 - Linux: apt
 

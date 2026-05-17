@@ -13,10 +13,11 @@ The application represents a reactive API Gateway and is used as a centralized e
 - **Default spring profile:** `local`
 - **Default server port:** `5000`
 
-### Set up the environment
+### Set up the environment (Optional)
 
-- Set JWT secret for variable `TOKEN_SECRET_KEY`
-- Set Users service URL (Optional) `USERS_SERVICE_URL`
+- Set public key location as environment variable (Optional) `token.public-key-location`
+
+This properties should be got from the Config server.
 
 ### Start the application
 
@@ -28,5 +29,5 @@ The application represents a reactive API Gateway and is used as a centralized e
     Or with parameters
 
     ```bash
-    mvn spring-boot:run -Dtoken.secret-key="<YOUR_TOKEN_SECRET_KEY>"
+    mvn spring-boot:run -Dtoken.public-key-location="<YOUR_PUBLIC_KEY_LOCATION>"
     ```

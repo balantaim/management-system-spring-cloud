@@ -12,7 +12,6 @@ authorization:
     header:
       name: Authorization
       prefix: "Bearer "
-token:
-  expiration-time: 3600000
-  # Load the public key from resources/
-  public-key-location: classpath:public.pem
+# Load the public key from resources. This is provided from Config Server.
+#token:
+#  public-key-location: classpath:public.pem

@@ -222,12 +222,12 @@
 				</configuration>
                 <executions>
                     <!-- Ahead Of Time (AOT) for fast startup -->
-<!--                    <execution>-->
-<!--                        <id>process-aot</id>-->
-<!--                        <goals>-->
-<!--                            <goal>process-aot</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
+                    <execution>
+                        <id>process-aot</id>
+                        <goals>
+                            <goal>process-aot</goal>
+                        </goals>
+                    </execution>
                     <!-- Additional properties for actuator.info -->
                     <execution>
                         <goals>

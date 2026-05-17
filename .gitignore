@@ -1,6 +1,7 @@
 vault/data/
 vault/VAULT_KEY.txt
 keygen.txt
+setup.txt
 
 HELP.md
 target/

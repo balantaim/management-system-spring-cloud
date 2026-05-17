@@ -24,9 +24,9 @@ cd vault/
 docker compose -p management-system up -d
 ```
 
-### Initialize & Unseal Vault (ONE TIME)
+## Initialize & Unseal Vault (ONE TIME)
 
-**Variant 1: Use the CLI to unseal the vault (Recommend):**
+### **Variant 1: Use the CLI to unseal the vault (Recommend):**
 
 Enter the vault's CLI mode
 
@@ -80,23 +80,11 @@ export VAULT_TOKEN="<YOUR_ROOT_TOKEN>"
 vault secrets enable -path=secret kv-v2
 ```
 
-Add new secrets for local testing:
+Add new secrets for local testing (Optional):
 
 ```bash
-vault kv put secret/management-system \
-private.key="111" \
+vault kv put secret/application \
 spring.rabbitmq.host="localhost" \
-spring.rabbitmq.port="5672" \
-spring.rabbitmq.username="user" \
-spring.rabbitmq.password="password"
-```
-
-Add new secrets for docker network:
-
-```bash
-vault kv put secret/management-system-docker \
-private.key="222" \
-spring.rabbitmq.host="rabbitmq" \
 spring.rabbitmq.port="5672" \
 spring.rabbitmq.username="user" \
 spring.rabbitmq.password="password"
@@ -105,11 +93,10 @@ spring.rabbitmq.password="password"
 Get the secrets:
 
 ```bash
-vault kv get secret/management-system
+vault kv get secret/application
 ```
 
-
-**Variant 2: Use the UI via browser and unseal the vault:**
+### **Variant 2: Use the UI via browser and unseal the vault:**
 
 - Root Token (At least 1)
 - Unseal Keys (At least 1, but recommended 3 or more for production)
@@ -137,9 +124,54 @@ Login to the Vault and create a new secret engine:
 - version: 2
 - url: management-system
 
-### Update the application properties
+### Update the applications properties
 
 Add value for `ROOT_TOKEN` required for connection with Vault. (This could be IDE configuration file or environment variable)
+
+**Add secrets in to Vault**
+
+> [!NOTE]
+> Vault should be unsealed before you start!
+
+1. Enter in to Vault's cli via Docker container (`management-system-vault` is the name of the container):
+
+    ```bash
+    docker exec -it management-system-vault /bin/sh
+    ```
+
+2. Login to the Vault via `ROOT_TOKEN`. Replace the `<..>` with your `ROOT_TOKEN`
+
+    ```bash
+    vault login <YOUR_ROOT_TOKEN>
+    ```
+
+    > [!IMPORTANT]
+    > Check the [Users microservice guide](../ManagementSystemUsers/README.md) in order to create public and private keys.
+
+3. Put secrets for `API Gateway` (public key location). If you need to add configuration only for `prod` profile use `"secret/management-system-api-gateway,prod"` where `,` is separator.
+
+    ```bash
+    vault kv put "secret/management-system-api-gateway" \
+    token.public-key-location="classpath:public.pem"
+    ```
+
+4. Put secrets for `Users microservice` (keystore credentials):
+
+    ```bash
+    vault kv put "secret/management-system-users" \
+    encrypt.key-store.location="classpath:management-system.p12" \
+    encrypt.key-store.password="<YOUR_KEY_STORE_PASS>" \
+    encrypt.key-store.alias="management-system-key" \
+    encrypt.key-store.secret="<YOUR_KEY_STORE_SECRET>"
+    ```
+
+5. Test the credentials from new terminal:
+
+    ```bash
+    vault kv get -mount="secret" "management-system-users"
+
+    vault kv get -mount="secret" "management-system-api-gateway"
+    ```
 
 ### Start the application
 
@@ -165,8 +197,8 @@ Test `busrefresh` via curl:
 curl -X POST http://localhost:8888/actuator/busrefresh
 ```
 
-Check the stored secrets:
+Check the stored secrets for all applications:
 
 ```bash
-curl http://localhost:8888/config/management-system
+curl http://localhost:8888/application/default
 ```
