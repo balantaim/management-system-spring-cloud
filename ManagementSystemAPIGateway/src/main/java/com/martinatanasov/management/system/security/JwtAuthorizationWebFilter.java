@@ -80,6 +80,11 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
 
             log.debug("Claims: {}", claims);
 
+            // Reject refresh tokens presented as access tokens
+            if (!jwtService.isAccessToken(claims)) {
+                throw new UnsupportedJwtException("Refresh token cannot be used for authentication");
+            }
+
             String subject = claims.getSubject();
             List<GrantedAuthority> authorities = jwtService.extractAuthorities(claims);
 

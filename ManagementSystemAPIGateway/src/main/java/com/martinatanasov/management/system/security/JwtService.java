@@ -28,6 +28,10 @@ import java.util.stream.Collectors;
 @Service
 public class JwtService implements JwtVerifier {
 
+    private static final String TOKEN_TYPE_CLAIM   = "token_type";
+    private static final String ACCESS_TOKEN_TYPE  = "access";
+    private static final String REFRESH_TOKEN_TYPE = "refresh";
+
     @Value("${token.public-key-location}")
     private Resource publicKeyResource;
 
@@ -59,11 +63,13 @@ public class JwtService implements JwtVerifier {
         }
     }
 
+    // Get Key Access
     @Override
     public PublicKey getVerificationKey() {
         return publicKey;
     }
 
+    // Claims Extraction
     @Override
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
@@ -98,6 +104,17 @@ public class JwtService implements JwtVerifier {
         return claimsResolver.apply(claims);
     }
 
+    // Token Type
+    @Override
+    public boolean isAccessToken(Claims claims) {
+        return ACCESS_TOKEN_TYPE.equals(claims.get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
+    @Override
+    public boolean isRefreshToken(Claims claims) {
+        return REFRESH_TOKEN_TYPE.equals(claims.get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
     //Get Authorities
     @Override
     @SuppressWarnings("unchecked")
@@ -128,7 +145,7 @@ public class JwtService implements JwtVerifier {
             Claims claims = extractAllClaims(token);
             return !isTokenExpired(claims);
         } catch (JwtException e) {
-            log.warn("Token validation failed: {}", e.getMessage());
+            log.error("Token validation failed: {}", e.getMessage());
             return false;
         }
     }

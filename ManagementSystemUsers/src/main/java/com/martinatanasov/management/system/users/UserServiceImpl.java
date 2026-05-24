@@ -93,6 +93,13 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDataDto(user);
     }
 
+    @Override
+    public UserDetailsDto findByUserIdAndFullEnabled(String email) {
+        User user = userRepository.findByUserIdAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        return userMapper.userToUserDataDto(user);
+    }
+
     @Transactional
     @Override
     public void changeUserPassword(UserChangePasswordDto userChangePasswordDto) {

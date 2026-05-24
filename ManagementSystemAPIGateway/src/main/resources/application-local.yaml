@@ -20,7 +20,7 @@ spring:
             - id: management-system-users-get
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
-                - Path=/api/users/info,/api/users,/api/users/email/**,/api/users/{userId}
+                - Path=/api/users,/api/users/email/**,/api/users/{userId}
                 - Method=GET
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
@@ -35,7 +35,7 @@ spring:
             - id: management-system-users-post-auth
               uri: ${USERS_SERVICE_URL:lb://management-system-users}
               predicates:
-                - Path=/api/users/register,/auth/login
+                - Path=/api/users/register,/auth/login,/auth/refresh
                 - Method=POST
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}

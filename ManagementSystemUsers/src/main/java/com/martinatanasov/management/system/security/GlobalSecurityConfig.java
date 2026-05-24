@@ -52,8 +52,8 @@ public class GlobalSecurityConfig {
 
         http
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/api/users/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/info", "/actuator/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/api/users/register", "/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )

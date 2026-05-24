@@ -7,6 +7,9 @@ spring:
     active: vault
   main:
     banner-mode: off
+  threads:
+    virtual:
+      enabled: true
 
 encrypt:
   key-store:

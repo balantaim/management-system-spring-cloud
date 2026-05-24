@@ -9,10 +9,29 @@ import lombok.Setter;
 @Singleton
 public class UserToken {
 
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 
-    public void clear() { this.token = null; }
+    public void clear() {
+        this.accessToken = null;
+        this.refreshToken = null;
+    }
 
-    public boolean hasToken() { return token != null; }
+    public boolean hasAccessToken() {
+        return accessToken != null;
+    }
+
+    public boolean hasRefreshToken() {
+        return refreshToken != null;
+    }
+
+    public void update(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
 }

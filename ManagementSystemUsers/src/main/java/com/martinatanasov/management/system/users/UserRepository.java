@@ -18,6 +18,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(String email);
 
+    Optional<User> findByUserIdAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(String userId);
+
     Page<User> findAll(Pageable pageable);
 
 }

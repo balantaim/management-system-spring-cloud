@@ -26,9 +26,10 @@ public class SecurityConfig {
                         .frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable)
                 )
                 .authorizeExchange(request -> request
-                        .pathMatchers(HttpMethod.POST, "/auth/login", "/api/users/register").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/auth/login", "/api/users/register", "/auth/refresh").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/users/info").permitAll()
                         .pathMatchers("/api/users").hasAnyRole("CUSTOMER", "ADMIN")
+                        //h2-console should be removed in production
                         .pathMatchers("/h2-console/**").permitAll()
                         .anyExchange().authenticated()
                 )

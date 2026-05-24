@@ -1,6 +1,7 @@
 package com.martinatanasov.management.system.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
@@ -30,6 +31,10 @@ import java.util.stream.Collectors;
 @Service
 public class JwtService implements AsymmetricJwtService {
 
+    private static final String TOKEN_TYPE_CLAIM = "token_type";
+    private static final String ACCESS_TOKEN_TYPE = "access";
+    private static final String REFRESH_TOKEN_TYPE = "refresh";
+
     @Value("${encrypt.key-store.location}")
     private Resource KEY_STORE_LOCATION;
 
@@ -42,14 +47,19 @@ public class JwtService implements AsymmetricJwtService {
     @Value("${encrypt.key-store.secret}")
     private String KEY_STORE_SECRET;
 
-    @Value("${token.expiration-time}")
+    @Value("${token.access-expiration}")
     @Getter
-    private Long TOKEN_EXPIRATION_TIME;
+    private Long ACCESS_TOKEN_EXPIRATION;
+
+    @Value("${token.refresh-expiration}")
+    @Getter
+    private Long REFRESH_TOKEN_EXPIRATION;
 
     @Value("${token.issuer}")
     private String TOKEN_ISSUER;
+
     private KeyPair keyPair;
-    
+
     @PostConstruct
     public void init() {
         this.keyPair = loadKeyPair();
@@ -86,7 +96,8 @@ public class JwtService implements AsymmetricJwtService {
     @Override
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getVerificationKey())   // ← PublicKey, not SecretKey
+                // PublicKey, not SecretKey
+                .verifyWith(getVerificationKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -115,6 +126,16 @@ public class JwtService implements AsymmetricJwtService {
     @Override
     public <T> T extractClaim(Claims claims, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(claims);
+    }
+
+    @Override
+    public boolean isAccessToken(Claims claims) {
+        return ACCESS_TOKEN_TYPE.equals(claims.get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
+    @Override
+    public boolean isRefreshToken(Claims claims) {
+        return REFRESH_TOKEN_TYPE.equals(claims.get(TOKEN_TYPE_CLAIM, String.class));
     }
 
     //Get Authorities
@@ -152,24 +173,59 @@ public class JwtService implements AsymmetricJwtService {
         }
     }
 
-    //Token Generation
+    //Generate Access Token
     @Override
-    public String generateToken(String subject, List<String> authorities) {
-        return generateToken(subject, authorities, Collections.emptyMap());
+    public String generateAccessToken(String subject, List<String> authorities) {
+        return generateAccessToken(subject, authorities, Collections.emptyMap());
     }
 
     @Override
-    public String generateToken(String subject, List<String> authorities, Map<String, Object> extraClaims) {
+    public String generateAccessToken(String subject, List<String> authorities, Map<String, Object> extraClaims) {
+        return buildToken(
+                subject,
+                authorities,
+                extraClaims,
+                ACCESS_TOKEN_TYPE,
+                ACCESS_TOKEN_EXPIRATION
+        );
+    }
+
+    @Override
+    public String generateRefreshToken(String subject) {
+        // Refresh tokens carry no authorities - they are only used to get a new access token
+        return buildToken(
+                subject,
+                Collections.emptyList(),
+                Collections.emptyMap(),
+                REFRESH_TOKEN_TYPE,
+                REFRESH_TOKEN_EXPIRATION
+        );
+    }
+
+    private String buildToken(String subject, List<String> authorities,
+            Map<String, Object> extraClaims, String tokenType, long expirationTime) {
         Instant timeNow = Instant.now();
-        return Jwts.builder()
+        JwtBuilder builder = Jwts.builder()
+                //Set Optional header
+//                .header()
+//                .keyId("KeyId")
+//                .and()
                 .claims(extraClaims)
                 .subject(subject)
                 .issuer(TOKEN_ISSUER)
-                .claim("authorities", authorities)
+                .claim(TOKEN_TYPE_CLAIM, tokenType)
                 .issuedAt(Date.from(timeNow))
-                .expiration(Date.from(timeNow.plusMillis(TOKEN_EXPIRATION_TIME)))
-                .signWith(getSigningKey(), Jwts.SIG.RS256)
-                .compact();
+                //.content(aByteArray, "text/plain") //any byte[] content, with media type
+                .expiration(Date.from(timeNow.plusMillis(expirationTime)))
+                //Set SecretKey from the token
+                //Set the Algorithm RSA-2048
+                .signWith(getSigningKey(), Jwts.SIG.RS256);
+
+        if (!authorities.isEmpty()) {
+            builder.claim("authorities", authorities);
+        }
+
+        return builder.compact();
     }
 
 }

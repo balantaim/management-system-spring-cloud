@@ -24,6 +24,10 @@ public interface JwtVerifier {
 
     <T> T extractClaim(Claims claims, Function<Claims, T> claimsResolver);
 
+    boolean isAccessToken(Claims claims);
+
+    boolean isRefreshToken(Claims claims);
+
     List<GrantedAuthority> extractAuthorities(Claims claims);
 
     boolean isTokenExpired(Claims claims);

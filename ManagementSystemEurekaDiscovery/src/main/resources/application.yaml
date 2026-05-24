@@ -9,4 +9,4 @@ spring:
     banner-mode: off
   threads:
     virtual:
-      enabled: false
+      enabled: true
