@@ -80,10 +80,10 @@ export VAULT_TOKEN="<YOUR_ROOT_TOKEN>"
 vault secrets enable -path=secret kv-v2
 ```
 
-Add new secrets for local testing (Optional):
+Add new secrets for `local` testing (Optional):
 
 ```bash
-vault kv put secret/application \
+vault kv put "secret/application" \
 spring.rabbitmq.host="localhost" \
 spring.rabbitmq.port="5672" \
 spring.rabbitmq.username="user" \
@@ -124,7 +124,7 @@ Login to the Vault and create a new secret engine:
 - version: 2
 - url: management-system
 
-### Update the applications properties
+## Update the applications properties
 
 Add value for `ROOT_TOKEN` required for connection with Vault. (This could be IDE configuration file or environment variable)
 
@@ -148,14 +148,24 @@ Add value for `ROOT_TOKEN` required for connection with Vault. (This could be ID
     vault login <YOUR_ROOT_TOKEN>
     ```
 
-3. Put secrets for `API Gateway` (public key location). If you need to add configuration only for `prod` profile use `"secret/management-system-api-gateway,prod"` where `,` is separator.
+3. Add new secrets for `local` testing:
+
+    ```bash
+    vault kv put "secret/application" \
+    spring.rabbitmq.host="localhost" \
+    spring.rabbitmq.port="5672" \
+    spring.rabbitmq.username="user" \
+    spring.rabbitmq.password="password"
+    ```
+
+4. Put secrets for `API Gateway` (public key location). If you need to add configuration only for `prod` profile use `"secret/management-system-api-gateway,prod"` where `,` is separator.
 
     ```bash
     vault kv put "secret/management-system-api-gateway" \
     token.public-key-location="classpath:public.pem"
     ```
 
-4. Put secrets for `Users microservice` (keystore credentials):
+5. Put secrets for `Users microservice` (keystore credentials):
 
     ```bash
     vault kv put "secret/management-system-users" \
@@ -165,7 +175,7 @@ Add value for `ROOT_TOKEN` required for connection with Vault. (This could be ID
     encrypt.key-store.secret="<YOUR_KEY_STORE_SECRET>"
     ```
 
-5. Test the credentials from new terminal:
+6. Test the credentials from new terminal:
 
     ```bash
     vault kv get -mount="secret" "management-system-users"

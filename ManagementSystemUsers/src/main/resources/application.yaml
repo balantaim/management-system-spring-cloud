@@ -18,7 +18,6 @@ token:
   # 30 days
   refresh-expiration: 2592000000
   issuer: "Management system"
-
 authorization:
   token:
     header:

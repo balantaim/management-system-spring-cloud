@@ -115,6 +115,9 @@
               }
             }
           ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -285,8 +288,12 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [],
-                "type": "text/javascript"
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -389,6 +396,9 @@
               }
             }
           ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
           "request": {
             "auth": {
               "type": "bearer",
@@ -714,14 +724,7 @@
           "name": "busrefresh",
           "request": {
             "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{TOKEN}}",
-                  "type": "string"
-                }
-              ]
+              "type": "noauth"
             },
             "method": "POST",
             "header": [],

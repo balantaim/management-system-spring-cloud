@@ -82,6 +82,7 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
 
             // Reject refresh tokens presented as access tokens
             if (!jwtService.isAccessToken(claims)) {
+                log.error("Refresh token cannot be used for authentication");
                 throw new UnsupportedJwtException("Refresh token cannot be used for authentication");
             }
 

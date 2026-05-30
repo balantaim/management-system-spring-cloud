@@ -9,6 +9,11 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -16,11 +21,17 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    @Value("${security.allowed-origins}")
+    private List<String> allowedOrigins;
+
     //Configure reactive web filter chain
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtAuthorizationWebFilter jwtAuthorizationWebFilter) {
         //In the reactive world session is STATELESS by default
         return http
+                .cors(cors -> cors
+                        .configurationSource(corsConfigurationSource())
+                )
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .headers(headers -> headers
                         .frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable)
@@ -40,9 +51,24 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        // Add list of allowed origins
+        config.setAllowedOrigins(allowedOrigins);
+        // Add list of allowed headers
+        config.setAllowedHeaders(List.of("Authorization", "userId"));
+        // Add list of allowed methods
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+    @Bean
     public JwtAuthorizationWebFilter jwtAuthorizationWebFilter(
             @Value("${authorization.token.header.name}") String headerName,
-            @Value("${authorization.token.header.prefix}") String prefix, JwtService jwtService) {
+            @Value("${authorization.token.header.prefix}") String prefix,
+            JwtService jwtService) {
         return new JwtAuthorizationWebFilter(new JwtReactiveAuthenticationManager(jwtService), headerName, prefix, jwtService);
     }
 
