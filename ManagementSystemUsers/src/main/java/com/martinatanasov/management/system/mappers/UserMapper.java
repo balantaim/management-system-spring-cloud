@@ -1,4 +1,4 @@
-package com.martinatanasov.management.system.mapper;
+package com.martinatanasov.management.system.mappers;
 
 import com.martinatanasov.management.system.users.User;
 import com.martinatanasov.management.system.users.UserDetailsDto;

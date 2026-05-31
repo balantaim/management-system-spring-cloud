@@ -2,6 +2,7 @@ vault/data/
 vault/VAULT_KEY.txt
 keygen.txt
 setup.txt
+certs/
 
 HELP.md
 target/

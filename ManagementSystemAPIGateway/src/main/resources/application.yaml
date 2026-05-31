@@ -13,5 +13,5 @@ authorization:
       name: Authorization
       prefix: "Bearer "
 # Load the public key from resources. This is provided from Config Server.
-#token:
+#jwt:
 #  public-key-location: classpath:public.pem

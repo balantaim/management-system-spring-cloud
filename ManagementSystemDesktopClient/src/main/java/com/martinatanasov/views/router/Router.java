@@ -1,9 +1,9 @@
-package com.martinatanasov.view.router;
+package com.martinatanasov.views.router;
 
 import com.martinatanasov.animations.transition.PanelTransition;
 import com.martinatanasov.animations.transition.TransitionFactory;
 import com.martinatanasov.animations.transition.TransitionType;
-import com.martinatanasov.view.MainFrame;
+import com.martinatanasov.views.MainFrame;
 import jakarta.inject.Singleton;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.martinatanasov.config;
+package com.martinatanasov.configs;
 
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Property;

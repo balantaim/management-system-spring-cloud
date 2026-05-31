@@ -23,10 +23,8 @@ authorization:
     header:
       name: Authorization
       prefix: "Bearer "
-# Keystore properties will be load from the config server
-#encrypt:
-#  key-store:
-#    location: classpath:management-system.p12
-#    password: ${KEYSTORE-PASSWORD}
-#    alias: management-system-key
-#    secret: ${KEYSTORE-SECRET-PASSWORD}
+
+# Public and Private keys will be load from the config server
+#jwt:
+#  private-key-location: file:../private.pem
+#  public-key-location: file:../public.pem

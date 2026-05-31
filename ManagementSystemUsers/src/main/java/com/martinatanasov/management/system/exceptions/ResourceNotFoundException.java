@@ -1,4 +1,4 @@
-package com.martinatanasov.management.system.exception;
+package com.martinatanasov.management.system.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
 

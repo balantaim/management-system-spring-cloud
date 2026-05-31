@@ -1,4 +1,4 @@
-package com.martinatanasov.management.system.config;
+package com.martinatanasov.management.system.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
