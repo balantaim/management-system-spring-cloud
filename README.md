@@ -24,7 +24,7 @@ providing routing, load balancing, and centralized request handling.
 1. Users Service - [Setup guide](./ManagementSystemUsers/README.md) (Required)
 2. Config server - [Setup guide](./ManagementSystemConfigServer/README.md) (Required)
 3. Eureka Discovery server - [Readme](./ManagementSystemEurekaDiscovery/README.md)
-4. API Gateway - [Setup guide](./ManagementSystemAPIGateway/README.md)
+4. API Gateway - [Readme](./ManagementSystemAPIGateway/README.md)
 5. Image Converter (Planned for future release)
 6. Web frontend (Planned for future release)
 7. Desktop Client - [Readme](./ManagementSystemDesktopClient/README.md)

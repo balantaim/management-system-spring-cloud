@@ -29,5 +29,5 @@ This properties should be got from the **config server**!
     Or with parameters
 
     ```bash
-    mvn spring-boot:run -Dtoken.public-key-location="<YOUR_PUBLIC_KEY_LOCATION>"
+    mvn spring-boot:run -Djwt.public-key-location="<YOUR_PUBLIC_KEY_LOCATION>"
     ```
