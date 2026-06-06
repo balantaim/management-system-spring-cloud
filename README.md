@@ -1,4 +1,4 @@
-# Management System - 5 projects in 1 project
+# Management System - 6 projects in 1 project
 
 [License: Apache 2.0](LICENSE)
 
@@ -21,13 +21,14 @@ providing routing, load balancing, and centralized request handling.
 
 **Included projects:**
 
-1. Users Service - [Setup guide](./ManagementSystemUsers/README.md) (Required)
-2. Config server - [Setup guide](./ManagementSystemConfigServer/README.md) (Required)
-3. Eureka Discovery server - [Readme](./ManagementSystemEurekaDiscovery/README.md)
-4. API Gateway - [Readme](./ManagementSystemAPIGateway/README.md)
-5. Image Converter (Planned for future release)
-6. Web frontend (Planned for future release)
-7. Desktop Client - [Readme](./ManagementSystemDesktopClient/README.md)
+1. Users service - [Setup guide](./management-system-users/README.md) (Required)
+2. Config server - [Setup guide](./management-system-config-server/README.md) (Required)
+3. Eureka Discovery server - [Readme](./management-system-eureka-discovery/README.md)
+4. API Gateway - [Readme](./management-system-api-gateway/README.md)
+5. Analytics service - [Readme](./management-system-analytics/README.md)
+6. Image Converter (Planned for future release)
+7. Web frontend (Planned for future release)
+8. Desktop Client - [Readme](./management-system-desktop-client/README.md)
 
 **Key Features:**
 
@@ -83,7 +84,7 @@ Supported implementations:
 2. Unseal the Vault
 3. Start Config Server
 4. Start Eureka Discovery
-5. Start microservices (Users)
+5. Start microservices (Users, Analytics)
 6. Start API Gateway
 
 ### Validate Token

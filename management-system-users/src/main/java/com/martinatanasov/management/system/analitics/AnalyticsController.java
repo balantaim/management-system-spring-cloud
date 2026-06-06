@@ -1,0 +1,24 @@
+package com.martinatanasov.management.system.analitics;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequiredArgsConstructor
+@RestController
+public class AnalyticsController {
+
+    private final AnalyticsService analyticsService;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/api/analytics/{userId}")
+    public String analytics(@PathVariable String userId) {
+        if (userId != null && userId.length() > 2 && userId.length() <= 150) {
+            return analyticsService.getUserMetrics(userId);
+        }
+        return "Invalid user";
+    }
+
+}
