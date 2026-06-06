@@ -8,7 +8,14 @@ The Users microservice is responsible for all functionalities related to users, 
 
 **Generate Public and Private keys via keytool:**
 
-1. Generate .p12 file via keytool in the `resources` directory
+1. Go to root directory and create `certs` directory:
+
+    ```bash
+    mkdir certs
+    cd certs
+    ```
+
+2. Generate .p12 file via `keytool` in the `certs` directory
     ```bash
     keytool -genkeypair \
       -alias management-system-key \
@@ -22,7 +29,7 @@ The Users microservice is responsible for all functionalities related to users, 
       -dname "CN=management-system, OU=Development, L=Sofia, C=BG"
     ```
 
-2. Extract Public key as file
+3. Extract Public key as file
     ```bash
     keytool -exportcert \
       -alias management-system-key \
@@ -32,7 +39,27 @@ The Users microservice is responsible for all functionalities related to users, 
       -file public.pem
     ```
 
-3. Copy `public.pem` to APIGateway's `resources` directory
+4. Extract Private key as file. It will require to enter the password!
+
+    ```bash
+    openssl pkcs12 \
+      -in management-system.p12 \
+      -nocerts \
+      -nodes \
+      -out private-key-pkcs12.pem
+    ```
+
+5. Convert `private-key-pkcs12.pem` to PKCS8 format
+
+    ```bash
+    openssl pkcs8 \
+      -topk8 \
+      -nocrypt \
+      -in private-key-pkcs12.pem \
+      -out private-key.pem
+    ```
+
+6. It is safe to delete `private-key-pkcs12.pem` that is no longer needed
 
 ### Check Redis connection (Optional)
 

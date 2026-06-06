@@ -573,6 +573,39 @@
           "response": []
         },
         {
+          "name": "application local",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/application/local",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "application",
+                "local"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "users default",
           "event": [
             {
@@ -600,6 +633,39 @@
               "path": [
                 "management-system-users",
                 "default"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users local",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/management-system-users/local",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "management-system-users",
+                "local"
               ]
             }
           },
@@ -639,6 +705,39 @@
           "response": []
         },
         {
+          "name": "api-gateway local",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/management-system-api-gateway/local",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "management-system-api-gateway",
+                "local"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "config-encrypt",
           "event": [
             {
@@ -660,7 +759,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "afasf",
+              "raw": "afasfwseftweg:svgdsfsdgsdgsdg",
               "options": {
                 "raw": {
                   "language": "json"
