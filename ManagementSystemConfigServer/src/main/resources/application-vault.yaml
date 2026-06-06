@@ -16,3 +16,7 @@ spring:
           token: ${ROOT_TOKEN}
           order: 1
   #          namespace: null
+logging:
+  level:
+    org:
+      springframework: DEBUG

@@ -34,6 +34,12 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
         return Mono.fromCallable(() -> {
                     Claims claims = jwtService.extractAllClaims(token);
 
+                    // Reject refresh tokens used as access tokens
+                    if (!jwtService.isAccessToken(claims)) {
+                        log.error("Refresh token cannot be used for authentication");
+                        throw new BadCredentialsException("Refresh token cannot be used for authentication");
+                    }
+
                     String subject = jwtService.extractSubjectFromClaims(claims);
                     if (subject == null) {
                         throw new BadCredentialsException("JWT subject is missing");
@@ -45,6 +51,8 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
 
                     return (Authentication) new JwtAuthenticationToken(subject, authorities);
                 })
+                // Check if the token is from type access
+                .onErrorMap(BadCredentialsException.class, ex -> ex)
                 .onErrorMap(ExpiredJwtException.class,
                         ex -> new BadCredentialsException("JWT expired", ex))
                 .onErrorMap(JwtException.class,

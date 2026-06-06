@@ -1,4 +1,4 @@
-package com.martinatanasov.view;
+package com.martinatanasov.views;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;

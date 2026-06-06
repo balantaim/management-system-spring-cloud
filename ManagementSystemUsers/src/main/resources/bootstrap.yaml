@@ -1,7 +1,20 @@
 spring:
-  # Message broker required for busrefresh
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:user}
-    password: ${RABBITMQ_PASSWORD:password}
+  config:
+    import: configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+  cloud:
+    config:
+      enabled: true
+      fail-fast: true
+      retry:
+        max-attempts: 4
+        initial-interval: 1000
+        multiplier: 1.5
+        max-interval: 6000
+# Credentials for RabbitMQ will be loaded from the config server
+
+  # Message broker is required for busrefresh
+#  rabbitmq:
+#    host: ${RABBITMQ_HOST:localhost}
+#    port: ${RABBITMQ_PORT:5672}
+#    username: ${RABBITMQ_USERNAME:user}
+#    password: ${RABBITMQ_PASSWORD:password}

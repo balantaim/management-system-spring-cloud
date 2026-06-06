@@ -25,6 +25,18 @@ public class UserController {
         };
     }
 
+    public ResponseStatus refreshAccessToken() {
+        return switch (userService.refreshAccessToken()) {
+            case 200 -> ResponseStatus.SUCCESS; //Access token is refreshed
+            // Refresh token expired. Need to log-in again. Keep in mid that the account may be disabled!
+            case 401 -> ResponseStatus.UNAUTHORIZED_ACCESS;
+            case 408 -> ResponseStatus.TIMEOUT; //Timeout
+            case 429 -> ResponseStatus.TOO_MANY_REQUESTS; //Too many requests
+            case 500, 503, 504 -> ResponseStatus.SERVER_ERROR; //Server problem
+            default -> ResponseStatus.UNKNOWN_ERROR;
+        };
+    }
+
     public ResponseStatus register(String email, String fullName, String password) {
         return switch (userService.register(email, fullName, password)) {
             case 201 -> ResponseStatus.RESOURCE_CREATED; //User created

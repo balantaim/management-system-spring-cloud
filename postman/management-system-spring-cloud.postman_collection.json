@@ -10,40 +10,6 @@
       "name": "Users",
       "item": [
         {
-          "name": "get info",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{GATEWAY_BASE_URL}}/api/users/info",
-              "host": [
-                "{{GATEWAY_BASE_URL}}"
-              ],
-              "path": [
-                "api",
-                "users",
-                "info"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "get user by email",
           "event": [
             {
@@ -66,7 +32,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{TOKEN}}",
+                  "value": "{{ACCESS_TOKEN}}",
                   "type": "string"
                 }
               ]
@@ -111,7 +77,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{TOKEN}}",
+                  "value": "{{ACCESS_TOKEN}}",
                   "type": "string"
                 }
               ]
@@ -149,13 +115,16 @@
               }
             }
           ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{TOKEN}}",
+                  "value": "{{ACCESS_TOKEN}}",
                   "type": "string"
                 }
               ]
@@ -198,7 +167,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{TOKEN}}",
+                  "value": "{{ACCESS_TOKEN}}",
                   "type": "string"
                 }
               ]
@@ -240,10 +209,14 @@
                   "});",
                   "// Parse the JSON response",
                   "const response = pm.response.json();",
-                  "// Extract the token",
-                  "const userToken = response.token;",
-                  "// Store it in an environment variable named 'TOKEN'",
-                  "pm.environment.set(\"TOKEN\", userToken);",
+                  "// Extract the tokens",
+                  "const accessToken = response.access_token;",
+                  "// Store it in an environment variable named 'ACCESS_TOKEN'",
+                  "pm.environment.set(\"ACCESS_TOKEN\", accessToken);",
+                  "",
+                  "const refreshToken = response.refresh_token;",
+                  "// Store it in an environment variable named 'REFRESH_TOKEN'",
+                  "pm.environment.set(\"REFRESH_TOKEN\", refreshToken);",
                   "",
                   "const userId = pm.response.headers.get('userId');",
                   "pm.environment.set(\"USER_ID\", userId);",
@@ -252,6 +225,13 @@
                 "type": "text/javascript",
                 "packages": {},
                 "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [],
+                "type": "text/javascript"
               }
             }
           ],
@@ -278,6 +258,68 @@
               "path": [
                 "auth",
                 "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "// Parse the JSON response",
+                  "const response = pm.response.json();",
+                  "// Extract the tokens",
+                  "const accessToken = response.access_token;",
+                  "// Store it in an environment variable named 'ACCESS_TOKEN'",
+                  "pm.environment.set(\"ACCESS_TOKEN\", accessToken);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refresh_token\": \"{{REFRESH_TOKEN}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{GATEWAY_BASE_URL}}/auth/refresh",
+              "host": [
+                "{{GATEWAY_BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
               ]
             }
           },
@@ -354,13 +396,16 @@
               }
             }
           ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{TOKEN}}",
+                  "value": "{{ACCESS_TOKEN}}",
                   "type": "string"
                 }
               ]
@@ -410,8 +455,12 @@
             {
               "listen": "prerequest",
               "script": {
-                "exec": [],
-                "type": "text/javascript"
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -421,7 +470,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{TOKEN}}",
+                  "value": "{{ACCESS_TOKEN}}",
                   "type": "string"
                 }
               ]
@@ -524,6 +573,39 @@
           "response": []
         },
         {
+          "name": "application local",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/application/local",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "application",
+                "local"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "users default",
           "event": [
             {
@@ -551,6 +633,39 @@
               "path": [
                 "management-system-users",
                 "default"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "users local",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/management-system-users/local",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "management-system-users",
+                "local"
               ]
             }
           },
@@ -590,6 +705,39 @@
           "response": []
         },
         {
+          "name": "api-gateway local",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/management-system-api-gateway/local",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "management-system-api-gateway",
+                "local"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "config-encrypt",
           "event": [
             {
@@ -611,7 +759,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "afasf",
+              "raw": "afasfwseftweg:svgdsfsdgsdgsdg",
               "options": {
                 "raw": {
                   "language": "json"
@@ -675,14 +823,7 @@
           "name": "busrefresh",
           "request": {
             "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{TOKEN}}",
-                  "type": "string"
-                }
-              ]
+              "type": "noauth"
             },
             "method": "POST",
             "header": [],

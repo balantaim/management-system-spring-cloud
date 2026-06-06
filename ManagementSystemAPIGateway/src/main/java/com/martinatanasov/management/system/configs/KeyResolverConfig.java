@@ -1,4 +1,4 @@
-package com.martinatanasov.management.system.config;
+package com.martinatanasov.management.system.configs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;

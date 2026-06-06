@@ -1,13 +1,13 @@
-package com.martinatanasov.view.panels;
+package com.martinatanasov.views.panels;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.martinatanasov.requests.AsyncExecutor;
 import com.martinatanasov.uicomponents.toast.Toast;
 import com.martinatanasov.user.UserController;
-import com.martinatanasov.view.Theme;
-import com.martinatanasov.view.router.Router;
-import com.martinatanasov.view.router.Routes;
+import com.martinatanasov.views.Theme;
+import com.martinatanasov.views.router.Router;
+import com.martinatanasov.views.router.Routes;
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 import lombok.Getter;

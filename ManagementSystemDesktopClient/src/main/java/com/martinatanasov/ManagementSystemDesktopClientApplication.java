@@ -1,7 +1,7 @@
 package com.martinatanasov;
 
 import com.martinatanasov.uicomponents.DefaultThemeAndFont;
-import com.martinatanasov.view.MainFrame;
+import com.martinatanasov.views.MainFrame;
 import io.micronaut.context.ApplicationContext;
 import lombok.extern.slf4j.Slf4j;
 

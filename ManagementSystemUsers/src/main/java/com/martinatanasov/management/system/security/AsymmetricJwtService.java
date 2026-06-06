@@ -28,14 +28,20 @@ public interface AsymmetricJwtService {
 
     <T> T extractClaim(Claims claims, Function<Claims, T> claimsResolver);
 
+    boolean isAccessToken(Claims claims);
+
+    boolean isRefreshToken(Claims claims);
+
     List<GrantedAuthority> extractAuthorities(Claims claims);
 
     boolean isTokenExpired(Claims claims);
 
     boolean isTokenValid(String token);
 
-    String generateToken(String subject, List<String> authorities);
+    String generateAccessToken(String subject, List<String> authorities);
 
-    String generateToken(String subject, List<String> authorities, Map<String, Object> extraClaims);
+    String generateAccessToken(String subject, List<String> authorities, Map<String, Object> extraClaims);
+
+    String generateRefreshToken(String subject);
 
 }

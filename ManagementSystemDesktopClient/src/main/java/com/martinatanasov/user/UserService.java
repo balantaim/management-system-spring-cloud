@@ -4,7 +4,7 @@ public interface UserService {
 
     int login(String email, String password);
 
-    void getInfo();
+    int refreshAccessToken();
 
     void logout();
 

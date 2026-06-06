@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,8 +29,12 @@ import java.util.stream.Collectors;
 @Service
 public class JwtService implements JwtVerifier {
 
-    @Value("${token.public-key-location}")
-    private Resource publicKeyResource;
+    private static final String TOKEN_TYPE_CLAIM   = "token_type";
+    private static final String ACCESS_TOKEN_TYPE  = "access";
+    private static final String REFRESH_TOKEN_TYPE = "refresh";
+
+    @Value("${jwt.public-key-location}")
+    private String PUBLIC_KEY_LOCATION;
 
     private PublicKey publicKey;
 
@@ -41,7 +46,9 @@ public class JwtService implements JwtVerifier {
 
     private PublicKey loadPublicKey() {
         try {
-            byte[] pemBytes = publicKeyResource.getInputStream().readAllBytes();
+            Resource resource = new DefaultResourceLoader().getResource(PUBLIC_KEY_LOCATION);
+
+            byte[] pemBytes = resource.getInputStream().readAllBytes();
 
             String pem = new String(pemBytes, StandardCharsets.UTF_8)
                     .replace("-----BEGIN CERTIFICATE-----", "")
@@ -55,15 +62,17 @@ public class JwtService implements JwtVerifier {
             return cf.generateCertificate(new ByteArrayInputStream(decoded)).getPublicKey();
 
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to load JWT public key from: " + publicKeyResource.getFilename(), e);
+            throw new IllegalStateException("Failed to load JWT public key from: " + PUBLIC_KEY_LOCATION, e);
         }
     }
 
+    // Get Key Access
     @Override
     public PublicKey getVerificationKey() {
         return publicKey;
     }
 
+    // Claims Extraction
     @Override
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
@@ -98,6 +107,17 @@ public class JwtService implements JwtVerifier {
         return claimsResolver.apply(claims);
     }
 
+    // Token Type
+    @Override
+    public boolean isAccessToken(Claims claims) {
+        return ACCESS_TOKEN_TYPE.equals(claims.get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
+    @Override
+    public boolean isRefreshToken(Claims claims) {
+        return REFRESH_TOKEN_TYPE.equals(claims.get(TOKEN_TYPE_CLAIM, String.class));
+    }
+
     //Get Authorities
     @Override
     @SuppressWarnings("unchecked")
@@ -128,7 +148,7 @@ public class JwtService implements JwtVerifier {
             Claims claims = extractAllClaims(token);
             return !isTokenExpired(claims);
         } catch (JwtException e) {
-            log.warn("Token validation failed: {}", e.getMessage());
+            log.error("Token validation failed: {}", e.getMessage());
             return false;
         }
     }

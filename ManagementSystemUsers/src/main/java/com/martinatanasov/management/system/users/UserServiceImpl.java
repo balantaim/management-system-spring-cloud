@@ -1,8 +1,8 @@
 package com.martinatanasov.management.system.users;
 
-import com.martinatanasov.management.system.exception.ResourceNotFoundException;
-import com.martinatanasov.management.system.exception.UserAlreadyExistsException;
-import com.martinatanasov.management.system.mapper.UserMapper;
+import com.martinatanasov.management.system.exceptions.ResourceNotFoundException;
+import com.martinatanasov.management.system.exceptions.UserAlreadyExistsException;
+import com.martinatanasov.management.system.mappers.UserMapper;
 import com.martinatanasov.management.system.roles.Role;
 import com.martinatanasov.management.system.roles.RoleName;
 import com.martinatanasov.management.system.roles.RoleRepository;
@@ -89,6 +89,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailsDto findByEmailAndFullEnabled(String email) {
         User user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        return userMapper.userToUserDataDto(user);
+    }
+
+    @Override
+    public UserDetailsDto findByUserIdAndFullEnabled(String email) {
+        User user = userRepository.findByUserIdAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         return userMapper.userToUserDataDto(user);
     }

@@ -1,5 +1,5 @@
 spring:
-  # Message broker required for busrefresh
+  # Message broker is required for busrefresh
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}

@@ -2,6 +2,7 @@ package com.martinatanasov.management.system.security;
 
 import com.martinatanasov.management.system.users.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -27,7 +28,7 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class GlobalSecurityConfig {
+public class SecurityConfig {
 
     /**
      * Argon2id is used instead of bcryptPasswordEncoder (for more control over passwordEncoder add dependency for artifactId `password4j`)
@@ -41,6 +42,9 @@ public class GlobalSecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final Environment environment;
 
+    @Value("${security.allowed-origins}")
+    private List<String> allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) {
         //AuthenticationFilter authFilter = new AuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
@@ -52,8 +56,8 @@ public class GlobalSecurityConfig {
 
         http
                 .authorizeHttpRequests(config -> config
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/api/users/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/info", "/actuator/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/api/users/register", "/auth/refresh").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -80,9 +84,11 @@ public class GlobalSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5000"));
-        config.setAllowCredentials(true);
-        config.setAllowedHeaders(List.of("*"));
+        // Add list of allowed origins
+        config.setAllowedOrigins(allowedOrigins);
+        // Add list of allowed headers
+        config.setAllowedHeaders(List.of("Authorization", "userId"));
+        // Add list of allowed methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

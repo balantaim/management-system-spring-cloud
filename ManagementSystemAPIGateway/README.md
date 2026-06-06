@@ -15,9 +15,9 @@ The application represents a reactive API Gateway and is used as a centralized e
 
 ### Set up the environment (Optional)
 
-- Set public key location as environment variable (Optional) `token.public-key-location`
+- Set public key location as environment variable (Optional) `jwt.public-key-location`
 
-This properties should be got from the Config server.
+This properties should be got from the **config server**!
 
 ### Start the application
 
@@ -29,5 +29,5 @@ This properties should be got from the Config server.
     Or with parameters
 
     ```bash
-    mvn spring-boot:run -Dtoken.public-key-location="<YOUR_PUBLIC_KEY_LOCATION>"
+    mvn spring-boot:run -Djwt.public-key-location="<YOUR_PUBLIC_KEY_LOCATION>"
     ```

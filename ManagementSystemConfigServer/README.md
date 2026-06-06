@@ -80,10 +80,10 @@ export VAULT_TOKEN="<YOUR_ROOT_TOKEN>"
 vault secrets enable -path=secret kv-v2
 ```
 
-Add new secrets for local testing (Optional):
+Add new secrets for `local` testing. Use `,` as separator between the application name and profile (Optional):
 
 ```bash
-vault kv put secret/application \
+vault kv put "secret/application,local" \
 spring.rabbitmq.host="localhost" \
 spring.rabbitmq.port="5672" \
 spring.rabbitmq.username="user" \
@@ -93,7 +93,7 @@ spring.rabbitmq.password="password"
 Get the secrets:
 
 ```bash
-vault kv get secret/application
+vault kv get "secret/application,local"
 ```
 
 ### **Variant 2: Use the UI via browser and unseal the vault:**
@@ -124,7 +124,7 @@ Login to the Vault and create a new secret engine:
 - version: 2
 - url: management-system
 
-### Update the applications properties
+## Update the applications properties
 
 Add value for `ROOT_TOKEN` required for connection with Vault. (This could be IDE configuration file or environment variable)
 
@@ -148,29 +148,42 @@ Add value for `ROOT_TOKEN` required for connection with Vault. (This could be ID
     vault login <YOUR_ROOT_TOKEN>
     ```
 
-3. Put secrets for `API Gateway` (public key location). If you need to add configuration only for `prod` profile use `"secret/management-system-api-gateway,prod"` where `,` is separator.
+3. Use `,` as separator between the application name and profile in order to add new secrets for `local` testing:
 
     ```bash
-    vault kv put "secret/management-system-api-gateway" \
-    token.public-key-location="classpath:public.pem"
+    vault kv put "secret/application,local" \
+    spring.rabbitmq.host="localhost" \
+    spring.rabbitmq.port="5672" \
+    spring.rabbitmq.username="user" \
+    spring.rabbitmq.password="password"
     ```
 
-4. Put secrets for `Users microservice` (keystore credentials):
+4. Put secrets for `API Gateway` (public key location). If you need to add configuration only for `prod` profile use `"secret/management-system-api-gateway,prod"` where `,` is separator.
+
+    - Use `file:/<PATH_TO_PROJECT>/management-system-spring-cloud/certs/public.pem` for files outside of `resources` directory **(Recommended)**
+    - Use `classpath:public.pem` for files inside `resources` directory
+    - Use `http://<URL>/public.pem` for URLs
+    - Use value of `public.pem` as a string if you want to use it directly **(Not recommended)**
 
     ```bash
-    vault kv put "secret/management-system-users" \
-    encrypt.key-store.location="classpath:management-system.p12" \
-    encrypt.key-store.password="<YOUR_KEY_STORE_PASS>" \
-    encrypt.key-store.alias="management-system-key" \
-    encrypt.key-store.secret="<YOUR_KEY_STORE_SECRET>"
+    vault kv put "secret/management-system-api-gateway,local" \
+    jwt.public-key-location="<YOUR_PUBLIC_KEY_LOCATION>"
     ```
 
-5. Test the credentials from new terminal:
+5. Put secrets for `Users microservice` (keystore credentials):
 
     ```bash
-    vault kv get -mount="secret" "management-system-users"
+    vault kv put "secret/management-system-users,local" \
+    jwt.private-key-location="<YOUR_PRIVATE_KEY_LOCATION>" \
+    jwt.public-key-location="<YOUR_PUBLIC_KEY_LOCATION>"
+    ```
 
-    vault kv get -mount="secret" "management-system-api-gateway"
+6. Test the credentials from new terminal:
+
+    ```bash
+    vault kv get -mount="secret" "management-system-users,local"
+
+    vault kv get -mount="secret" "management-system-api-gateway,local"
     ```
 
 ### Start the application
@@ -200,5 +213,5 @@ curl -X POST http://localhost:8888/actuator/busrefresh
 Check the stored secrets for all applications:
 
 ```bash
-curl http://localhost:8888/application/default
+curl http://localhost:8888/application/local
 ```

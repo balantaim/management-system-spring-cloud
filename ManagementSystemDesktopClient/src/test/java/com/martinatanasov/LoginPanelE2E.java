@@ -1,7 +1,7 @@
 package com.martinatanasov;
 
 import com.martinatanasov.utils.SwingTestUtils;
-import com.martinatanasov.view.panels.LoginPanel;
+import com.martinatanasov.views.panels.LoginPanel;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

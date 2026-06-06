@@ -9,22 +9,22 @@ spring:
     banner-mode: off
   threads:
     virtual:
-      enabled: false
+      enabled: true
 login:
   url: /auth/login
 token:
-  expiration-time: 3600000
+  # 1 hour
+  access-expiration: 3600000
+  # 30 days
+  refresh-expiration: 2592000000
   issuer: "Management system"
-
 authorization:
   token:
     header:
       name: Authorization
       prefix: "Bearer "
-# Keystore properties will be load from the config server
-#encrypt:
-#  key-store:
-#    location: classpath:management-system.p12
-#    password: ${KEYSTORE-PASSWORD}
-#    alias: management-system-key
-#    secret: ${KEYSTORE-SECRET-PASSWORD}
+
+# Public and Private keys will be load from the config server
+#jwt:
+#  private-key-location: file:../private.pem
+#  public-key-location: file:../public.pem

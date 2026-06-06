@@ -11,11 +11,11 @@
     <parent>
         <groupId>io.micronaut.platform</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>4.10.12</version>
+        <version>5.0.0</version>
     </parent>
 
     <properties>
-        <flatlaf.version>3.7</flatlaf.version>
+        <flatlaf.version>3.7.1</flatlaf.version>
         <miglayout.version>11.4.2</miglayout.version>
         <font.roboto.version>2.137</font.roboto.version>
         <assertj.guava.version>3.27.7</assertj.guava.version>
@@ -23,7 +23,7 @@
         <packaging>jar</packaging>
         <jdk.version>25</jdk.version>
         <release.version>25</release.version>
-        <micronaut.version>4.10.12</micronaut.version>
+        <micronaut.version>5.0.0</micronaut.version>
         <micronaut.aot.enabled>false</micronaut.aot.enabled>
         <micronaut.aot.packageName>com.martinatanasov.aot.generated</micronaut.aot.packageName>
         <!-- disable server -->
@@ -181,6 +181,18 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${exec.mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <!-- Uncomment to enable incremental compilation -->
@@ -229,7 +241,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -242,18 +253,35 @@
 
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.martinatanasov.ManagementSystemDesktopClientApplication</mainClass>
+                                    <mainClass>${exec.mainClass}</mainClass>
                                 </transformer>
+
+                                <!-- Required for Micronaut -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
+
+                            <filters>
+                                <filter>
+                                    <artifact>*.*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>module-info.class</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.jreleaser</groupId>
-                <artifactId>jreleaser-maven-plugin</artifactId>
-                <version>1.8.0</version>
-            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.jreleaser</groupId>-->
+<!--                <artifactId>jreleaser-maven-plugin</artifactId>-->
+<!--                <version>1.8.0</version>-->
+<!--            </plugin>-->
+
         </plugins>
 
     </build>

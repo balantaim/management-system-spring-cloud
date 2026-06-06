@@ -1,9 +1,9 @@
-package com.martinatanasov.view.panels;
+package com.martinatanasov.views.panels;
 
 import com.martinatanasov.user.UserController;
-import com.martinatanasov.view.Theme;
-import com.martinatanasov.view.router.Router;
-import com.martinatanasov.view.router.Routes;
+import com.martinatanasov.views.Theme;
+import com.martinatanasov.views.router.Router;
+import com.martinatanasov.views.router.Routes;
 import io.micronaut.context.annotation.Property;
 import jakarta.inject.Singleton;
 import lombok.Getter;

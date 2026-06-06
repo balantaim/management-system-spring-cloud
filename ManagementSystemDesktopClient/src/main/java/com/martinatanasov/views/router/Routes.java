@@ -1,4 +1,4 @@
-package com.martinatanasov.view.router;
+package com.martinatanasov.views.router;
 
 public enum Routes {
 

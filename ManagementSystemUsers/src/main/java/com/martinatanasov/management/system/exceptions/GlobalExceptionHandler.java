@@ -1,4 +1,4 @@
-package com.martinatanasov.management.system.exception;
+package com.martinatanasov.management.system.exceptions;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
