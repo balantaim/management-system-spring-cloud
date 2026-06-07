@@ -87,6 +87,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findEntityByUserId(String userId) {
+        return userRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+    }
+
+    @Override
     public UserDetailsDto findByEmailAndFullEnabled(String email) {
         User user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));

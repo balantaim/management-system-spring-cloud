@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.analitics;
 
+import com.martinatanasov.management.system.users.User;
 import com.martinatanasov.management.system.users.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,16 +20,20 @@ public class AnalyticsController {
     private final UserService userService;
 
     @GetMapping("/api/analytics/{userId}")
-    public ResponseEntity<AnalyticsDTO> analytics(@PathVariable String userId) {
+    public ResponseEntity<AnalyticsUserDetailsDTO> analytics(@PathVariable String userId) {
         if (userId == null || userId.length() <= 2 || userId.length() > 150) {
             return ResponseEntity.badRequest().build();
         }
-        if (userService.findByUserId(userId) == null) {
+        User user = userService.findEntityByUserId(userId);
+        if (user == null) {
             return ResponseEntity.notFound().build();
         }
         try {
             return analyticsService.getUserMetrics(userId)
-                    .map(ResponseEntity::ok)
+                    //TODO Use analytics to fill the DTO with data
+                    .map(analytics ->
+                            ResponseEntity.ok(newAnalyticsUserDetailsDTO(user))
+                    )
                     .orElseGet(() -> ResponseEntity.notFound().build());
         } catch (ResourceAccessException ex) {
             log.error("Analytics service is not available right now");
@@ -37,6 +42,17 @@ public class AnalyticsController {
             log.error("Internal Server Error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    private AnalyticsUserDetailsDTO newAnalyticsUserDetailsDTO(User user) {
+        return new AnalyticsUserDetailsDTO(user.getId(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getUserId(),
+                user.getAccountNonExpired(),
+                user.getAccountNonLocked(),
+                user.getCredentialsNonExpired(),
+                user.getEnabled());
     }
 
 }
