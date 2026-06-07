@@ -5,6 +5,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.Optional;
 
 @Service
 class AnalyticsServiceImpl implements AnalyticsService {
@@ -16,9 +17,9 @@ class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    public String getUserMetrics(String userId) {
+    public Optional<AnalyticsDTO> getUserMetrics(String userId) {
         return restClient.get()
-                .uri("/api/analytics/" + userId)
+                .uri("/api/analytics/{userId}", userId)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
     }

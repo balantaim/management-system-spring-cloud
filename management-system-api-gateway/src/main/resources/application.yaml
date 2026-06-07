@@ -7,6 +7,116 @@ spring:
     name: management-system-api-gateway
   main:
     banner-mode: off
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              # Enable auto created locator (Keep false if you have custom routes)
+              enabled: false
+              # Disable upper case name for services
+              lower-case-service-id: true
+          routes:
+            # Get - Analytics
+            - id: management-system-analytics-get
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/analytics/{userId}
+                - Method=GET
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                # Discard Cookie headers since authentication is handled via JWT
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 20
+                    redis-rate-limiter.burstCapacity: 40
+                    redis-rate-limiter.requestedTokens: 1
+            # Post Login/Register - Users Service
+            - id: management-system-users-post-auth
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/register,/auth/login,/auth/refresh
+                - Method=POST
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    # Customized resolver for anonymous user
+                    key-resolver: "#{@ipKeyResolver}"
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 2
+
+            # Get - Users Service
+            - id: management-system-users-get
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users,/api/users/email/**,/api/users/{userId}
+                - Method=GET
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                # Discard Cookie headers since authentication is handled via JWT
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 20
+                    redis-rate-limiter.burstCapacity: 40
+                    redis-rate-limiter.requestedTokens: 1
+            # Post Login/Register - Users Service
+            - id: management-system-users-post-auth
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/register,/auth/login,/auth/refresh
+                - Method=POST
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    # Customized resolver for anonymous user
+                    key-resolver: "#{@ipKeyResolver}"
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 2
+            # Post - Users Service
+            - id: management-system-users-post
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/update-password/{userId}
+                - Method=POST
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 2
+            # Put - Users Service
+            - id: management-system-users-put
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/api/users/update-fullname/{userId}
+                - Method=PUT
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 2
+            # H2 console - Users Service
+            - id: management-system-users-h2
+              uri: ${USERS_SERVICE_URL:lb://management-system-users}
+              predicates:
+                - Path=/h2-console/**
+                - Method=POST,GET,PUT,PATCH,DELETE
+              filters:
+                - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
 authorization:
   token:
     header:

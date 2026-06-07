@@ -26,7 +26,7 @@ providing routing, load balancing, and centralized request handling.
 3. Eureka Discovery server - [Readme](./management-system-eureka-discovery/README.md)
 4. API Gateway - [Readme](./management-system-api-gateway/README.md)
 5. Analytics service - [Readme](./management-system-analytics/README.md)
-6. Image Converter (Planned for future release)
+6. Image Converter service - (Planned for future release)
 7. Web frontend (Planned for future release)
 8. Desktop Client - [Readme](./management-system-desktop-client/README.md)
 

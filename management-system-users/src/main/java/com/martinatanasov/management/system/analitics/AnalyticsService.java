@@ -1,7 +1,9 @@
 package com.martinatanasov.management.system.analitics;
 
+import java.util.Optional;
+
 public interface AnalyticsService {
 
-    String getUserMetrics(String userId);
+    Optional<AnalyticsDTO> getUserMetrics(String userId);
 
 }
