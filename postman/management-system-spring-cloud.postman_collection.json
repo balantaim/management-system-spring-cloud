@@ -10,7 +10,7 @@
       "name": "Users",
       "item": [
         {
-          "name": "get user by email",
+          "name": "user by email",
           "event": [
             {
               "listen": "test",
@@ -55,7 +55,7 @@
           "response": []
         },
         {
-          "name": "get user by userId",
+          "name": "user by userId",
           "event": [
             {
               "listen": "test",
@@ -99,7 +99,7 @@
           "response": []
         },
         {
-          "name": "get user analytics",
+          "name": "user analytics by userId",
           "event": [
             {
               "listen": "test",
@@ -143,7 +143,7 @@
           "response": []
         },
         {
-          "name": "get all users",
+          "name": "all users",
           "event": [
             {
               "listen": "test",
@@ -189,7 +189,7 @@
           "response": []
         },
         {
-          "name": "get all users with parameters",
+          "name": "all users with parameters",
           "event": [
             {
               "listen": "test",
@@ -262,7 +262,7 @@
                   "// Store it in an environment variable named 'REFRESH_TOKEN'",
                   "pm.environment.set(\"REFRESH_TOKEN\", refreshToken);",
                   "",
-                  "const userId = pm.response.headers.get('userId');",
+                  "const userId = pm.response.headers.get('User-Id');",
                   "pm.environment.set(\"USER_ID\", userId);",
                   ""
                 ],
@@ -288,7 +288,18 @@
               "type": "noauth"
             },
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Client-Platform-Id",
+                "value": "1000",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"{{USERNAME}}\",\n    \"password\": \"{{PASSWORD}}\"\n}",
@@ -350,7 +361,13 @@
               "type": "noauth"
             },
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Client-Platform-Id",
+                "value": "1000",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n    \"refresh_token\": \"{{REFRESH_TOKEN}}\"\n}",
@@ -392,7 +409,13 @@
           ],
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Client-Platform-Id",
+                "value": "1000",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"fullName\": \"{{$randomFullName}}\",\n    \"password\": \"Test123!\"\n}",
@@ -459,7 +482,13 @@
               ]
             },
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Client-Platform-Id",
+                "value": "1000",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n    \"email\": \"abv@abv.bg\",\n    \"oldPassword\": \"Test123!\",\n    \"newPassword\": \"Test123!\"\n}",

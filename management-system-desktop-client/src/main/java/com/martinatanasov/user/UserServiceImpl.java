@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+import static com.martinatanasov.configs.RestClientConfig.CLIENT_PLATFORM_ID;
+import static com.martinatanasov.configs.RestClientConfig.CLIENT_PLATFORM_ID_HEADER;
+
 @Slf4j
 @RequiredArgsConstructor
 @Singleton
@@ -22,7 +25,6 @@ public class UserServiceImpl implements UserService {
     // Get the specific rest client by id
     @Named("rest-client")
     private HttpClient httpClient;
-
     private final UserToken userToken;
 
     @Override
@@ -31,13 +33,11 @@ public class UserServiceImpl implements UserService {
         try {
             HttpResponse<Map<String, String>> response = httpClient.toBlocking()
                     .exchange(
-                            HttpRequest.POST("/auth/login", new LoginCredentialsDto(email, password)),
+                            HttpRequest.POST("/auth/login", new LoginCredentialsDto(email, password))
+                                    // Add custom header for Client-Platform-Id
+                                    .header(CLIENT_PLATFORM_ID_HEADER, CLIENT_PLATFORM_ID),
                             Argument.mapOf(String.class, String.class)
                     );
-//            userToken.setToken(response.getHeaders().get("Authorization"));
-//            log.info("Login with status code: {}", response.getStatus().getCode());
-//            log.info("Has token: {}", userToken.hasToken());
-//            return response.getStatus().getCode();
 
             Map<String, String> body = response.body();
             if (body != null && body.containsKey("access_token") && body.containsKey("refresh_token")) {
@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService {
         try {
             HttpResponse<Map<String, String>> response = httpClient.toBlocking()
                     .exchange(
-                            HttpRequest.POST("/auth/refresh",
-                                    Map.of("refresh_token", userToken.getRefreshToken())),
+                            HttpRequest.POST("/auth/refresh", Map.of("refresh_token", userToken.getRefreshToken()))
+                                    .header(CLIENT_PLATFORM_ID_HEADER, CLIENT_PLATFORM_ID),
                             Argument.mapOf(String.class, String.class)
                     );
 
@@ -112,7 +112,8 @@ public class UserServiceImpl implements UserService {
             HttpResponse<Void> response = httpClient.toBlocking()
                     .exchange(
                             HttpRequest.POST("/api/users/register",
-                                    new RegisterCredentialsDto(email, fullName, password)),
+                                    new RegisterCredentialsDto(email, fullName, password))
+                                    .header(CLIENT_PLATFORM_ID_HEADER, CLIENT_PLATFORM_ID),
                             Void.class
                     );
             log.info("Register with status code: {}", response.getStatus().getCode());

@@ -15,6 +15,9 @@ import java.time.Duration;
 @Factory
 public class RestClientConfig {
 
+    public static final String CLIENT_PLATFORM_ID = "1001";
+    public static final String CLIENT_PLATFORM_ID_HEADER = "Client-Platform-Id";
+
     @Singleton
     // Set id of the client
     @Named("rest-client")

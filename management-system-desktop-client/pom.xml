@@ -16,14 +16,14 @@
 
     <properties>
         <flatlaf.version>3.7.1</flatlaf.version>
-        <miglayout.version>11.4.2</miglayout.version>
+        <miglayout.version>11.4.3</miglayout.version>
         <font.roboto.version>2.137</font.roboto.version>
         <assertj.guava.version>3.27.7</assertj.guava.version>
 
         <packaging>jar</packaging>
         <jdk.version>25</jdk.version>
         <release.version>25</release.version>
-        <micronaut.version>5.0.0</micronaut.version>
+        <micronaut.version>5.0.2</micronaut.version>
         <micronaut.aot.enabled>false</micronaut.aot.enabled>
         <micronaut.aot.packageName>com.martinatanasov.aot.generated</micronaut.aot.packageName>
         <!-- disable server -->
@@ -153,6 +153,18 @@
                 <artifactId>micronaut-maven-plugin</artifactId>
                 <configuration>
                     <configFile>aot-${packaging}.properties</configFile>
+
+                    <configurationValidation>
+                        <enabled>false</enabled>
+
+                        <suppressions>
+                            <suppression>datasources.default.db-type</suppression>
+                        </suppressions>
+                        <failOnNotPresent>true</failOnNotPresent>
+                        <validateDependencyInjection>false</validateDependencyInjection>
+                        <cacheEnabled>true</cacheEnabled>
+
+                    </configurationValidation>
                 </configuration>
             </plugin>
 
