@@ -101,7 +101,7 @@ Change the version of the application if needed.
 Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObjectHeaders`).
 
 > [!IMPORTANT]
-> `WIN Tools v3` with `candle` and `light` executable are required in order to build Windows executable. You can download it from [here](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm). Versions after v3 are not compatible!
+> `WIN Tools v3` with `candle` and `light` executable are required in order to build Windows executable. You can download it from [here](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm). Versions after v3 are not compatible with `jpackage`!
 
 - Linux: apt
 
@@ -219,7 +219,7 @@ Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObject
     where light.exe
     ```
 
-5. If the paths to candle and light are not printed. Add the as environment path:
+5. If the paths to candle and light are not printed. Add them as environment path:
   - Add: `C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe`
   - Add: `C:\Program Files (x86)\WiX Toolset v3.11\bin\light.exe`
 
