@@ -100,6 +100,9 @@ It is mandatory to build the application jar before running jpackage!
 Change the version of the application if needed.
 Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObjectHeaders`).
 
+> [!IMPORTANT]
+> `WIN Tools v3` with `candle` and `light` executable are required in order to build Windows executable. You can download it from [here](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm). Versions after v3 are not compatible!
+
 - Linux: apt
 
     ```bash
@@ -160,9 +163,6 @@ Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObject
 
 - Windows: exe
 
-  > [!IMPORTANT]
-  > `WIN Tools v3` with `candle` and `light` executable are required in order to build Windows executable. You can download it from [here](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm). Versions after v3 are not compatible!
-
     ```bash
     jpackage \
     --type exe \
@@ -184,9 +184,6 @@ Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObject
 
 - Windows: msi
 
-  > [!NOTE]
-  > Use 36 characters unique string for variable `<YOUR_UUID_HERE>`.
-
     ```bash
     jpackage \
     --type msi \
@@ -206,6 +203,9 @@ Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObject
     --win-dir-chooser \
     --win-upgrade-uuid "<YOUR_UUID_HERE>"
     ```
+
+> [!NOTE]
+> Use 36 characters unique string for variable `<YOUR_UUID_HERE>`.
 
 ### WIN Tools installation guide (Required only for Windows)
 
