@@ -90,7 +90,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         // Write tokens to response headers
         response.addHeader(HttpHeaders.AUTHORIZATION, accessToken);
-        response.addHeader("userId", subject);
+        response.addHeader("User-Id", subject);
 
         //Create simple JSON with the tokens
         String jsonResponse = new JsonMapper().writeValueAsString(Map.of(

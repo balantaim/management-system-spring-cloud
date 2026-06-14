@@ -14,22 +14,36 @@ CREATE TABLE IF NOT EXISTS users
     modified_date           TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Authority enum type
+CREATE TYPE authority AS ENUM (
+    'CUSTOMER_READ',
+    'CUSTOMER_WRITE',
+    'ADMIN_READ',
+    'ADMIN_WRITE'
+);
+
 -- Authorities table
 CREATE TABLE IF NOT EXISTS authorities
 (
     id            BIGSERIAL PRIMARY KEY,
-    name          VARCHAR(20) NOT NULL UNIQUE,
-    created_date  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+    name          authority NOT NULL UNIQUE,
+    created_date  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Role enum type
+CREATE TYPE role AS ENUM (
+    'CUSTOMER',
+    'ADMIN'
 );
 
 -- Roles table
 CREATE TABLE IF NOT EXISTS roles
 (
     id            BIGSERIAL PRIMARY KEY,
-    name          VARCHAR(20) NOT NULL UNIQUE,
-    created_date  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+    name          role      NOT NULL UNIQUE,
+    created_date  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Users-Roles junction table

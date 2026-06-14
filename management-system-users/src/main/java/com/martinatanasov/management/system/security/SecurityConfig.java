@@ -30,13 +30,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    /**
-     * Argon2id is used instead of bcryptPasswordEncoder (for more control over passwordEncoder add dependency for artifactId `password4j`)
-     * ToDo: Implement the following security configurations:
-     * OneTimeToken
-     * webAuthn() -> Passkey
-     */
-
+    /// Argon2id is used instead of bcryptPasswordEncoder (for more control over passwordEncoder add dependency for artifactId \`password4j\`)
+    /// ToDo: Implement the following security configurations:
+    /// OneTimeToken
+    /// webAuthn() -> Passkey
     private final UserService userService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -82,13 +79,16 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /// This is example for CorsConfigurationSource in WebMVC
+    /// We handle the CorsConfigurationSource inside API Gateway
+    /// It is safe to remove it and add .cors(Customizer.withDefaults()) inside securityFilterChain
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         // Add list of allowed origins
         config.setAllowedOrigins(allowedOrigins);
         // Add list of allowed headers
-        config.setAllowedHeaders(List.of("Authorization", "userId"));
+        config.setAllowedHeaders(List.of("Authorization", "User-Id", "Client-Platform-Id"));
         // Add list of allowed methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

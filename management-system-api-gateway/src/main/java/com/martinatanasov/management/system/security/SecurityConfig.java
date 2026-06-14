@@ -57,7 +57,7 @@ public class SecurityConfig {
         // Add list of allowed origins
         config.setAllowedOrigins(allowedOrigins);
         // Add list of allowed headers
-        config.setAllowedHeaders(List.of("Authorization", "userId"));
+        config.setAllowedHeaders(List.of("Authorization", "User-Id", "Client-Platform-Id"));
         // Add list of allowed methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

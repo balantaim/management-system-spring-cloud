@@ -88,6 +88,14 @@ java -Dmicronaut.environments=prod -jar management-system-desktop-client-x.x.x.j
 
 ### Create cross-platform installable app via jpackage (Optional)
 
+**Platforms:**
+
+- Windows: version 10 (exe, msi) verified
+- Mac OS: Not verified
+- Linux:
+  - Ubuntu: Gnome version 26.04 (deb) verified
+  - Fedora: KDE Plasma version 34 (rpm) verified
+
 It is mandatory to build the application jar before running jpackage!
 Change the version of the application if needed.
 Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObjectHeaders`).
@@ -132,7 +140,28 @@ Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObject
     --linux-app-category "Utility"
     ```
 
+- macOS: dmg
+
+    ```bash
+    jpackage \
+    --type dmg \
+    --name "ManagementSystem" \
+    --app-version "1.0.0" \
+    --vendor "Martin Atanasov" \
+    --input target/ \
+    --main-jar management-system-desktop-client-1.0.0.jar \
+    --main-class com.martinatanasov.ManagementSystemDesktopClientApplication \
+    --dest dist/ \
+    --icon logo/logo.icns \
+    --license-file ../LICENSE \
+    --java-options "-Dmicronaut.environments=prod" \
+    --mac-package-name "ManagementSystem"
+    ```
+
 - Windows: exe
+
+    > [!IMPORTANT]
+    > `WIN Tools v3` with `candle` and `light` executable are required in order to build Windows executable. You can download it from [here](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm). Versions after v3 are not compatible!
 
     ```bash
     jpackage \
@@ -155,6 +184,9 @@ Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObject
 
 - Windows: msi
 
+    > [!NOTE]
+    > Use 36 characters unique string for variable `<YOUR_UUID_HERE>`.
+
     ```bash
     jpackage \
     --type msi \
@@ -175,23 +207,21 @@ Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObject
     --win-upgrade-uuid "<YOUR_UUID_HERE>"
     ```
 
-- macOS: dmg
+### WIN Tools installation guide (Required only for Windows)
+
+1. Download the executable [file](https://github.com/wixtoolset/wix3/releases/tag/wix3112rtm)
+2. Run `wix311.exe`
+3. After the installation make sure that `WIX` is in the environment path `C:\Program Files (x86)\WiX Toolset v3.11\bin`
+4. Open a new command prompt and run:
 
     ```bash
-    jpackage \
-    --type dmg \
-    --name "ManagementSystem" \
-    --app-version "1.0.0" \
-    --vendor "Martin Atanasov" \
-    --input target/ \
-    --main-jar management-system-desktop-client-1.0.0.jar \
-    --main-class com.martinatanasov.ManagementSystemDesktopClientApplication \
-    --dest dist/ \
-    --icon logo/logo.icns \
-    --license-file ../LICENSE \
-    --java-options "-Dmicronaut.environments=prod" \
-    --mac-package-name "ManagementSystem"
+    where candle.exe
+    where light.exe
     ```
+
+5. If the paths to candle and light are not printed. Add the as environment path:
+  - Add: `C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe`
+  - Add: `C:\Program Files (x86)\WiX Toolset v3.11\bin\light.exe`
 
 ## Gallery
 

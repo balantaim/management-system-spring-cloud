@@ -70,3 +70,51 @@ docker exec -it management-system-redis redis-cli
 ```
 
 Check all variables in Redis with following command: `KEYS "*"`
+
+## Database schema
+
+```mermaid
+erDiagram
+    users {
+        BIGSERIAL id PK
+        VARCHAR255 email UK
+        VARCHAR150 full_name
+        VARCHAR255 password
+        VARCHAR36  user_id UK
+        BOOLEAN    account_non_expired
+        BOOLEAN    account_non_locked
+        BOOLEAN    credentials_non_expired
+        BOOLEAN    enabled
+        TIMESTAMP  created_date
+        TIMESTAMP  modified_date
+    }
+
+    roles {
+        BIGSERIAL id PK
+        VARCHAR20 name UK
+        TIMESTAMP created_date
+        TIMESTAMP modified_date
+    }
+
+    authorities {
+        BIGSERIAL id PK
+        VARCHAR20 name UK
+        TIMESTAMP created_date
+        TIMESTAMP modified_date
+    }
+
+    users_roles {
+        BIGINT user_id FK
+        BIGINT role_id FK
+    }
+
+    roles_authorities {
+        BIGINT role_id FK
+        BIGINT authority_id FK
+    }
+
+    users        ||--o{ users_roles       : "has"
+    roles        ||--o{ users_roles       : "assigned to"
+    roles        ||--o{ roles_authorities : "has"
+    authorities  ||--o{ roles_authorities : "granted to"
+```

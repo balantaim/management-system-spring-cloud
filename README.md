@@ -1,4 +1,4 @@
-# Management System - 6 projects in 1 project
+# Management System - 8 projects in 1 project
 
 [License: Apache 2.0](LICENSE)
 
@@ -26,7 +26,7 @@ providing routing, load balancing, and centralized request handling.
 3. Eureka Discovery server - [Readme](./management-system-eureka-discovery/README.md)
 4. API Gateway - [Readme](./management-system-api-gateway/README.md)
 5. Analytics service - [Readme](./management-system-analytics/README.md)
-6. Image Converter service - (Planned for future release)
+6. Image Creator service - [Readme](./management-system-image-creator/README.md)
 7. Web frontend (Planned for future release)
 8. Desktop Client - [Readme](./management-system-desktop-client/README.md)
 
@@ -45,7 +45,7 @@ providing routing, load balancing, and centralized request handling.
 
 ## Software and Requirements
 
-Tools/libraries: Java, Spring (Cloud, Config Server, Security, JPA, WebFlux), Maven, Docker, RabbitMQ, Redis, git
+Tools/libraries: Java, Spring (Cloud, Config Server, Security, JPA, RestClient, API Gateway), Maven, Docker, RabbitMQ, Redis, Kafka, H2, PostgreSQL, Lombok, git
 
 Requirements: Java 21+, Docker, git
 
@@ -71,12 +71,31 @@ Supported implementations:
 
 ### Service endpoints
 
-- Config Server: http://localhost:8888/
-- API Gateway: http://localhost:5000/
-- Eureka Discovery: http://localhost:8761/
-- Vault: http://localhost:8200/
-- RabbitMQ: http://localhost:5672/
-- RabbitMQ UI: http://localhost:15672/ (Requires image rabbitmq:x.x.x-management-alpine in the docker compose file)
+- Local env:
+
+  - Config Server: http://localhost:8888
+  - API Gateway: http://localhost:5000
+  - Eureka Discovery: http://localhost:8761
+  - PostgreSQL (Users): http://localhost:5432
+  - Vault: http://localhost:8200
+  - RabbitMQ: http://localhost:5672
+  - RabbitMQ UI: http://localhost:15672 (Requires image rabbitmq:x.x.x-management-alpine in the docker compose file)
+  - Redis http://localhost:6379
+  - Kafka: http://localhost:9092
+  - Kafka UI: http://localhost:8090
+
+- Docker env:
+
+  - Config Server: http://management-system-config-server:8888 (No configuration yet)
+  - API Gateway: http://management-system-api-gateway:5000 (No configuration yet)
+  - Eureka Discovery: http://management-system-discovery-server:8761 (No configuration yet)
+  - PostgreSQL (Users): http://datasource_users:5432
+  - Vault: http://management-system-vault:8200
+  - RabbitMQ: http://management-system-rabbitmq:5672
+  - RabbitMQ UI: http://management-system-rabbitmq:15672 (Requires image rabbitmq:x.x.x-management-alpine in the docker compose file)
+  - Redis http://management-system-redis:6379
+  - Kafka: http://management-system-kafka:9092
+  - Kafka UI: http://management-system-kafka-ui:8090
 
 ### Endpoints Startup Order (Local)
 
@@ -84,18 +103,17 @@ Supported implementations:
 2. Unseal the Vault
 3. Start Config Server
 4. Start Eureka Discovery
-5. Start microservices (Users, Analytics)
+5. Start microservices (Users, Analytics, Image creator)
 6. Start API Gateway
+
+### Postman's resources
+
+- *Postman collection:* [collection](postman/management-system-spring-cloud.postman_collection.json)
+- *Postman locale env:* [locale env](postman/management-system-local.postman_environment.json)
 
 ### Validate Token
 
 https://www.jwt.io/
-
-### Postman's resources
-
-*Postman locale env:* [locale env](postman/management-system-local.postman_environment.json)
-
-*Postman collection:* [collection](postman/management-system-spring-cloud.postman_collection.json)
 
 ## Contact me
 

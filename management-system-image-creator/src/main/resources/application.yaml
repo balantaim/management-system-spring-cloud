@@ -1,0 +1,12 @@
+server:
+  port: ${PORT:0}
+spring:
+  profiles:
+    active: local
+  application:
+    name: management-system-image-creator
+  main:
+    banner-mode: off
+  threads:
+    virtual:
+      enabled: true

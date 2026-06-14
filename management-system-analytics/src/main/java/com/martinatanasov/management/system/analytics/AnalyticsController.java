@@ -10,6 +10,9 @@ public class AnalyticsController {
 
     @GetMapping("/api/analytics/{userId}")
     public ResponseEntity<AnalyticsDTO> getAnalytics(@PathVariable String userId) {
+        if (userId == null || userId.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
         AnalyticsDTO response = new AnalyticsDTO(1L, userId);
         return ResponseEntity.ok(response);
     }

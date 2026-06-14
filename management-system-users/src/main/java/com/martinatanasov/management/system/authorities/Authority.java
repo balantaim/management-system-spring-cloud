@@ -16,11 +16,17 @@ import java.util.Collection;
 @Builder
 public class Authority {
 
+    /// Uses Long/BIGSERIAL for compatibility with the development database setup.
+    /// PostgreSQL supports SMALLSERIAL, but H2 does not. If the application is
+    /// deployed exclusively on PostgreSQL and the expected number of roles is small,
+    /// this field could be changed to Short with a Short/SMALLSERIAL column.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /// H2 doesn't support JdbcTypeCode(SqlTypes.NAMED_ENUM) and Enum type. Use it only on PostgreSQL
     @Enumerated(value = EnumType.STRING)
+//    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(nullable = false, length = 20)
     private AuthorityName name;
 

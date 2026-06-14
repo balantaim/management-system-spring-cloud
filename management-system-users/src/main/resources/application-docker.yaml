@@ -1,0 +1,50 @@
+spring:
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  sql:
+    init:
+      mode: never
+      platform: postgresql
+#      schema-locations: classpath:schema-docker.sql
+#      data-locations: classpath:data-docker.sql
+  datasource:
+    name: users
+    url: jdbc:postgresql://${DATASOURCE_NAME:localhost}:${DATASOURCE_PORT:5432}/users
+    driver-class-name: org.postgresql.Driver
+    username: sa
+    password: sa
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,mappings,refresh
+  endpoint:
+    health:
+      show-details: always
+security:
+  allowed-origins: http://localhost:5000
+logging:
+  level:
+    org:
+      hibernate:
+        sql: DEBUG
+      springframework:
+        security: TRACE
+        jdbc: TRACE
+        h2: TRACE
