@@ -1,4 +1,8 @@
 spring:
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   h2:
     console:
       enabled: true
@@ -8,7 +12,7 @@ spring:
         web-allow-others: true
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: false
@@ -27,6 +31,21 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password: sa
+  # Creation of stream bindings inside producer (eventName_out_groupNumber) is optional
+  cloud:
+    stream:
+      bindings:
+        userLogin-out-0:
+          destination: user-login
+          content-type: application/json
+        userRegistration-out-0:
+          destination: user-registration
+          content-type: application/json
+      kafka:
+        streams:
+          binder:
+            brokers: localhost:9092
+            application-id: management-system-users
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

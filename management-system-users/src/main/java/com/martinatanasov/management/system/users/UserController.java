@@ -1,5 +1,7 @@
 package com.martinatanasov.management.system.users;
 
+import com.martinatanasov.management.system.analytics.AnalyticsService;
+import com.martinatanasov.management.system.analytics.events.RegisterEvent;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final AnalyticsService analyticsService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -49,6 +52,10 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<UserDetailsDto> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         UserDetailsDto registeredUser = userService.createUser(userRegisterDto);
+        //Send registration message to analytics service
+        analyticsService.sendRegisterMessage(new RegisterEvent(
+                registeredUser.userId(), registeredUser.createdDate()
+        ));
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 

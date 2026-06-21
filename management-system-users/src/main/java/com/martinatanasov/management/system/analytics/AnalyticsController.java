@@ -1,4 +1,4 @@
-package com.martinatanasov.management.system.analitics;
+package com.martinatanasov.management.system.analytics;
 
 import com.martinatanasov.management.system.users.User;
 import com.martinatanasov.management.system.users.UserService;
