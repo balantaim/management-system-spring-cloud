@@ -118,3 +118,8 @@ erDiagram
     roles        ||--o{ roles_authorities : "has"
     authorities  ||--o{ roles_authorities : "granted to"
 ```
+
+### Custom Messages
+
+- `user-login` send via Kafka to analytics service
+- `user-registered` send via Kafka to analytics service

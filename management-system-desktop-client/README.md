@@ -97,7 +97,7 @@ java -Dmicronaut.environments=prod -jar management-system-desktop-client-x.x.x.j
   - Fedora: KDE Plasma version 34 (rpm) verified
 
 It is mandatory to build the application jar before running jpackage!
-Change the version of the application if needed.
+Change the version of the application if needed (Only if there is existing file with the same version inside `./dist` folder you can't build the executable).
 Change or remove `--java-options` if needed (Optional add `-XX:+UseCompactObjectHeaders`).
 
 > [!IMPORTANT]

@@ -1,4 +1,4 @@
-package com.martinatanasov.management.system.analitics;
+package com.martinatanasov.management.system.analytics;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
