@@ -1,6 +1,6 @@
 package com.martinatanasov.management.system.analytics;
 
-import com.martinatanasov.management.system.users.User;
+import com.martinatanasov.management.system.users.UserAnalyticsDetailsDto;
 import com.martinatanasov.management.system.users.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -19,22 +21,19 @@ public class AnalyticsController {
     private final AnalyticsService analyticsService;
     private final UserService userService;
 
-    @GetMapping("/api/analytics/{userId}")
-    public ResponseEntity<AnalyticsUserDetailsDTO> analytics(@PathVariable String userId) {
-        if (userId == null || userId.length() <= 2 || userId.length() > 150) {
+    @GetMapping("/api/analytics/{email}")
+    public ResponseEntity<UserAndAnalyticsDTO> analytics(@PathVariable String email) {
+        if (email == null || email.length() <= 2 || email.length() > 150) {
             return ResponseEntity.badRequest().build();
         }
-        User user = userService.findEntityByUserId(userId);
+        UserAnalyticsDetailsDto user = userService.findByEmailAnalyticsUser(email);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
         try {
-            return analyticsService.getUserMetrics(userId)
-                    //TODO Use analytics to fill the DTO with data
-                    .map(analytics ->
-                            ResponseEntity.ok(newAnalyticsUserDetailsDTO(user))
-                    )
-                    .orElseGet(() -> ResponseEntity.notFound().build());
+            List<AnalyticsDTO> analytics = analyticsService.getUserMetrics(email);
+            UserAndAnalyticsDTO userDTO = newAnalyticsUserDetailsDTO(user, analytics);
+            return ResponseEntity.ok(userDTO);
         } catch (ResourceAccessException ex) {
             log.error("Analytics service is not available right now");
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
@@ -44,15 +43,16 @@ public class AnalyticsController {
         }
     }
 
-    private AnalyticsUserDetailsDTO newAnalyticsUserDetailsDTO(User user) {
-        return new AnalyticsUserDetailsDTO(user.getId(),
-                user.getEmail(),
-                user.getFullName(),
-                user.getUserId(),
-                user.getAccountNonExpired(),
-                user.getAccountNonLocked(),
-                user.getCredentialsNonExpired(),
-                user.getEnabled());
+    private UserAndAnalyticsDTO newAnalyticsUserDetailsDTO(UserAnalyticsDetailsDto user, List<AnalyticsDTO> analytics) {
+        return new UserAndAnalyticsDTO(
+                user.email(),
+                user.fullName(),
+                user.userId(),
+                user.accountNonLocked(),
+                user.accountNonExpired(),
+                user.credentialsNonExpired(),
+                user.enabled(),
+                analytics);
     }
 
 }

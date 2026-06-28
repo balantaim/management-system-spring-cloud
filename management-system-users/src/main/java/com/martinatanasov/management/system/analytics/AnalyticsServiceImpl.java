@@ -9,7 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.Optional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -27,7 +27,7 @@ class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    public Optional<AnalyticsDTO> getUserMetrics(String userId) {
+    public List<AnalyticsDTO> getUserMetrics(String userId) {
         return restClient.get()
                 .uri("/api/analytics/{userId}", userId)
                 .retrieve()

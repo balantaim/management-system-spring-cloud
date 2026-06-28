@@ -99,7 +99,7 @@
           "response": []
         },
         {
-          "name": "user analytics by userId",
+          "name": "user analytics by email",
           "event": [
             {
               "listen": "test",
@@ -129,14 +129,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{GATEWAY_BASE_URL}}/api/analytics/{{USER_ID}}",
+              "raw": "{{GATEWAY_BASE_URL}}/api/analytics/Breanne_Dare98@gmail.com",
               "host": [
                 "{{GATEWAY_BASE_URL}}"
               ],
               "path": [
                 "api",
                 "analytics",
-                "{{USER_ID}}"
+                "Breanne_Dare98@gmail.com"
               ]
             }
           },

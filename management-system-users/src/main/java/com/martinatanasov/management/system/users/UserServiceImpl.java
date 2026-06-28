@@ -80,6 +80,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserAnalyticsDetailsDto findByEmailAnalyticsUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        return userMapper.userToUserAnalyticsDetailsDto(user);
+    }
+
+    @Override
     public UserDetailsDto findByUserId(String userId) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));

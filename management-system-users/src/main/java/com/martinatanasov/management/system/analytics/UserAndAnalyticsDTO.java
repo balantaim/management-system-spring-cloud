@@ -1,17 +1,16 @@
 package com.martinatanasov.management.system.analytics;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
-public record AnalyticsUserDetailsDTO(
-        @JsonIgnore
-        Long id,
+public record UserAndAnalyticsDTO(
         String email,
         String fullName,
         String userId,
         Boolean accountNonExpired,
         Boolean accountNonLocked,
         Boolean credentialsNonExpired,
-        Boolean enabled
+        Boolean enabled,
+        List<AnalyticsDTO> analytics
 ) {
 
 }
