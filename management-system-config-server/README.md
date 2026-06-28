@@ -72,6 +72,12 @@ Check if the Vault is unsealed:
 vault status
 ```
 
+Or if you are outside the Vault cli:
+
+```bash
+docker exec -it management-system-vault vault status
+```
+
 Export the root token and create a new engine `kv` version 2:
 
 ```bash

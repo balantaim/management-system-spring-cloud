@@ -50,11 +50,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDetailsDto> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<UserDetailsDto> register(@RequestHeader(value = "Client-Platform-Id") String clientId,
+            @Valid @RequestBody UserRegisterDto userRegisterDto) {
         UserDetailsDto registeredUser = userService.createUser(userRegisterDto);
         //Send registration message to analytics service
         analyticsService.sendRegisterMessage(new RegisterEvent(
-                registeredUser.userId(), registeredUser.createdDate()
+                registeredUser.email(), clientId, registeredUser.createdDate()
         ));
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }

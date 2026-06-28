@@ -22,11 +22,14 @@ public class Analytics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private String email;
 
     @Column(name = "event_identifier", nullable = false, updatable = false, length = 50)
     private String eventIdentifier;
+
+    @Column(name = "platform_id", nullable = false, updatable = false, length = 4, columnDefinition = "CHAR(4)")
+    private String platformId;
 
     @Column(name = "created_date", updatable = false, nullable = false)
     @CreatedDate

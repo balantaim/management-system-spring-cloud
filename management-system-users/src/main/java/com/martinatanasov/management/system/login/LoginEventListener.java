@@ -2,12 +2,15 @@ package com.martinatanasov.management.system.login;
 
 import com.martinatanasov.management.system.analytics.AnalyticsService;
 import com.martinatanasov.management.system.analytics.events.LoginEvent;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +26,9 @@ public class LoginEventListener {
         Object principal = event.getAuthentication().getPrincipal();
         String email = extractUserEmail(principal);
 
-        analyticsService.sendLoginMessage(new LoginEvent(email, LocalDateTime.now()));
+        String platformId = getPlatformIdFromHeaders();
+
+        analyticsService.sendLoginMessage(new LoginEvent(email, platformId, LocalDateTime.now()));
         log.trace("\n\tSuccess Login event dispatched --->>> email: {}", email);
     }
 
@@ -33,5 +38,16 @@ public class LoginEventListener {
         }
         return principal.toString();
     }
+    private String getPlatformIdFromHeaders() {
+        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
+        if (attrs == null) {
+            return null;
+        }
+
+        HttpServletRequest request = attrs.getRequest();
+        return request.getHeader("Client-Platform-Id");
+    }
+
 
 }

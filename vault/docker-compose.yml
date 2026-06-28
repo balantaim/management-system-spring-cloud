@@ -10,8 +10,11 @@ services:
       - IPC_LOCK
     environment:
       VAULT_ADDR: http://127.0.0.1:8200
+#      DEV variables are used only in -dev mode
       VAULT_DEV_ROOT_TOKEN_ID: root
       VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+#    This will start DEV mode and will automatically unseal the Vault (Use only for locale testing)
+#    command: vault server -dev
     restart: unless-stopped
 
   rabbitmq:
