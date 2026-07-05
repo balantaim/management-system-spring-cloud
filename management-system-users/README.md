@@ -85,6 +85,7 @@ erDiagram
         BOOLEAN    account_non_locked
         BOOLEAN    credentials_non_expired
         BOOLEAN    enabled
+        BIGINT     version
         TIMESTAMP  created_date
         TIMESTAMP  modified_date
     }
@@ -92,6 +93,7 @@ erDiagram
     roles {
         BIGSERIAL id PK
         VARCHAR20 name UK
+        BIGINT    version
         TIMESTAMP created_date
         TIMESTAMP modified_date
     }
@@ -99,6 +101,7 @@ erDiagram
     authorities {
         BIGSERIAL id PK
         VARCHAR20 name UK
+        BIGINT    version
         TIMESTAMP created_date
         TIMESTAMP modified_date
     }
@@ -118,6 +121,13 @@ erDiagram
     roles        ||--o{ roles_authorities : "has"
     authorities  ||--o{ roles_authorities : "granted to"
 ```
+
+## Profiles
+
+1. `locale`: This profiles recreates the tables every time in the H2 in memory database. (Default)
+    -  Compatible initialization via (H2, PostgreSQL): [schema.sql](./src/main/resources/schema.sql) and [data.sql](./src/main/resources/data.sql)
+2. `docker`: This profile uses a Docker container for the application and database. You need to create database one time before launching the application:
+    -  Optimized script via (PostgreSQL): [schema-docker.sql](./src/main/resources/schema-docker.sql) and [data-docker.sql](./src/main/resources/data-docker.sql). It is very important uncomment `@JdbcTypeCode(SqlTypes.NAMED_ENUM)` inside Entity classes!
 
 ### Custom Messages
 

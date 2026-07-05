@@ -13,12 +13,38 @@ Set up your environment variables:
 - `0` means that you want to set first group (you application could have multiple groups)
 - `<your_topic_name>` replace with you topic name (it must be the same name as in you producer configuration)
 
-```properties
-spring.kafka.stream.bindings.youEventNameConsumer-in-0.destination=<your_topic_name>
-spring.kafka.stream.bindings.youEventNameConsumer-in-0.content-type=application/json
+```yaml
+spring:
+  kafka:
+    stream:
+      bindings:
+        youEventNameConsumer-in-0:
+          destination: <your_topic_name>
+          content-type: application/json
 ```
 
-Use `youEventNameConsumer` inside `AnalyticsKafkaConsumers.java` to consume messages from the topic.
+Add configuration about trusted ObjectEvent and serializer:
+
+- Set unique name for `applicationId`
+- Set serializer for `valueSerde` (Should be the same as in the example)
+- Add the package and the Class name of the object (This object should match exactly in the producer and consumer)
+
+```yaml
+spring:
+  cloud:
+    stream:
+      kafka:
+        streams:
+          bindings:
+            youEventNameConsumer-in-0:
+              consumer:
+                applicationId: management-system-analytics-event-name
+                valueSerde: org.springframework.kafka.support.serializer.JsonSerde
+                configuration:
+                  spring.json.value.default.type: com.martinatanasov.management.system.analytics.events.YourObjectEvent
+```
+
+Use `youEventNameConsumer` inside `AnalyticsKafkaConsumers.java` to consume messages from the topic. The name of you method should match the name from the configuration!
 
 ## Database Schema
 

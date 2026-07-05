@@ -1,6 +1,7 @@
 package com.martinatanasov.management.system.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.martinatanasov.management.system.base.BaseEntity;
 import com.martinatanasov.management.system.roles.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -20,11 +22,9 @@ import java.util.UUID;
 @Setter
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    ///#id Value is set from BaseEntity class
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
@@ -63,6 +63,10 @@ public class User {
     )
     private Collection<Role> roles;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
     @Column(name = "created_date", updatable = false, nullable = false)
     @CreatedDate
     private LocalDateTime createdDate;
@@ -79,8 +83,37 @@ public class User {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        User user = (User) o;
+        return Objects.equals(email, user.email) && Objects.equals(fullName, user.fullName) && Objects.equals(password, user.password) && Objects.equals(userId, user.userId) && Objects.equals(accountNonExpired, user.accountNonExpired) && Objects.equals(accountNonLocked, user.accountNonLocked) && Objects.equals(credentialsNonExpired, user.credentialsNonExpired) && Objects.equals(enabled, user.enabled) && Objects.equals(roles, user.roles) && Objects.equals(version, user.version) && Objects.equals(createdDate, user.createdDate) && Objects.equals(modifiedDate, user.modifiedDate);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + Objects.hashCode(email);
+        result = 31 * result + Objects.hashCode(fullName);
+        result = 31 * result + Objects.hashCode(password);
+        result = 31 * result + Objects.hashCode(userId);
+        result = 31 * result + Objects.hashCode(accountNonExpired);
+        result = 31 * result + Objects.hashCode(accountNonLocked);
+        result = 31 * result + Objects.hashCode(credentialsNonExpired);
+        result = 31 * result + Objects.hashCode(enabled);
+        result = 31 * result + Objects.hashCode(roles);
+        result = 31 * result + Objects.hashCode(version);
+        result = 31 * result + Objects.hashCode(createdDate);
+        result = 31 * result + Objects.hashCode(modifiedDate);
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return "User " + "\n\tID: " + id +
+        return
+                "User " + "\n\tID: " + getId() +
                 "\n\tEmail: " + email +
                 "\n\tFull name: " + fullName +
                 "\n\tUUID: " + userId +

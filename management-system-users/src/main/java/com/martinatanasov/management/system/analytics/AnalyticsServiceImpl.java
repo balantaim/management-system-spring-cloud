@@ -6,10 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -37,13 +39,30 @@ class AnalyticsServiceImpl implements AnalyticsService {
     @Override
     public void sendRegisterMessage(RegisterEvent registerEvent) {
         log.info("\n\tSending message to analytics service --->>> {}", USER_REGISTRATION);
-        kafkaTemplate.send(USER_REGISTRATION, registerEvent);
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(USER_REGISTRATION, registerEvent);
+
+        future.whenComplete((result, ex) -> {
+            if (ex == null) {
+                log.trace("Consumed message: email: {}, event: {}", registerEvent.email(), USER_REGISTRATION);
+            } else {
+                log.error("Error while sending analytics message to analytics service: {}", ex.getMessage());
+            }
+        });
     }
 
     @Override
     public void sendLoginMessage(LoginEvent loginEvent) {
         log.info("\n\tSending message to analytics service --->>> {}", USER_LOGIN);
-        kafkaTemplate.send(USER_LOGIN, loginEvent);
+        //We check if the Kafka successfully get the message
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(USER_LOGIN, loginEvent);
+
+        future.whenComplete((result, ex) -> {
+            if (ex == null) {
+                log.trace("Consumed message: email: {}, event: {}", loginEvent.email(), USER_LOGIN);
+            } else {
+                log.error("Error while sending analytics message to analytics service: {}", ex.getMessage());
+            }
+        });
     }
 
 }

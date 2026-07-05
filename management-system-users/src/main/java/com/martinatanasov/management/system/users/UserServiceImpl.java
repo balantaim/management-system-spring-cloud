@@ -72,6 +72,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDataDto(createdUser);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetailsDto findByEmail(String email) {
         User user = userRepository.findByEmail(email)
@@ -79,6 +80,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDataDto(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserAnalyticsDetailsDto findByEmailAnalyticsUser(String email) {
         User user = userRepository.findByEmail(email)
@@ -86,6 +88,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserAnalyticsDetailsDto(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetailsDto findByUserId(String userId) {
         User user = userRepository.findByUserId(userId)
@@ -99,6 +102,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetailsDto findByEmailAndFullEnabled(String email) {
         User user = userRepository.findByEmailAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
@@ -106,6 +110,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToUserDataDto(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetailsDto findByUserIdAndFullEnabled(String email) {
         User user = userRepository.findByUserIdAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue(email)
@@ -115,8 +120,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeUserPassword(UserChangePasswordDto userChangePasswordDto) {
-        User user = userRepository.findByEmail(userChangePasswordDto.email())
+    public UserDetailsDto changeUserPassword(String userId, UserChangePasswordDto userChangePasswordDto) {
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         if (!passwordEncoder.matches(userChangePasswordDto.oldPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect");
@@ -124,16 +129,18 @@ public class UserServiceImpl implements UserService {
         //Encode and set new password
         String encodedNewPassword = passwordEncoder.encode(userChangePasswordDto.newPassword());
         user.setPassword(encodedNewPassword);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return userMapper.userToUserDataDto(savedUser);
     }
 
     @Transactional
     @Override
-    public void changeUserFullName(String email, String newFullName) {
-        User user = userRepository.findByEmail(email)
+    public UserDetailsDto changeUserFullName(String userId, String newFullName) {
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         user.setFullName(newFullName);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return userMapper.userToUserDataDto(savedUser);
     }
 
     @NonNull

@@ -60,22 +60,20 @@ public class UserController {
         return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN') && #userId == authentication.principal")
+    @PreAuthorize("(hasRole('CUSTOMER') && #userId == authentication.principal) || hasRole('ADMIN')")
     @PostMapping("/update-password/{userId}")
-    public ResponseEntity<Void> changeUserPassword(@PathVariable String userId, @Valid @RequestBody UserChangePasswordDto userChangePasswordDto) {
+    public ResponseEntity<UserDetailsDto> changeUserPassword(@PathVariable String userId, @Valid @RequestBody UserChangePasswordDto userChangePasswordDto) {
         if (userId != null) {
-            userService.changeUserPassword(userChangePasswordDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(userService.changeUserPassword(userId, userChangePasswordDto), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PreAuthorize("(hasRole('CUSTOMER') && #userId == authentication.principal) || hasRole('ADMIN')")
     @PutMapping("/update-fullname/{userId}")
-    public ResponseEntity<Void> changeUserFullName(@PathVariable String userId, @Valid @RequestBody UserChangeFullNameDto userChangeFullNameDto) {
+    public ResponseEntity<UserDetailsDto> changeUserFullName(@PathVariable String userId, @Valid @RequestBody UserChangeFullNameDto userChangeFullNameDto) {
         if (userId != null) {
-            userService.changeUserFullName(userChangeFullNameDto.email(), userChangeFullNameDto.fullName());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(userService.changeUserFullName(userId, userChangeFullNameDto.fullName()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

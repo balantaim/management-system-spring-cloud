@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users
     account_non_locked      BOOLEAN      NOT NULL DEFAULT FALSE,
     credentials_non_expired BOOLEAN      NOT NULL DEFAULT FALSE,
     enabled                 BOOLEAN      NOT NULL DEFAULT FALSE,
+    version                 BIGINT       NOT NULL DEFAULT 0,
     created_date            TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     modified_date           TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS authorities
 (
     id            BIGSERIAL PRIMARY KEY,
     name          VARCHAR(20) NOT NULL UNIQUE,
+    version       BIGINT      NOT NULL DEFAULT 0,
     created_date  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS roles
 (
     id            BIGSERIAL PRIMARY KEY,
     name          VARCHAR(20) NOT NULL UNIQUE,
+    version       BIGINT      NOT NULL DEFAULT 0,
     created_date  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     modified_date TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

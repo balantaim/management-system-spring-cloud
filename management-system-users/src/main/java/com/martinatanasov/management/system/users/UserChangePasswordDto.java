@@ -6,12 +6,6 @@ import jakarta.validation.constraints.Size;
 
 public record UserChangePasswordDto(
 
-        @NotBlank(message = "Email is required")
-        @Pattern(
-                regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
-                message = "Invalid email format"
-        )
-        String email,
         @NotBlank(message = "Old password is required")
         @Size(min = 8, max = 50, message = "Old password must be between 8 and 50 characters")
         @Pattern(

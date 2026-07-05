@@ -33,7 +33,6 @@ spring:
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
               spring.json.trusted.packages: com.martinatanasov.management.system.analytics.events
-              spring.json.value.default.type: com.martinatanasov.management.system.analytics.events.RegisterEvent
           bindings:
             # Consumer 1 userRegisteredConsumer, group 1
             userRegisteredConsumer-in-0:

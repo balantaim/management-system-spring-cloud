@@ -202,7 +202,7 @@ Add value for `ROOT_TOKEN` required for connection with Vault. (This could be ID
     Or with parameters (Replace `<YOUR_ROOT_TOKEN>` with your actual Vault token):
 
     ```bash
-    mvn spring-boot:run -Dspring.cloud.config.server.vault.token="<YOUR_ROOT_TOKEN>"
+    mvn spring-boot:run -Dspring-boot.run.arguments="--ROOT_TOKEN=<YOUR_ROOT_TOKEN>"
     ```
 
 - Via IDE:

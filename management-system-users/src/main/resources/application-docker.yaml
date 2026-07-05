@@ -1,4 +1,8 @@
 spring:
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   h2:
     console:
       enabled: false
@@ -23,6 +27,20 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: sa
     password: sa
+  cloud:
+    stream:
+      bindings:
+        userLogin-out-0:
+          destination: user-login
+          content-type: application/json
+        userRegistration-out-0:
+          destination: user-registration
+          content-type: application/json
+      kafka:
+        streams:
+          binder:
+            brokers: localhost:9092
+            application-id: management-system-users
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}

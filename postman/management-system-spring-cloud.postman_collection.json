@@ -491,7 +491,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"abv@abv.bg\",\n    \"oldPassword\": \"Test123!\",\n    \"newPassword\": \"Test123!\"\n}",
+              "raw": "{\n    \"oldPassword\": \"Test123!\",\n    \"newPassword\": \"Test123!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -556,7 +556,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"abv@abv.bg\",\n    \"fullName\": \"{{$randomFullName}}\"\n}",
+              "raw": "{\n    \"fullName\": \"{{$randomFullName}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
