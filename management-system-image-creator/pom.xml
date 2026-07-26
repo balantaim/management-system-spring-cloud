@@ -43,11 +43,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.twelvemonkeys</groupId>
-            <artifactId>twelvemonkeys</artifactId>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-core</artifactId>
             <version>${twelvemonkeys.version}</version>
-            <type>pom</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>
@@ -64,8 +62,6 @@
             <artifactId>imageio-bmp</artifactId>
             <version>${twelvemonkeys.version}</version>
         </dependency>
-
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

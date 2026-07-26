@@ -7,6 +7,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.http.client.FilteredHostException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -25,6 +26,17 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    //RestClient ssrf exception
+    @ExceptionHandler(FilteredHostException.class)
+    public ResponseEntity<ErrorResponse> handleFilteredHost(FilteredHostException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(403,
+                        HttpStatus.FORBIDDEN.getReasonPhrase(),
+                        "Request to %s are not allowed".formatted(ex.getHost()),
+                        request.getRequestURI(),
+                        LocalDateTime.now()));
+    }
 
     //Validation Exceptions
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -117,6 +117,66 @@ spring:
                 - Method=POST,GET,PUT,PATCH,DELETE
               filters:
                 - RewritePath=/management-system-users/(?<segment>.*), /$\{segment}
+
+
+
+            # Get - Images
+            - id: management-system-image-creator-get
+              uri: ${IMAGE_CREATOR_SERVICE_URL:lb://management-system-image-creator}
+              predicates:
+                - Path=/images,/images/{imageId},/images/get-remaining-tokens/{userId}
+                - Method=GET
+              filters:
+                - RewritePath=/management-system-image-creator/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 2
+            # Post - Images
+            - id: management-system-image-creator-post
+              uri: ${IMAGE_CREATOR_SERVICE_URL:lb://management-system-image-creator}
+              predicates:
+                - Path=/images/upload,/images/convert
+                - Method=POST
+              filters:
+                - RewritePath=/management-system-image-creator/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 2
+            # Put - Images
+            - id: management-system-image-creator-put
+              uri: ${IMAGE_CREATOR_SERVICE_URL:lb://management-system-image-creator}
+              predicates:
+                - Path=/images/{imageId}
+                - Method=PUT
+              filters:
+                - RewritePath=/management-system-image-creator/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 2
+            # Delete - Images
+            - id: management-system-image-creator-delete
+              uri: ${IMAGE_CREATOR_SERVICE_URL:lb://management-system-image-creator}
+              predicates:
+                - Path=/images/{imageId}
+                - Method=DELETE
+              filters:
+                - RewritePath=/management-system-image-creator/(?<segment>.*), /$\{segment}
+                - RemoveRequestHeader=Cookie
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 5
+                    redis-rate-limiter.burstCapacity: 10
+                    redis-rate-limiter.requestedTokens: 2
+
 authorization:
   token:
     header:

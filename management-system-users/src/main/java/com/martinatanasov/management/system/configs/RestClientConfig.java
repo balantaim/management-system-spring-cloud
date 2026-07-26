@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.configs;
 
+import org.springframework.boot.http.client.InetAddressFilter;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,16 @@ public class RestClientConfig {
     @Primary
     RestClient.Builder restClientBuilder() {
         return RestClient.builder();
+    }
+
+    /// Creates an `InetAddressFilter` that protects `RestClient` from
+    /// Server-Side Request Forgery (SSRF) attacks.
+    /// Only public IP addresses are allowed. Requests to localhost,
+    /// private, link-local, and other non-public addresses are blocked.
+    /// @return an `InetAddressFilter` allowing only external addresses
+    @Bean
+    InetAddressFilter ssrfProtectionFilter() {
+        return InetAddressFilter.externalAddresses();
     }
 
 }
