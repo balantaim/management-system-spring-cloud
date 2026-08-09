@@ -69,7 +69,7 @@ public class SecurityConfig {
     public JwtAuthorizationWebFilter jwtAuthorizationWebFilter(
             @Value("${authorization.token.header.name}") String headerName,
             @Value("${authorization.token.header.prefix}") String prefix,
-            JwtService jwtService) {
+            JwtServiceVerifier jwtService) {
         return new JwtAuthorizationWebFilter(new JwtReactiveAuthenticationManager(jwtService), headerName, prefix, jwtService);
     }
 

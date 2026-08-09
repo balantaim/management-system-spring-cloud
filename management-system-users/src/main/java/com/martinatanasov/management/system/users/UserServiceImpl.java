@@ -6,6 +6,7 @@ import com.martinatanasov.management.system.mappers.UserMapper;
 import com.martinatanasov.management.system.roles.Role;
 import com.martinatanasov.management.system.roles.RoleName;
 import com.martinatanasov.management.system.roles.RoleRepository;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
@@ -27,9 +28,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Service
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;

@@ -27,7 +27,7 @@ providing routing, load balancing, and centralized request handling.
 4. API Gateway - [Readme](./management-system-api-gateway/README.md)
 5. Analytics service - [Readme](./management-system-analytics/README.md)
 6. Image Creator service - [Readme](./management-system-image-creator/README.md)
-7. Web frontend (Planned for future release)
+7. Web frontend - [Readme](./management-system-frontend/README.md)
 8. Desktop Client - [Readme](./management-system-desktop-client/README.md)
 
 **Key Features:**
@@ -63,7 +63,7 @@ Supported implementations:
 
 Supported implementations:
 
-- [ ] Web frontend (Planned release)
+- [ ] Web frontend
 - [x] Desktop client (Java, Swing, Flatlaf and MigLayout)
 - [x] Postman as UI client
 - [ ] Mobile application
@@ -76,6 +76,7 @@ Supported implementations:
   - Config Server: http://localhost:8888
   - API Gateway: http://localhost:5000
   - Eureka Discovery: http://localhost:8761
+  - Web frontend: http://localhost:4200
   - PostgreSQL (Users): http://localhost:5432
   - Vault: http://localhost:8200
   - RabbitMQ: http://localhost:5672
@@ -84,11 +85,12 @@ Supported implementations:
   - Kafka: http://localhost:9092
   - Kafka UI: http://localhost:8090
 
-- Docker env:
+- Prod env:
 
   - Config Server: http://management-system-config-server:8888 (No configuration yet)
   - API Gateway: http://management-system-api-gateway:5000 (No configuration yet)
   - Eureka Discovery: http://management-system-discovery-server:8761 (No configuration yet)
+  - Web frontend: (No configuration yet)
   - PostgreSQL (Users): http://datasource_users:5432
   - Vault: http://management-system-vault:8200
   - RabbitMQ: http://management-system-rabbitmq:5672
@@ -97,7 +99,7 @@ Supported implementations:
   - Kafka: http://management-system-kafka:9092
   - Kafka UI: http://management-system-kafka-ui:8090
 
-### Endpoints Startup Order (Local)
+### Endpoints Startup Order
 
 1. Startup Vault, Redis, RabbitMQ (via Docker)
 2. Unseal the Vault
@@ -105,6 +107,7 @@ Supported implementations:
 4. Start Eureka Discovery
 5. Start microservices (Users, Analytics, Image creator)
 6. Start API Gateway
+7. User UI: Postman, Web frontend, Desktop Client
 
 ### Postman's resources
 

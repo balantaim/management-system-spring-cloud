@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
@@ -49,25 +48,6 @@ public class Role extends BaseEntity {
 
     public Role(RoleName name) {
         this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Role role = (Role) o;
-        return name == role.name && Objects.equals(version, role.version) && Objects.equals(users, role.users) && Objects.equals(authorities, role.authorities);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + Objects.hashCode(name);
-        result = 31 * result + Objects.hashCode(version);
-        result = 31 * result + Objects.hashCode(users);
-        result = 31 * result + Objects.hashCode(authorities);
-        return result;
     }
 
     @Override

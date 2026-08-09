@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
-public class UserLimiterServiceImpl implements UserLimiterService {
+class UserLimiterServiceImpl implements UserLimiterService {
 
     private final Map<String, Bucket> userBuckets = new ConcurrentHashMap<>();
     private static final long TOKENS_PER_DAY = 50;

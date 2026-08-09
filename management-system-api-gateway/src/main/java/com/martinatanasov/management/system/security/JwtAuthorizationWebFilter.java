@@ -23,13 +23,13 @@ public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
 
     private final String headerName;
     private final String prefix;
-    private final JwtService jwtService;
+    private final JwtServiceVerifier jwtService;
 
     public JwtAuthorizationWebFilter(
             JwtReactiveAuthenticationManager jwtReactiveAuthenticationManager,
             String headerName,
             String prefix,
-            JwtService jwtService) {
+            JwtServiceVerifier jwtService) {
         super(jwtReactiveAuthenticationManager);
         this.jwtService = jwtService;
         this.headerName = headerName;

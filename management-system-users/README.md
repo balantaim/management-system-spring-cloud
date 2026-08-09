@@ -126,8 +126,8 @@ erDiagram
 
 1. `locale`: This profiles recreates the tables every time in the H2 in memory database. (Default)
     -  Compatible initialization via (H2, PostgreSQL): [schema.sql](./src/main/resources/schema.sql) and [data.sql](./src/main/resources/data.sql)
-2. `docker`: This profile uses a Docker container for the application and database. You need to create database one time before launching the application:
-    -  Optimized script via (PostgreSQL): [schema-docker.sql](./src/main/resources/schema-docker.sql) and [data-docker.sql](./src/main/resources/data-docker.sql). It is very important uncomment `@JdbcTypeCode(SqlTypes.NAMED_ENUM)` inside Entity classes!
+2. `prod`: This profile uses a Docker container for the application and database. You need to create database one time before launching the application:
+    -  Optimized script via (PostgreSQL): [schema-prod.sql](./src/main/resources/schema-prod.sql) and [data-prod.sql](./src/main/resources/data-prod.sql). It is very important uncomment `@JdbcTypeCode(SqlTypes.NAMED_ENUM)` inside Entity classes!
 
 ### Custom Messages
 

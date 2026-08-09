@@ -104,14 +104,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});"
+                ]
               }
             }
           ],
@@ -129,14 +125,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{GATEWAY_BASE_URL}}/api/analytics/Breanne_Dare98@gmail.com",
+              "raw": "{{GATEWAY_BASE_URL}}/api/analytics/admin@abv.bg",
               "host": [
                 "{{GATEWAY_BASE_URL}}"
               ],
               "path": [
                 "api",
                 "analytics",
-                "Breanne_Dare98@gmail.com"
+                "admin@abv.bg"
               ]
             }
           },
@@ -292,11 +288,6 @@
               {
                 "key": "Client-Platform-Id",
                 "value": "1000",
-                "type": "text"
-              },
-              {
-                "key": "",
-                "value": "",
                 "type": "text"
               }
             ],
@@ -912,6 +903,137 @@
               "path": [
                 "actuator",
                 "busrefresh"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "item": [
+        {
+          "name": "all user images",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Client-Platform-Id",
+                "value": "1000",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{GATEWAY_BASE_URL}}/images",
+              "host": [
+                "{{GATEWAY_BASE_URL}}"
+              ],
+              "path": [
+                "images"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get remaining tokens",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Client-Platform-Id",
+                "value": "1000",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{GATEWAY_BASE_URL}}/images/get-remaining-tokens/{{USER_ID}}",
+              "host": [
+                "{{GATEWAY_BASE_URL}}"
+              ],
+              "path": [
+                "images",
+                "get-remaining-tokens",
+                "{{USER_ID}}"
               ]
             }
           },

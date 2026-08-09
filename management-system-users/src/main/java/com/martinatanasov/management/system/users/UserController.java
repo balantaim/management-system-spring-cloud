@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.users;
 
+
 import com.martinatanasov.management.system.analytics.AnalyticsService;
 import com.martinatanasov.management.system.analytics.events.RegisterEvent;
 import jakarta.validation.Valid;
@@ -22,12 +23,18 @@ public class UserController {
 
     private final UserService userService;
     private final AnalyticsService analyticsService;
+    private static final int DEFAULT_PAGE_SIZE = 24;
+    private static final int MAX_PAGE_SIZE = 60;
+    private static final int MIN_PAGE_SIZE = 0;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<UserDetailsDto>> getAllUsers(
-            @PageableDefault(size = 24, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
-        return new ResponseEntity<>(userService.findAll(pageable), HttpStatus.OK);
+            @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        if (validatePageable(pageable)) {
+            return new ResponseEntity<>(userService.findAll(pageable), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     // #userId == authentication.principal
@@ -76,6 +83,11 @@ public class UserController {
             return new ResponseEntity<>(userService.changeUserFullName(userId, userChangeFullNameDto.fullName()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    private static boolean validatePageable(Pageable pageable) {
+        return pageable.getPageSize() <= MAX_PAGE_SIZE &&
+                pageable.getPageNumber() >= MIN_PAGE_SIZE;
     }
 
 }

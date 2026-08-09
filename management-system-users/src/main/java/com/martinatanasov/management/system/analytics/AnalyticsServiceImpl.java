@@ -22,7 +22,7 @@ class AnalyticsServiceImpl implements AnalyticsService {
     private static final String USER_LOGIN = "user-login";
     private static final String USER_REGISTRATION = "user-registration";
 
-    public AnalyticsServiceImpl(@LoadBalanced RestClient.Builder loadBalanced,
+    AnalyticsServiceImpl(@LoadBalanced RestClient.Builder loadBalanced,
             KafkaTemplate<String, Object> kafkaTemplate) {
         this.restClient = loadBalanced.baseUrl("http://management-system-analytics").build();
         this.kafkaTemplate = kafkaTemplate;

@@ -3,6 +3,7 @@ package com.martinatanasov.management.system.analytics;
 
 import com.martinatanasov.management.system.analytics.events.LoginEvent;
 import com.martinatanasov.management.system.analytics.events.RegisterEvent;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Service
-public class AnalyticsServiceImpl implements AnalyticsService {
+class AnalyticsServiceImpl implements AnalyticsService {
 
     private final AnalyticsRepository analyticsRepository;
 

@@ -28,9 +28,11 @@ import java.util.stream.Stream;
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final UserService userService;
-    private final JwtService jwtService;
+    private final AsymmetricJwtService jwtService;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, JwtService jwtService) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager,
+            UserService userService,
+            AsymmetricJwtService jwtService) {
         super(authenticationManager);
         this.userService = userService;
         this.jwtService = jwtService;

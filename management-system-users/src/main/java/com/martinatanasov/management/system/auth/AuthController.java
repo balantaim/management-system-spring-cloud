@@ -1,6 +1,6 @@
 package com.martinatanasov.management.system.auth;
 
-import com.martinatanasov.management.system.security.JwtService;
+import com.martinatanasov.management.system.security.AsymmetricJwtService;
 import com.martinatanasov.management.system.users.UserDetailsDto;
 import com.martinatanasov.management.system.users.UserService;
 import io.jsonwebtoken.Claims;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 @RestController
 public class AuthController {
 
-    private final JwtService jwtService;
+    private final AsymmetricJwtService jwtService;
     private final UserService userService;
 
     @PostMapping("/refresh")

@@ -84,33 +84,6 @@ public class User extends BaseEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        User user = (User) o;
-        return Objects.equals(email, user.email) && Objects.equals(fullName, user.fullName) && Objects.equals(password, user.password) && Objects.equals(userId, user.userId) && Objects.equals(accountNonExpired, user.accountNonExpired) && Objects.equals(accountNonLocked, user.accountNonLocked) && Objects.equals(credentialsNonExpired, user.credentialsNonExpired) && Objects.equals(enabled, user.enabled) && Objects.equals(roles, user.roles) && Objects.equals(version, user.version) && Objects.equals(createdDate, user.createdDate) && Objects.equals(modifiedDate, user.modifiedDate);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + Objects.hashCode(email);
-        result = 31 * result + Objects.hashCode(fullName);
-        result = 31 * result + Objects.hashCode(password);
-        result = 31 * result + Objects.hashCode(userId);
-        result = 31 * result + Objects.hashCode(accountNonExpired);
-        result = 31 * result + Objects.hashCode(accountNonLocked);
-        result = 31 * result + Objects.hashCode(credentialsNonExpired);
-        result = 31 * result + Objects.hashCode(enabled);
-        result = 31 * result + Objects.hashCode(roles);
-        result = 31 * result + Objects.hashCode(version);
-        result = 31 * result + Objects.hashCode(createdDate);
-        result = 31 * result + Objects.hashCode(modifiedDate);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return
                 "User " + "\n\tID: " + getId() +

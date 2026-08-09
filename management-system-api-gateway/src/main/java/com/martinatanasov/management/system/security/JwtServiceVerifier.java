@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
-public interface JwtVerifier {
+public interface JwtServiceVerifier {
 
     PublicKey getVerificationKey();
 

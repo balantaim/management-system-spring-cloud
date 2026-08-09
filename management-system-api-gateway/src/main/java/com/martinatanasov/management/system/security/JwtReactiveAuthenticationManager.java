@@ -19,7 +19,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
-    private final JwtService jwtService;
+    private final JwtServiceVerifier jwtService;
 
     @Override
     @NonNull

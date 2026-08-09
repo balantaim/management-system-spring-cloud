@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "authorities")
@@ -40,24 +39,6 @@ public class Authority extends BaseEntity {
 
     public Authority(AuthorityName name) {
         this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        Authority authority = (Authority) o;
-        return name == authority.name && Objects.equals(version, authority.version) && Objects.equals(roles, authority.roles);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + Objects.hashCode(name);
-        result = 31 * result + Objects.hashCode(version);
-        result = 31 * result + Objects.hashCode(roles);
-        return result;
     }
 
     @Override

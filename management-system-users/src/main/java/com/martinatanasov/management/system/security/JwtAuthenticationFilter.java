@@ -24,9 +24,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final String headerName;
     private final String prefix;
-    private final JwtService jwtService;
+    private final AsymmetricJwtService jwtService;
 
-    public JwtAuthenticationFilter(JwtService jwtService, @Value("${authorization.token.header.name}") String headerName, @Value("${authorization.token.header.prefix}") String prefix) {
+    public JwtAuthenticationFilter(AsymmetricJwtService jwtService,
+            @Value("${authorization.token.header.name}") String headerName,
+            @Value("${authorization.token.header.prefix}") String prefix) {
         this.jwtService = jwtService;
         this.headerName = headerName;
         this.prefix = prefix;

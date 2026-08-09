@@ -35,7 +35,7 @@ public class SecurityConfig {
     /// OneTimeToken
     /// webAuthn() -> Passkey
     private final UserService userService;
-    private final JwtService jwtService;
+    private final AsymmetricJwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final Environment environment;
 

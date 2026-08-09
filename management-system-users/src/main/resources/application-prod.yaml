@@ -19,8 +19,8 @@ spring:
     init:
       mode: never
       platform: postgresql
-#      schema-locations: classpath:schema-docker.sql
-#      data-locations: classpath:data-docker.sql
+#      schema-locations: classpath:schema-prod.sql
+#      data-locations: classpath:data-prod.sql
   datasource:
     name: users
     url: jdbc:postgresql://${DATASOURCE_NAME:localhost}:${DATASOURCE_PORT:5432}/users

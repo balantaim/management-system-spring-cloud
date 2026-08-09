@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RefreshScope
 @Service
-public class JwtService implements AsymmetricJwtService {
+class JwtServiceImpl implements AsymmetricJwtService {
 
     private static final String TOKEN_TYPE_CLAIM = "token_type";
     private static final String ACCESS_TOKEN_TYPE = "access";
