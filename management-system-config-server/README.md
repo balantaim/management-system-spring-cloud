@@ -14,7 +14,6 @@ This project is a simple Spring Boot application that acts as a Config Server. I
 - **Default server port:** `8888`
 - **Default vault port:** `8200`
 - **Default vault engine kv:** `2`
-- **Default Eureka base url:** `http://localhost:8761` (Could be changed via `EUREKA_BASE_URL` environment variable)
 
 ### Init HashiCorp Vault and RabbitMQ services
 
