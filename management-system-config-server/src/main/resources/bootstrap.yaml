@@ -5,3 +5,13 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:user}
     password: ${RABBITMQ_PASSWORD:password}
+
+# This should be set into `bootstrap.yaml` in order to override default behavior
+# If you don't use boostrap dependency put it in `application.yaml`
+encrypt:
+  key-store:
+    type: PKCS12
+    location: classpath:management-system.p12
+    password: ${KEYSTORE_PASSWORD}
+    alias: management-system-key
+    secret: ${KEYSTORE_SECRET_PASSWORD}

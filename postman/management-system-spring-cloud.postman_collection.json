@@ -144,14 +144,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});"
+                ]
               }
             }
           ],
@@ -190,14 +186,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});"
+                ]
               }
             }
           ],
@@ -387,14 +379,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 201\", function () {",
-                  "    pm.response.to.have.status(201);",
-                  "});"
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});"
+                ]
               }
             }
           ],
@@ -403,13 +391,12 @@
             "header": [
               {
                 "key": "Client-Platform-Id",
-                "value": "1000",
-                "type": "text"
+                "value": "1000"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"fullName\": \"{{$randomFullName}}\",\n    \"password\": \"Test123!\"\n}",
+              "raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"fullName\": \"{{$randomFirstName}} {{$randomLastName}}\",\n    \"password\": \"Test123!\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -806,6 +793,47 @@
           "response": []
         },
         {
+          "name": "config-encrypt status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "afasfwseftweg:svgdsfsdgsdgsdg",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{CONFIG_SERVER_URL}}/encrypt/status",
+              "host": [
+                "{{CONFIG_SERVER_URL}}"
+              ],
+              "path": [
+                "encrypt",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "config-encrypt",
           "event": [
             {
@@ -852,14 +880,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 201\", function () {",
-                  "    pm.response.to.have.status(201);",
-                  "});"
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});"
+                ]
               }
             }
           ],
@@ -868,7 +892,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "AQA9jc9dg5hJJ8o4XidvcBAXWd+72q6/iotMGWBqKk+H5114HAZzjt+5rBnPxWXXzjj5ONJGW5jMbZYW2aT8hUxh9sibhBsHfHXZj2KO/Fuhp+qnP4rDkD0c32bWYylSPBpq1b080f4675bHhWIR2FNR3OxwE+VgSNjqyYXGuu+VKQUPjbGs13xaXeIddmT49pEM0heOl0b5xUdWyvN1/Vu6myd9pHZpjzY0sUzIUz95t1+pmdxAzreKWFqxMw9h0CIxaLy80jRTuZHFx5YAYvQT5T+8Yn1yEEluKHg7MYyb18U3ewFkvwzIwyoqnL1PtGOFVtgW+VqtbgqcE/+C6np4cnD9KO8I/Vumq693YRGiPFpGI4jqv3rWZwOTzHWE1GM=",
+              "raw": "AQA0VsScI8CxlpgoSuqqc1QHwSa3MxSt4ILxbB8txDY5T1067GAhW58CHU3MDjo4xjhD2FloX9kGmlOtLkADlTaWHECCf1GL3Egr3EPxMdcm+b8F9Br/F4DaV4pbhaym/XpC3iJDh28x58YaLW6Erhd9mD1bMcZ6btiYRDg1u1kTjslS7yCOk+LB839m7vBT2u/lsVFdK68YXhEQKHrSt2oLUPjRPEncZjG7pnp/9I4rCxrdvb540BPYLut9K4emB35kJEjahMUP7ah/GHd0OwdCp+g+M9mwELz4dgZJk1darEzY79cwxIKnRIIlOpQtuxfw+NkOwwWKJRwEmunZ53L5M+Al/MBfuEYoFAV1CPAnNWQNr0vVhU1RYNhN3eCb+tFk/JYAyLF9/2qu0OFxNO88",
               "options": {
                 "raw": {
                   "language": "json"

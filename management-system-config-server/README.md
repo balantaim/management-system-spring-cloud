@@ -78,11 +78,17 @@ Or if you are outside the Vault cli:
 docker exec -it management-system-vault vault status
 ```
 
-Export the root token and create a new engine `kv` version 2:
+Export your secrets:
 
 ```bash
 export VAULT_TOKEN="<YOUR_ROOT_TOKEN>"
+export KEYSTORE_PASSWORD="<YOUR_KEYSTORE_PASSWORD>"
+export KEYSTORE_SECRET_PASSWORD="<YOUR_KEYSTORE_SECRET_PASSWORD>"
+```
 
+Create a new engine `kv` version 2
+
+```bash
 vault secrets enable -path=secret kv-v2
 ```
 
@@ -202,7 +208,7 @@ Add value for `ROOT_TOKEN` required for connection with Vault. (This could be ID
     Or with parameters (Replace `<YOUR_ROOT_TOKEN>` with your actual Vault token):
 
     ```bash
-    mvn spring-boot:run -Dspring-boot.run.arguments="--ROOT_TOKEN=<YOUR_ROOT_TOKEN>"
+    mvn spring-boot:run -Dspring-boot.run.arguments="--ROOT_TOKEN=<YOUR_ROOT_TOKEN> --KEYSTORE_PASSWORD=<YOUR_KEYSTORE_PASSWORD> --KEYSTORE_SECRET_PASSWORD=<YOUR_KEYSTORE_SECRET_PASSWORD>"
     ```
 
 - Via IDE:

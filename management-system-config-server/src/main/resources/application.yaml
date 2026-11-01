@@ -10,15 +10,6 @@ spring:
   threads:
     virtual:
       enabled: true
-# TODO where is management-system.p12
-
-encrypt:
-  key-store:
-    location: classpath:management-system.p12
-    password: ${KEYSTORE-PASSWORD}
-    alias: management-system-key
-    secret: ${KEYSTORE-SECRET-PASSWORD}
-
 management:
   endpoints:
     web:

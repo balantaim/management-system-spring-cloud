@@ -10,7 +10,8 @@ spring:
           defaultKey: application
           profileSeparator: ","
           kvVersion: 2
-          skipSslValidation: true
+          # Use skipSSL parameter only for scheme: https
+#          skipSslValidation: true
           timeout: 5
           authentication: TOKEN
           token: ${ROOT_TOKEN}
@@ -19,4 +20,4 @@ spring:
 logging:
   level:
     org:
-      springframework: DEBUG
+      springframework: INFO

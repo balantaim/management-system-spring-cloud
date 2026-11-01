@@ -3,6 +3,22 @@ server:
 spring:
   profiles:
     active: local
+  # Hikari pool
+  datasource:
+    hikari:
+      pool-name: management-system-users
+      maximum-pool-size: 5
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
   application:
     name: management-system-users
   main:
