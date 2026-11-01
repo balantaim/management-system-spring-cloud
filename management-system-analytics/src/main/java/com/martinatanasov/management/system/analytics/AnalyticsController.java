@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.analytics;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -10,19 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RestController
-public class AnalyticsController {
+class AnalyticsController {
 
     private final AnalyticsService analyticsService;
 
     @GetMapping("/api/analytics/{email}")
-    public ResponseEntity<List<AnalyticsDTO>> getAnalytics(@PathVariable String email) {
+    public ResponseEntity<List<AnalyticsDto>> getAnalytics(@PathVariable String email) {
         if (email == null || email.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
         log.info("Check email's data: {}", email);
-        List<AnalyticsDTO> analytics = analyticsService.getEventsByEmail(email);
+        List<AnalyticsDto> analytics = analyticsService.getEventsByEmail(email);
         log.info("Analytics: {}", analytics);
         return ResponseEntity.ok(analytics);
     }

@@ -3,6 +3,7 @@ package com.martinatanasov.management.system.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
@@ -16,8 +17,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-@RequiredArgsConstructor
-public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
     private final JwtServiceVerifier jwtService;
 

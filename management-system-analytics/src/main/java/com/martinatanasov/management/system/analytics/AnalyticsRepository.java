@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AnalyticsRepository extends JpaRepository<Analytics, Long> {
+interface AnalyticsRepository extends JpaRepository<Analytics, Long> {
 
     List<Analytics> findAllByEmail(String email);
 

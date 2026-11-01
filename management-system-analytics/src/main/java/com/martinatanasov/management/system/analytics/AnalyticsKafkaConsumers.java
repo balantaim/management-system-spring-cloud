@@ -1,8 +1,9 @@
 package com.martinatanasov.management.system.analytics;
 
 
-import com.martinatanasov.management.system.analytics.events.LoginEvent;
-import com.martinatanasov.management.system.analytics.events.RegisterEvent;
+import com.martinatanasov.management.system.analytics.event.LoginEvent;
+import com.martinatanasov.management.system.analytics.event.RegisterEvent;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.kstream.KStream;
@@ -13,9 +14,9 @@ import java.util.function.Consumer;
 
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Configuration
-public class AnalyticsKafkaConsumers {
+class AnalyticsKafkaConsumers {
 
     private final AnalyticsService analyticsService;
     private static final String USER_LOGIN = "user-login";

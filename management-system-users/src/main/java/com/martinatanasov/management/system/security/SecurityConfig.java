@@ -1,6 +1,7 @@
 package com.martinatanasov.management.system.security;
 
-import com.martinatanasov.management.system.users.UserService;
+import com.martinatanasov.management.system.user.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,8 +28,8 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
-public class SecurityConfig {
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+class SecurityConfig {
 
     /// Argon2id is used instead of bcryptPasswordEncoder (for more control over passwordEncoder add dependency for artifactId \`password4j\`)
     /// ToDo: Implement the following security configurations:

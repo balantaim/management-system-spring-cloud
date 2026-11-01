@@ -1,7 +1,8 @@
 package com.martinatanasov.management.system.bootstrap;
 
-import com.martinatanasov.management.system.users.UserDetailsDto;
-import com.martinatanasov.management.system.users.UserService;
+import com.martinatanasov.management.system.user.UserDetailsDto;
+import com.martinatanasov.management.system.user.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Profile("local")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Component
-public class UpdateAnalyticsDatasource implements CommandLineRunner {
+class UpdateAnalyticsDatasource implements CommandLineRunner {
 
     private final UserService userService;
 

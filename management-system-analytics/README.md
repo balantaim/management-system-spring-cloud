@@ -41,7 +41,7 @@ spring:
                 applicationId: management-system-analytics-event-name
                 valueSerde: org.springframework.kafka.support.serializer.JsonSerde
                 configuration:
-                  spring.json.value.default.type: com.martinatanasov.management.system.analytics.events.YourObjectEvent
+                  spring.json.value.default.type: com.martinatanasov.management.system.analytics.event.YourObjectEvent
 ```
 
 Use `youEventNameConsumer` inside `AnalyticsKafkaConsumers.java` to consume messages from the topic. The name of you method should match the name from the configuration!

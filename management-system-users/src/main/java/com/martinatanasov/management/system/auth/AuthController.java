@@ -1,10 +1,11 @@
 package com.martinatanasov.management.system.auth;
 
 import com.martinatanasov.management.system.security.AsymmetricJwtService;
-import com.martinatanasov.management.system.users.UserDetailsDto;
-import com.martinatanasov.management.system.users.UserService;
+import com.martinatanasov.management.system.user.UserDetailsDto;
+import com.martinatanasov.management.system.user.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RequestMapping("/auth")
 @RestController
-public class AuthController {
+class AuthController {
 
     private final AsymmetricJwtService jwtService;
     private final UserService userService;

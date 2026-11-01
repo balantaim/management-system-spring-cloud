@@ -1,0 +1,29 @@
+package com.martinatanasov.management.system.user;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+public interface UserService extends UserDetailsService {
+
+    Page<UserDetailsDto> findAll(Pageable pageable);
+
+    UserDetailsDto createUser(UserRegisterDto userRegisterDto);
+
+    UserDetailsDto findByEmail(String email);
+
+    UserAnalyticsDetailsDto findByEmailAnalyticsUser(String email);
+
+    UserDetailsDto findByUserId(String userId);
+
+    User findEntityByUserId(String userId);
+
+    UserDetailsDto findByEmailAndFullEnabled(String email);
+
+    UserDetailsDto findByUserIdAndFullEnabled(String userId);
+
+    UserDetailsDto changeUserPassword(String userId, UserChangePasswordDto userChangePasswordDto);
+
+    UserDetailsDto changeUserFullName(String userId, String newFullName);
+
+}

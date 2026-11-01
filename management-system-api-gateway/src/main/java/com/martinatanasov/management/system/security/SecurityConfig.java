@@ -1,5 +1,6 @@
 package com.martinatanasov.management.system.security;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +16,11 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Configuration
 //Enable Reactive Security required for Reactive Gateway
 @EnableWebFluxSecurity
-public class SecurityConfig {
+class SecurityConfig {
 
     @Value("${security.allowed-origins}")
     private List<String> allowedOrigins;

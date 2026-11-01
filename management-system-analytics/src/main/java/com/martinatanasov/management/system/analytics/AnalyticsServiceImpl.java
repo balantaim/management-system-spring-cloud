@@ -1,8 +1,8 @@
 package com.martinatanasov.management.system.analytics;
 
 
-import com.martinatanasov.management.system.analytics.events.LoginEvent;
-import com.martinatanasov.management.system.analytics.events.RegisterEvent;
+import com.martinatanasov.management.system.analytics.event.LoginEvent;
+import com.martinatanasov.management.system.analytics.event.RegisterEvent;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +47,11 @@ class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    public List<AnalyticsDTO> getEventsByEmail(String email) {
+    public List<AnalyticsDto> getEventsByEmail(String email) {
         List<Analytics> userData = analyticsRepository.findAllByEmail(email);
         log.info("Found :{}", userData);
         return userData.stream()
-                .map(user -> new AnalyticsDTO(
+                .map(user -> new AnalyticsDto(
                         user.getId(),
                         user.getEventIdentifier(),
                         user.getPlatformId(),

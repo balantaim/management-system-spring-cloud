@@ -6,13 +6,13 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import java.util.Collections;
 
-public class JwtAuthenticationToken extends AbstractAuthenticationToken {
+class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final String principal;
     private final String token;
 
     //Unauthenticated
-    public JwtAuthenticationToken(String token) {
+    JwtAuthenticationToken(String token) {
         super(Collections.emptyList());
         this.token = token;
         this.principal = null;
@@ -20,7 +20,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     //Authenticated
-    public JwtAuthenticationToken(String principal, Collection<? extends GrantedAuthority> authorities) {
+    JwtAuthenticationToken(String principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.token = null;

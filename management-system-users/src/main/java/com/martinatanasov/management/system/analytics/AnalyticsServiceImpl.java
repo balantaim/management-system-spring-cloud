@@ -1,7 +1,7 @@
 package com.martinatanasov.management.system.analytics;
 
-import com.martinatanasov.management.system.analytics.events.LoginEvent;
-import com.martinatanasov.management.system.analytics.events.RegisterEvent;
+import com.martinatanasov.management.system.analytics.event.LoginEvent;
+import com.martinatanasov.management.system.analytics.event.RegisterEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
@@ -29,7 +29,7 @@ class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     @Override
-    public List<AnalyticsDTO> getUserMetrics(String userId) {
+    public List<AnalyticsDto> getUserMetrics(String userId) {
         return restClient.get()
                 .uri("/api/analytics/{userId}", userId)
                 .retrieve()

@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 @Component
 // Runs early, after CORS
 @Order(Ordered.HIGHEST_PRECEDENCE + 1)
-public class ClientPlatformIdFilter implements WebFilter {
+class ClientPlatformIdFilter implements WebFilter {
 
     private static final String CLIENT_PLATFORM_ID_HEADER_NAME = "Client-Platform-Id";
 

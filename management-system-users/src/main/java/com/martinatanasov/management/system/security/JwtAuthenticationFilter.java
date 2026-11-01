@@ -20,13 +20,13 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final String headerName;
     private final String prefix;
     private final AsymmetricJwtService jwtService;
 
-    public JwtAuthenticationFilter(AsymmetricJwtService jwtService,
+    JwtAuthenticationFilter(AsymmetricJwtService jwtService,
             @Value("${authorization.token.header.name}") String headerName,
             @Value("${authorization.token.header.prefix}") String prefix) {
         this.jwtService = jwtService;

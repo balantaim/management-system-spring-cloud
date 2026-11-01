@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
-public class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
+class JwtAuthorizationWebFilter extends AuthenticationWebFilter {
 
     private final String headerName;
     private final String prefix;
     private final JwtServiceVerifier jwtService;
 
-    public JwtAuthorizationWebFilter(
+    JwtAuthorizationWebFilter(
             JwtReactiveAuthenticationManager jwtReactiveAuthenticationManager,
             String headerName,
             String prefix,

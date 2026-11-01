@@ -1,0 +1,26 @@
+package com.martinatanasov.management.system.user;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
+record UserChangePasswordDto(
+
+        @NotBlank(message = "Old password is required")
+        @Size(min = 8, max = 50, message = "Old password must be between 8 and 50 characters")
+        @Pattern(
+                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,50}$",
+                message = "Old password must contain uppercase, lowercase, number, and special character"
+        )
+        String oldPassword,
+        @NotBlank(message = "New password is required")
+        @Size(min = 8, max = 50, message = "New password must be between 8 and 50 characters")
+        @Pattern(
+                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,50}$",
+                message = "New password must contain uppercase, lowercase, number, and special character"
+        )
+        String newPassword
+
+) {
+
+}

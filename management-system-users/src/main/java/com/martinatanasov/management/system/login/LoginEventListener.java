@@ -1,8 +1,9 @@
 package com.martinatanasov.management.system.login;
 
 import com.martinatanasov.management.system.analytics.AnalyticsService;
-import com.martinatanasov.management.system.analytics.events.LoginEvent;
+import com.martinatanasov.management.system.analytics.event.LoginEvent;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -15,9 +16,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.time.LocalDateTime;
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Component
-public class LoginEventListener {
+class LoginEventListener {
 
     private final AnalyticsService analyticsService;
 

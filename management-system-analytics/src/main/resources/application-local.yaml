@@ -32,7 +32,7 @@ spring:
             configuration:
               default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
               default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
-              spring.json.trusted.packages: com.martinatanasov.management.system.analytics.events
+              spring.json.trusted.packages: com.martinatanasov.management.system.analytics.event
           bindings:
             # Consumer 1 userRegisteredConsumer, group 1
             userRegisteredConsumer-in-0:
@@ -40,14 +40,14 @@ spring:
                 applicationId: management-system-analytics-register
                 valueSerde: org.springframework.kafka.support.serializer.JsonSerde
                 configuration:
-                  spring.json.value.default.type: com.martinatanasov.management.system.analytics.events.RegisterEvent
+                  spring.json.value.default.type: com.martinatanasov.management.system.analytics.event.RegisterEvent
             # Consumer 2 userLoginConsumer, group 1
             userLoginConsumer-in-0:
               consumer:
                 applicationId: management-system-analytics-login
                 valueSerde: org.springframework.kafka.support.serializer.JsonSerde
                 configuration:
-                  spring.json.value.default.type: com.martinatanasov.management.system.analytics.events.LoginEvent
+                  spring.json.value.default.type: com.martinatanasov.management.system.analytics.event.LoginEvent
 
   jpa:
     # Keeping a persistence context open for the entire web request (default: true)

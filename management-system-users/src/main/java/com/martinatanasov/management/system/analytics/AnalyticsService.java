@@ -1,13 +1,13 @@
 package com.martinatanasov.management.system.analytics;
 
-import com.martinatanasov.management.system.analytics.events.LoginEvent;
-import com.martinatanasov.management.system.analytics.events.RegisterEvent;
+import com.martinatanasov.management.system.analytics.event.LoginEvent;
+import com.martinatanasov.management.system.analytics.event.RegisterEvent;
 
 import java.util.List;
 
 public interface AnalyticsService {
 
-    List<AnalyticsDTO> getUserMetrics(String userId);
+    List<AnalyticsDto> getUserMetrics(String userId);
     void sendRegisterMessage(RegisterEvent registerEvent);
     void sendLoginMessage(LoginEvent LoginEvent);
 

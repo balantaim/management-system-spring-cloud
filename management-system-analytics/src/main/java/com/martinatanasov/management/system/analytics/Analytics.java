@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "analytics")
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access =  AccessLevel.PACKAGE)
 @Getter
 @Setter
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Analytics {
+class Analytics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

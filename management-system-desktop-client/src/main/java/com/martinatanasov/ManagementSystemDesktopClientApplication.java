@@ -1,7 +1,7 @@
 package com.martinatanasov;
 
-import com.martinatanasov.uicomponents.DefaultThemeAndFont;
-import com.martinatanasov.views.MainFrame;
+import com.martinatanasov.uicomponent.DefaultThemeAndFont;
+import com.martinatanasov.view.MainFrame;
 import io.micronaut.context.ApplicationContext;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,6 +41,7 @@ public class ManagementSystemDesktopClientApplication {
 
         // Start Swing UI on EDT
         SwingUtilities.invokeLater(() -> {
+//            MainFrame frame = context.getBean(MainFrame.class);
             MainFrame frame = context.getBean(MainFrame.class);
             frame.init();
         });

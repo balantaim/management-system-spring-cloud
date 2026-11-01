@@ -1,8 +1,8 @@
 package com.martinatanasov.management.system.security;
 
-import com.martinatanasov.management.system.users.UserDetailsDto;
-import com.martinatanasov.management.system.users.UserLoginDto;
-import com.martinatanasov.management.system.users.UserService;
+import com.martinatanasov.management.system.user.UserDetailsDto;
+import com.martinatanasov.management.system.user.UserLoginDto;
+import com.martinatanasov.management.system.user.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,12 +25,12 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 @Slf4j
-public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final UserService userService;
     private final AsymmetricJwtService jwtService;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager,
+    AuthenticationFilter(AuthenticationManager authenticationManager,
             UserService userService,
             AsymmetricJwtService jwtService) {
         super(authenticationManager);

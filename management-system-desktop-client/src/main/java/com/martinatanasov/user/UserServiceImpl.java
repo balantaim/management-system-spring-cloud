@@ -8,18 +8,19 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
-import static com.martinatanasov.configs.RestClientConfig.CLIENT_PLATFORM_ID;
-import static com.martinatanasov.configs.RestClientConfig.CLIENT_PLATFORM_ID_HEADER;
+import static com.martinatanasov.config.RestClientConfig.CLIENT_PLATFORM_ID;
+import static com.martinatanasov.config.RestClientConfig.CLIENT_PLATFORM_ID_HEADER;
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Singleton
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
 
     @Inject
     // Get the specific rest client by id

@@ -1,7 +1,8 @@
 package com.martinatanasov.management.system.analytics;
 
-import com.martinatanasov.management.system.users.UserAnalyticsDetailsDto;
-import com.martinatanasov.management.system.users.UserService;
+import com.martinatanasov.management.system.user.UserAnalyticsDetailsDto;
+import com.martinatanasov.management.system.user.UserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,16 +16,16 @@ import org.springframework.web.client.ResourceAccessException;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @RestController
-public class AnalyticsController {
+class AnalyticsController {
 
     private final AnalyticsService analyticsService;
     private final UserService userService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/api/analytics/{email}")
-    public ResponseEntity<UserAndAnalyticsDTO> analytics(@PathVariable String email) {
+    public ResponseEntity<UserAndAnalyticsDto> analytics(@PathVariable String email) {
         if (email == null || email.length() <= 2 || email.length() > 150) {
             return ResponseEntity.badRequest().build();
         }
@@ -33,8 +34,8 @@ public class AnalyticsController {
             return ResponseEntity.notFound().build();
         }
         try {
-            List<AnalyticsDTO> analytics = analyticsService.getUserMetrics(email);
-            UserAndAnalyticsDTO userDTO = newAnalyticsUserDetailsDTO(user, analytics);
+            List<AnalyticsDto> analytics = analyticsService.getUserMetrics(email);
+            UserAndAnalyticsDto userDTO = newAnalyticsUserDetailsDTO(user, analytics);
             return ResponseEntity.ok(userDTO);
         } catch (ResourceAccessException ex) {
             log.error("Analytics service is not available right now");
@@ -45,8 +46,8 @@ public class AnalyticsController {
         }
     }
 
-    private UserAndAnalyticsDTO newAnalyticsUserDetailsDTO(UserAnalyticsDetailsDto user, List<AnalyticsDTO> analytics) {
-        return new UserAndAnalyticsDTO(
+    private UserAndAnalyticsDto newAnalyticsUserDetailsDTO(UserAnalyticsDetailsDto user, List<AnalyticsDto> analytics) {
+        return new UserAndAnalyticsDto(
                 user.email(),
                 user.fullName(),
                 user.userId(),
