@@ -1,0 +1,56 @@
+<header class="sticky top-0 z-50 border-b border-surface bg-surface-0 text-surface-900 dark:bg-surface-900 dark:text-surface-0">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3" aria-label="Main">
+        <a routerLink="/home" class="text-lg font-semibold">Management System</a>
+
+        <div class="flex items-center gap-2">
+            <!-- desktop links -->
+            <ul class="hidden items-center gap-1 md:flex">
+                @for (item of ctrl.navItems; track item.route) {
+                <li>
+                    <a [routerLink]="item.route"
+                       routerLinkActive="active-link font-semibold"
+                       class="flex items-center gap-2 border-b-2 border-transparent px-3 py-2 text-muted-color hover:bg-surface-100 dark:hover:bg-surface-800 [&.active-link]:border-primary">
+                        <i [class]="item.icon"></i>
+                        {{ item.label }}
+                    </a>
+                </li>
+                }
+            </ul>
+
+            <!-- theme dropdown -->
+            <p-select
+                    [options]="ctrl.themeOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    [ngModel]="ctrl.themeMode()"
+                    (onChange)="ctrl.setTheme($event.value)"
+                    ariaLabel="Theme"/>
+
+            <!-- hamburger (mobile only) -->
+            <button type="button"
+                    class="rounded-md p-2 hover:bg-surface-100 md:hidden dark:hover:bg-surface-800"
+                    aria-label="Toggle menu"
+                    aria-controls="mobile-menu"
+                    [attr.aria-expanded]="ctrl.menuOpen()"
+                    (click)="ctrl.toggleMenu()">
+                <i [class]="ctrl.menuOpen() ? 'pi pi-times' : 'pi pi-bars'"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- mobile collapsible menu -->
+    @if (ctrl.menuOpen()) {
+    <ul id="mobile-menu" class="border-t border-surface px-4 py-2 md:hidden">
+        @for (item of ctrl.navItems; track item.route) {
+        <li>
+            <a [routerLink]="item.route"
+               routerLinkActive="active-link font-semibold"
+               class="inline-flex items-center gap-2 border-b-2 border-transparent px-3 py-3 text-muted-color hover:bg-surface-100 dark:hover:bg-surface-800 [&.active-link]:border-primary"
+               (click)="ctrl.closeMenu()">
+                <i [class]="item.icon"></i>{{ item.label }}
+            </a>
+        </li>
+        }
+    </ul>
+    }
+</header>

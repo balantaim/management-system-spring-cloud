@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-1">
+    <p-floatlabel variant="on"
+                  class="block">
+        <p-iconfield>
+            @if (icon()) {
+            <p-inputicon [class]="icon()"/>
+            }
+            <input pInputText
+                   [id]="id()"
+                   [type]="inputType()"
+                   class="w-full"
+                   [class.pr-10]="revealable()"
+                   [pSize]="size()"
+                   [class.p-invalid]="showError()"
+                   [attr.autocomplete]="autocomplete()"
+                   [formField]="field()"
+                   [attr.aria-invalid]="showError()"
+                   [attr.aria-describedby]="id() + '-errors'"/>
+            @if (revealable()) {
+            <button type="button"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-color hover:text-primary"
+                    [attr.aria-label]="visible() ? 'Hide password' : 'Show password'"
+                    [attr.aria-pressed]="visible()"
+                    (click)="toggleVisibility()">
+                <i [class]="visible() ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+            </button>
+            }
+        </p-iconfield>
+        <label [attr.for]="id()">{{ label() }}</label>
+    </p-floatlabel>
+
+    <div [id]="id() + '-errors'"
+         class="min-h-5"
+         role="alert">
+        @for (msg of messages(); track msg) {
+        <small class="block text-red-600 dark:text-red-400">{{ msg }}</small>
+        }
+    </div>
+</div>
