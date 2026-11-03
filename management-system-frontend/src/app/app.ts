@@ -1,5 +1,5 @@
 import {Component, signal} from '@angular/core';
-import {Shell} from './layout/shell/shell/shell';
+import {Shell} from './layout/shell/shell';
 
 @Component({
     selector: 'app-root',

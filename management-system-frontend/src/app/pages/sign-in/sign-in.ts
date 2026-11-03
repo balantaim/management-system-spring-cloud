@@ -1,8 +1,8 @@
 import {Component, inject} from '@angular/core';
-import {SignInController} from "../../../core/controllers/sign-in.controller";
+import {SignInController} from "../../core/controllers/sign-in.controller";
 import {RouterLink} from "@angular/router";
 import {NgComponentOutlet} from "@angular/common";
-import {Card} from "../../../shared/card/card";
+import {Card} from "../../shared/card/card";
 
 
 @Component({

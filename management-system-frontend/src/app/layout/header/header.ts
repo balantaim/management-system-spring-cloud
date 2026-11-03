@@ -12,7 +12,7 @@ import {Component, inject} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Select} from '@openng/optimus-ui/select';
-import {HeaderController} from '../../../core/controllers/header.controller';
+import {HeaderController} from '../../core/controllers/header.controller';
 
 
 @Component({
