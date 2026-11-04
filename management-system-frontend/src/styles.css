@@ -1,8 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
 @import "@openng/optimus-ui-tailwindcss";
 @import "@openng/icons/openng-icons.css";
+
+/*Light Gallery library*/
+@import 'lightgallery/css/lightgallery.css';
+@import 'lightgallery/css/lg-thumbnail.css';
+@import 'lightgallery/css/lg-zoom.css';
 
 /* Tailwind's dark: variant follows the same class Optimus uses */
 @custom-variant dark (&:where(.app-dark, .app-dark *));

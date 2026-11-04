@@ -10,12 +10,12 @@
                    [type]="inputType()"
                    class="w-full"
                    [class.pr-10]="revealable()"
-                   [pSize]="size()"
                    [class.p-invalid]="showError()"
+                   [pSize]="size()"
                    [attr.autocomplete]="autocomplete()"
                    [formField]="field()"
                    [attr.aria-invalid]="showError()"
-                   [attr.aria-describedby]="id() + '-errors'"/>
+                   [attr.aria-describedby]="showMessages() ? id() + '-errors' : null"/>
             @if (revealable()) {
             <button type="button"
                     class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-color hover:text-primary"
@@ -29,6 +29,7 @@
         <label [attr.for]="id()">{{ label() }}</label>
     </p-floatlabel>
 
+    @if (showMessages()) {
     <div [id]="id() + '-errors'"
          class="min-h-5"
          role="alert">
@@ -36,4 +37,5 @@
         <small class="block text-red-600 dark:text-red-400">{{ msg }}</small>
         }
     </div>
+    }
 </div>

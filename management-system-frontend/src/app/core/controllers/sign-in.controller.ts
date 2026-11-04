@@ -5,6 +5,7 @@ import {LoginRequest} from "../models/login-request";
 import {UiItem, UiSize} from "../models/ui-config";
 import {TextField} from "../../shared/text-field/text-field";
 import {SubmitButton} from "../../shared/submit-button/submit-button";
+import {withTimeout} from '../utils/with-timeout';
 import {
     EMAIL_MAX_LENGTH,
     HAS_LOWERCASE,
@@ -93,6 +94,7 @@ export class SignInController {
         inputs: {
             label: 'Sign in',
             loading: this.form().submitting(),
+            disabled: this.form().invalid(),
             size: BUTTON_SIZE,
         },
     }));
@@ -103,7 +105,7 @@ export class SignInController {
 
         await submit(this.form, async () => {
             try {
-                const success = await this.withTimeout(this.auth.login(this.model()), LOGIN_TIMEOUT_MS);
+                const success = await withTimeout(this.auth.login(this.model()), LOGIN_TIMEOUT_MS);
                 if (!success) {
                     this.submitError.set('Invalid email or password.');
                     return;
@@ -115,22 +117,6 @@ export class SignInController {
                     ? 'The request timed out. Please try again.'
                     : 'Something went wrong. Please try again.');
             }
-        });
-    }
-
-    private withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-        return new Promise<T>((resolve, reject) => {
-            const timer = setTimeout(() => reject(new Error('timeout')), ms);
-            promise.then(
-                (value) => {
-                    clearTimeout(timer);
-                    resolve(value);
-                },
-                (error) => {
-                    clearTimeout(timer);
-                    reject(error);
-                },
-            );
         });
     }
 

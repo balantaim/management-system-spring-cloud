@@ -1,1 +1,27 @@
-<p>register works!</p>
+<section class="flex min-h-[60vh] items-center justify-center py-10">
+    <app-card title="Create account">
+        <form novalidate
+              class="flex flex-col gap-4"
+              (submit)="$event.preventDefault(); ctrl.onSubmit()">
+
+            @for (item of ctrl.fields; track item.id) {
+            <ng-container *ngComponentOutlet="item.component; inputs: item.inputs"/>
+            }
+
+            @if (ctrl.submitError()) {
+            <p role="alert"
+               class="text-center text-sm text-red-600 dark:text-red-400">{{ ctrl.submitError() }}</p>
+            }
+
+            <div class="mt-4">
+                <ng-container *ngComponentOutlet="ctrl.submitButton().component; inputs: ctrl.submitButton().inputs"/>
+            </div>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-muted-color">
+            Already have an account?
+            <a routerLink="/sign-in"
+               class="text-primary underline">Sign in</a>
+        </p>
+    </app-card>
+</section>

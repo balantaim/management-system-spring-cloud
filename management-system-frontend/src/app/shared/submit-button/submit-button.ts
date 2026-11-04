@@ -12,6 +12,7 @@ import {Button} from "@openng/optimus-ui/button";
 export class SubmitButton {
     readonly label = input.required<string>();
     readonly loading = input(false);
+    readonly disabled = input(false);
     readonly size = input<UiSize>();
     readonly fluid = input(true);
 }

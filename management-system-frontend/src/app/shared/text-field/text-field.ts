@@ -14,6 +14,7 @@ import {UiSize} from "../../core/models/ui-config";
     host: {class: 'block'},
 })
 export class TextField {
+
     readonly field = input.required<FieldTree<string>>();
     readonly id = input.required<string>();
     readonly label = input.required<string>();
@@ -23,6 +24,7 @@ export class TextField {
     // 'small' | 'large' | undefined
     readonly size = input<UiSize>();
     readonly revealable = input(false);
+    readonly showMessages = input(true);
 
     protected readonly visible = signal(false);
 
