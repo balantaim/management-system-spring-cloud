@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {RouterLink} from '@angular/router';
+import {AuthService} from "../../core/services/auth.service";
 
 @Component({
     imports: [RouterLink],
@@ -8,5 +9,6 @@ import {RouterLink} from '@angular/router';
     templateUrl: './footer.html',
 })
 export class Footer {
+    protected readonly auth = inject(AuthService);
     protected readonly year = new Date().getFullYear();
 }

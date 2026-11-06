@@ -1,11 +1,11 @@
 import {computed, inject, Injectable, signal} from '@angular/core';
 import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {LoginRequest} from "../models/login-request";
 import {UiItem, UiSize} from "../models/ui-config";
 import {TextField} from "../../shared/text-field/text-field";
 import {SubmitButton} from "../../shared/submit-button/submit-button";
-import {withTimeout} from '../utils/with-timeout';
+import {TIMEOUT_ERROR_MESSAGE, withTimeout} from '../utils/with-timeout';
 import {
     EMAIL_MAX_LENGTH,
     HAS_LOWERCASE,
@@ -37,6 +37,7 @@ export class SignInController {
 
     private readonly auth = inject(AuthService);
     private readonly router = inject(Router);
+    private readonly route = inject(ActivatedRoute);
     private readonly model = signal<LoginRequest>({email: '', password: ''});
 
     readonly submitError = signal('');
@@ -110,14 +111,20 @@ export class SignInController {
                     this.submitError.set('Invalid email or password.');
                     return;
                 }
-                await this.router.navigateByUrl('/home');
+                await this.router.navigateByUrl(this.returnUrl());
             } catch (error) {
-                const timedOut = error instanceof Error && error.message === 'timeout';
+                const timedOut = error instanceof Error && error.message === TIMEOUT_ERROR_MESSAGE;
                 this.submitError.set(timedOut
                     ? 'The request timed out. Please try again.'
                     : 'Something went wrong. Please try again.');
             }
         });
+    }
+
+    /** Only internal paths are allowed, so a crafted link can't redirect to another site */
+    private returnUrl(): string {
+        const url = this.route.snapshot.queryParamMap.get('returnUrl');
+        return url && url.startsWith('/') && !url.startsWith('//') ? url : '/home';
     }
 
 }

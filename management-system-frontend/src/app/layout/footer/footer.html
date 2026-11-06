@@ -16,9 +16,25 @@
             <section class="md:col-span-2">
                 <h3 class="mb-4 text-xl font-semibold">Quick links</h3>
                 <ul class="space-y-2">
-                    <li><a routerLink="/home" class="text-muted-color hover:text-primary">Home</a></li>
-                    <li><a routerLink="/sign-in" class="text-muted-color hover:text-primary">Sign in</a></li>
-                    <li><a routerLink="/demo" class="text-muted-color hover:text-primary">Demo</a></li>
+                    <li>
+                        <a routerLink="/home"
+                           class="text-muted-color hover:text-primary">Home</a>
+                    </li>
+                    <li>
+                        <a routerLink="/demo"
+                           class="text-muted-color hover:text-primary">Demo</a>
+                    </li>
+                    @if (auth.isLoggedIn()) {
+                    <li>
+                        <a routerLink="/gallery"
+                           class="text-muted-color hover:text-primary">Gallery</a>
+                    </li>
+                    } @else {
+                    <li>
+                        <a routerLink="/sign-in"
+                           class="text-muted-color hover:text-primary">Sign in</a>
+                    </li>
+                    }
                 </ul>
             </section>
 
@@ -32,11 +48,13 @@
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="pi pi-envelope mt-1 w-4 text-center text-muted-color"></i>
-                        <a href="mailto:management-system@support.com" class="text-muted-color hover:text-primary">management-system@support.com</a>
+                        <a href="mailto:management-system@support.com"
+                           class="text-muted-color hover:text-primary">management-system@support.com</a>
                     </li>
                     <li class="flex items-start gap-3">
                         <i class="pi pi-phone mt-1 w-4 text-center text-muted-color"></i>
-                        <a href="tel:+359999999999" class="text-muted-color hover:text-primary">+359 999 999 999</a>
+                        <a href="tel:+359999999999"
+                           class="text-muted-color hover:text-primary">+359 999 999 999</a>
                     </li>
                 </ul>
             </section>
@@ -45,20 +63,36 @@
             <section class="md:col-span-2">
                 <h3 class="mb-4 text-xl font-semibold">Follow us</h3>
                 <div class="flex flex-wrap gap-4 text-2xl">
-                    <a href="https://www.facebook.com/" title="facebook" aria-label="Facebook"
-                       target="_blank" rel="noopener noreferrer" class="text-muted-color hover:text-primary">
+                    <a href="https://www.facebook.com/"
+                       title="facebook"
+                       aria-label="Facebook"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-muted-color hover:text-primary">
                         <i class="pi pi-facebook"></i>
                     </a>
-                    <a href="https://www.instagram.com/" title="instagram" aria-label="Instagram"
-                       target="_blank" rel="noopener noreferrer" class="text-muted-color hover:text-primary">
+                    <a href="https://www.instagram.com/"
+                       title="instagram"
+                       aria-label="Instagram"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-muted-color hover:text-primary">
                         <i class="pi pi-instagram"></i>
                     </a>
-                    <a href="https://www.linkedin.com/" title="linkedin" aria-label="LinkedIn"
-                       target="_blank" rel="noopener noreferrer" class="text-muted-color hover:text-primary">
+                    <a href="https://www.linkedin.com/"
+                       title="linkedin"
+                       aria-label="LinkedIn"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-muted-color hover:text-primary">
                         <i class="pi pi-linkedin"></i>
                     </a>
-                    <a href="https://www.youtube.com/" title="youtube" aria-label="YouTube"
-                       target="_blank" rel="noopener noreferrer" class="text-muted-color hover:text-primary">
+                    <a href="https://www.youtube.com/"
+                       title="youtube"
+                       aria-label="YouTube"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-muted-color hover:text-primary">
                         <i class="pi pi-youtube"></i>
                     </a>
                 </div>
@@ -71,10 +105,12 @@
         <p class="text-center text-sm text-muted-color">
             <strong class="text-surface-900 dark:text-surface-0">Management System</strong>
             is a demo project built for learning purposes and released under the
-            <a href="http://www.apache.org/licenses/LICENSE-2.0" class="underline hover:text-primary">Apache License
-                2.0</a>.
+            <a href="http://www.apache.org/licenses/LICENSE-2.0"
+               class="underline hover:text-primary">Apache License 2.0</a>.
             Questions or feedback? Connect with the author on
-            <a href="https://www.linkedin.com/in/martin-atanasov-47550b1a2/" target="_blank" rel="noopener noreferrer"
+            <a href="https://www.linkedin.com/in/martin-atanasov-47550b1a2/"
+               target="_blank"
+               rel="noopener noreferrer"
                class="underline hover:text-primary">LinkedIn</a>.
         </p>
     </div>

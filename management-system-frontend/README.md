@@ -30,4 +30,6 @@ The Management System Web Frontend is responsible for providing a user-friendly 
 
 - Angular docs: [Angular](https://angular.dev/overview)
 - Tailwind css docs: [Tailwind](https://tailwindcss.com/docs/installation/framework-guides/angular)
+- Optimus UI docs: [Optimus UI](https://optimus.openng.org/)
+- lightGallery docs: [lightGallery](https://www.lightgalleryjs.com/)
 - Vitest docs: [Vitest](https://vitest.dev/guide/)
