@@ -11,4 +11,24 @@
 /* Tailwind's dark: variant follows the same class Optimus uses */
 @custom-variant dark (&:where(.app-dark, .app-dark *));
 
+/* Page Transition CSS */
+@keyframes page-out {
+    to { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes page-in {
+    from { opacity: 0; transform: translateY(8px); }
+}
+::view-transition-old(page) {
+    animation: 150ms ease-in both page-out;
+}
+::view-transition-new(page) {
+    animation: 250ms ease-out both page-in;
+}
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}
 
