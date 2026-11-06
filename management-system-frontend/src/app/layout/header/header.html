@@ -19,12 +19,10 @@
             </ul>
 
             <!-- theme dropdown -->
-            <p-select optionLabel="label"
-                      optionValue="value"
-                      ariaLabel="Theme"
-                      [options]="ctrl.themeOptions"
-                      [ngModel]="ctrl.themeMode()"
-                      (onChange)="ctrl.setTheme($event.value)"/>
+            <app-dropdown ariaLabel="Theme"
+                          [options]="ctrl.themeOptions"
+                          [value]="ctrl.themeMode()"
+                          (valueChange)="ctrl.setTheme($event)"/>
 
             <!-- user menu (logged in only) -->
             @if (ctrl.isLoggedIn()) {

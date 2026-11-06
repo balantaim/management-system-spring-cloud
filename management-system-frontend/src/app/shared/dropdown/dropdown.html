@@ -1,0 +1,42 @@
+<button #trigger
+        type="button"
+        class="flex cursor-pointer items-center justify-center rounded-md p-2 text-lg outline-hidden hover:bg-surface-100 focus-visible:bg-surface-100 dark:hover:bg-surface-800 dark:focus-visible:bg-surface-800"
+        aria-haspopup="listbox"
+        [attr.aria-label]="ariaLabel() + (selected() ? ': ' + selected()?.label : '')"
+        [attr.title]="selected()?.label"
+        [attr.aria-expanded]="open()"
+        [attr.aria-controls]="open() ? uid + '-list' : null"
+        (click)="toggle()"
+        (keydown)="onTriggerKeydown($event)">
+    @if (selected()?.icon; as icon) {
+    <i [class]="icon"></i>
+    }
+</button>
+
+@if (open()) {
+<ul #list
+    role="listbox"
+    tabindex="-1"
+    class="absolute right-0 z-50 mt-1 min-w-full overflow-hidden rounded-md bg-surface-100 py-1 outline-hidden dark:bg-surface-800"
+    [id]="uid + '-list'"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-activedescendant]="uid + '-option-' + activeIndex()"
+    (keydown)="onListKeydown($event)">
+    @for (option of options(); track $index) {
+    <li role="option"
+        class="flex cursor-pointer items-center gap-2 whitespace-nowrap px-3 py-2"
+        [id]="uid + '-option-' + $index"
+        [class]="activeIndex() === $index ? 'bg-surface-200 dark:bg-surface-700' : ''"
+        [class.text-primary]="isSelected(option)"
+        [class.font-semibold]="isSelected(option)"
+        [attr.aria-selected]="isSelected(option)"
+        (click)="select(option)"
+        (mouseenter)="activeIndex.set($index)">
+        @if (option.icon) {
+        <i [class]="option.icon"></i>
+        }
+        {{ option.label }}
+    </li>
+    }
+</ul>
+}

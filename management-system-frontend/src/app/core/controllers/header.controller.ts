@@ -4,6 +4,7 @@ import {ThemeMode} from '../models/theme-mode';
 import {ThemeService} from '../services/theme.service';
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import {DropdownOption} from "../models/dropdown-option";
 
 
 // provided per component, not root
@@ -21,14 +22,14 @@ export class HeaderController {
         {label: 'Home', route: '/home', icon: 'pi pi-home'},
         this.auth.isLoggedIn()
             ? {label: 'Gallery', route: '/gallery', icon: 'pi pi-image'}
-            : {label: 'Demo', route: '/demo', icon: 'pi pi-desktop'},
+            : {label: 'Demo', route: '/demo', icon: 'pi pi-th-large'},
         {label: 'Sign in', route: '/sign-in', icon: 'pi pi-sign-in'},
     ]);
 
-    readonly themeOptions = [
-        {label: 'System', value: ThemeMode.SYSTEM},
-        {label: 'White', value: ThemeMode.LIGHT},
-        {label: 'Dark', value: ThemeMode.DARK},
+    readonly themeOptions: DropdownOption<ThemeMode>[] = [
+        {label: 'System', value: ThemeMode.SYSTEM, icon: 'pi pi-palette'},
+        {label: 'White', value: ThemeMode.LIGHT, icon: 'pi pi-sun'},
+        {label: 'Dark', value: ThemeMode.DARK, icon: 'pi pi-moon'},
     ];
 
     readonly menuOpen = signal(false);

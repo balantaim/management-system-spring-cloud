@@ -15,7 +15,7 @@ export const routes: Routes = [
     },
     {
         path: 'demo',
-        title: 'Demos',
+        title: 'Demo',
         loadComponent: () => import('./pages/demo/demo').then(m => m.Demo)
     },
     {
@@ -38,7 +38,7 @@ export const routes: Routes = [
     },
     {
         path: 'account',
-        title: 'Accoutn',
+        title: 'Account',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/account/account').then(m => m.Account)
     },
