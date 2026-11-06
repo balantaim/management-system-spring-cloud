@@ -22,7 +22,7 @@ export class HeaderController {
         {label: 'Home', route: '/home', icon: 'pi pi-home'},
         this.auth.isLoggedIn()
             ? {label: 'Gallery', route: '/gallery', icon: 'pi pi-image'}
-            : {label: 'Demo', route: '/demo', icon: 'pi pi-th-large'},
+            : {label: 'Demos', route: '/demos', icon: 'pi pi-th-large'},
         {label: 'Sign in', route: '/sign-in', icon: 'pi pi-sign-in'},
     ]);
 

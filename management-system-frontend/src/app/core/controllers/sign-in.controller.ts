@@ -124,7 +124,7 @@ export class SignInController {
     /** Only internal paths are allowed, so a crafted link can't redirect to another site */
     private returnUrl(): string {
         const url = this.route.snapshot.queryParamMap.get('returnUrl');
-        return url && url.startsWith('/') && !url.startsWith('//') ? url : '/home';
+        return url && url.startsWith('/') && !url.startsWith('//') ? url : '/gallery';
     }
 
 }
