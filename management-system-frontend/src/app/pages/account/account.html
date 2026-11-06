@@ -1,0 +1,16 @@
+<section class="flex min-h-[60vh] items-center justify-center py-10">
+    <app-card title="Account">
+        @if (user(); as u) {
+        <dl class="flex flex-col gap-4">
+            <div>
+                <dt class="text-sm text-muted-color">Full name</dt>
+                <dd class="font-medium">{{ u.fullName }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-muted-color">Email</dt>
+                <dd class="font-medium">{{ u.email }}</dd>
+            </div>
+        </dl>
+        }
+    </app-card>
+</section>

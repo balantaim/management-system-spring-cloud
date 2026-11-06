@@ -22,7 +22,7 @@ export class AuthService {
 
         const email = request.email.trim();
         const fullName = this.registeredNames.get(email.toLowerCase()) ?? this.nameFromEmail(email);
-        this.currentUser.set({ email, fullName });
+        this.currentUser.set({email, fullName});
         return true;
     }
 

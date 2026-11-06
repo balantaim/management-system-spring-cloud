@@ -18,11 +18,11 @@ export class HeaderController {
     readonly user = this.auth.user;
 
     readonly navItems = computed<NavItem[]>(() => [
-        { label: 'Home', route: '/home', icon: 'pi pi-home' },
+        {label: 'Home', route: '/home', icon: 'pi pi-home'},
         this.auth.isLoggedIn()
-            ? { label: 'Gallery', route: '/gallery', icon: 'pi pi-image' }
-            : { label: 'Demo', route: '/demo', icon: 'pi pi-desktop' },
-        { label: 'Sign in', route: '/sign-in', icon: 'pi pi-sign-in' },
+            ? {label: 'Gallery', route: '/gallery', icon: 'pi pi-image'}
+            : {label: 'Demo', route: '/demo', icon: 'pi pi-desktop'},
+        {label: 'Sign in', route: '/sign-in', icon: 'pi pi-sign-in'},
     ]);
 
     readonly themeOptions = [
