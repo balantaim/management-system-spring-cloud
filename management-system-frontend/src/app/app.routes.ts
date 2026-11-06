@@ -10,34 +10,41 @@ export const routes: Routes = [
     },
     {
         path: 'home',
+        title: 'Home',
         loadComponent: () => import('./pages/home/home').then(m => m.Home)
     },
     {
         path: 'demo',
+        title: 'Demos',
         loadComponent: () => import('./pages/demo/demo').then(m => m.Demo)
     },
     {
         path: 'sign-in',
+        title: 'Sign in',
         canActivate: [guestGuard],
         loadComponent: () => import('./pages/sign-in/sign-in').then(m => m.SignIn)
     },
     {
         path: 'register',
+        title: 'Register',
         canActivate: [guestGuard],
         loadComponent: () => import('./pages/register/register').then(m => m.Register)
     },
     {
         path: 'gallery',
+        title: 'Gallery',
         canActivate: [authGuard],
-        loadComponent: () => import('./pages/gallery-page/gallery-page').then(m => m.GalleryPage),
+        loadComponent: () => import('./pages/gallery-page/gallery-page').then(m => m.GalleryPage)
     },
     {
         path: 'account',
+        title: 'Accoutn',
         canActivate: [authGuard],
-        loadComponent: () => import('./pages/account/account').then(m => m.Account),
+        loadComponent: () => import('./pages/account/account').then(m => m.Account)
     },
     {
         path: '**',
-        redirectTo: 'home'
+        title: 'Page not found',
+        loadComponent: () => import('./pages/not-found/not-found').then(m => m.NotFound)
     },
 ];
