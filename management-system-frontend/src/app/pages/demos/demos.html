@@ -1,1 +1,66 @@
-<p>demo works!</p>
+<section class="mx-auto flex max-w-6xl flex-col gap-6 py-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold">Demo gallery</h1>
+            <p class="text-muted-color">Click a picture to open it. Hover over one to see its label.</p>
+        </div>
+
+        <div class="flex flex-col gap-2 sm:items-end">
+            <div class="inline-flex overflow-hidden rounded-md border border-surface"
+                 role="group"
+                 aria-label="Sort pictures">
+                @for (option of ctrl.sortOptions; track option.key) {
+                <button type="button"
+                        class="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm"
+                        [class]="ctrl.sortKey() === option.key
+                    ? 'bg-primary text-white'
+                    : 'text-muted-color hover:bg-surface-100 dark:hover:bg-surface-800'"
+                        [attr.aria-pressed]="ctrl.sortKey() === option.key"
+                        (click)="ctrl.sortBy(option.key)">
+                    <i [class]="option.icon"></i>{{ option.label }}
+                    @if (ctrl.sortKey() === option.key) {
+                    <i [class]="ctrl.direction() === 'asc' ? 'pi pi-arrow-up' : 'pi pi-arrow-down'"></i>
+                    }
+                </button>
+                }
+            </div>
+            <p class="text-xs text-muted-color"
+               aria-live="polite">{{ ctrl.sortSummary() }}</p>
+        </div>
+    </div>
+
+    <lg-gallery #lg="lgGallery"
+                licenseKey="0000-0000-000-0000"
+                [features]="features"
+                [slides]="ctrl.slides()"/>
+
+    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        @for (photo of ctrl.photos(); track photo.id; let i = $index) {
+        <li>
+            <button type="button"
+                    class="group relative block w-full cursor-pointer overflow-hidden rounded-lg border border-surface"
+                    [attr.aria-label]="'Open ' + photo.title"
+                    (click)="lg.openGallery(i)">
+                <img class="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                     loading="lazy"
+                     [src]="ctrl.thumbOf(photo)"
+                     [alt]="photo.alt"
+                     (error)="ctrl.markFailed(photo.id)"/>
+
+                <!-- label: always visible on small screens (no hover on touch), on hover or keyboard focus from md up -->
+                <span class="absolute inset-x-0 bottom-0 flex flex-col gap-1 bg-linear-to-t from-black/80 to-transparent p-3 text-left text-white opacity-100 transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
+            <span class="font-semibold">{{ photo.title }}</span>
+            <span class="flex items-center gap-3 text-xs">
+              <span class="inline-flex items-center gap-1">
+                <i class="pi pi-tag"></i>{{ photo.tag }}
+              </span>
+              <span class="inline-flex items-center gap-1">
+                <i class="pi pi-calendar"></i>{{ photo.date | date: 'mediumDate' }}
+              </span>
+            </span>
+          </span>
+            </button>
+        </li>
+        }
+    </ul>
+</section>
