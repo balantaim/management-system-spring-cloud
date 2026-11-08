@@ -64,7 +64,7 @@ management:
     health:
       show-details: always
 security:
-  allowed-origins: http://localhost:5000
+  allowed-origins: http://localhost:4200
 logging:
   level:
     org:

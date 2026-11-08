@@ -24,6 +24,7 @@ import {
     required,
     submit
 } from "@angular/forms/signals";
+import {NotificationService} from "../services/notification.service";
 
 
 const LOGIN_TIMEOUT_MS = 10_000;
@@ -36,18 +37,17 @@ const BUTTON_SIZE: UiSize = undefined;
 export class SignInController {
 
     private readonly auth = inject(AuthService);
+    private readonly notify = inject(NotificationService);
     private readonly router = inject(Router);
     private readonly route = inject(ActivatedRoute);
+
     private readonly model = signal<LoginRequest>({email: '', password: ''});
 
-    readonly submitError = signal('');
-
     readonly form = form(this.model, (path) => {
-        //Email
         required(path.email, {message: 'Email is required'});
         email(path.email, {message: 'Enter a valid email address'});
         maxLength(path.email, EMAIL_MAX_LENGTH, {message: `Email must be at most ${EMAIL_MAX_LENGTH} characters`});
-        //Password
+
         required(path.password, {message: 'Password is required'});
         minLength(path.password, PASSWORD_MIN_LENGTH, {message: `At least ${PASSWORD_MIN_LENGTH} characters`});
         maxLength(path.password, PASSWORD_MAX_LENGTH, {message: `Password must be at most ${PASSWORD_MAX_LENGTH} characters`});
@@ -102,21 +102,17 @@ export class SignInController {
 
     async onSubmit(): Promise<void> {
         if (this.form().submitting()) return;
-        this.submitError.set('');
 
         await submit(this.form, async () => {
-            try {
-                const success = await withTimeout(this.auth.login(this.model()), LOGIN_TIMEOUT_MS);
-                if (!success) {
-                    this.submitError.set('Invalid email or password.');
-                    return;
-                }
+            const result = await this.auth.login(this.model());
+
+            if (result.status === 'success') {
+                this.notify.success(result.message);
                 await this.router.navigateByUrl(this.returnUrl());
-            } catch (error) {
-                const timedOut = error instanceof Error && error.message === TIMEOUT_ERROR_MESSAGE;
-                this.submitError.set(timedOut
-                    ? 'The request timed out. Please try again.'
-                    : 'Something went wrong. Please try again.');
+            } else if (result.status === 'too_many_requests') {
+                this.notify.warn(result.message);
+            } else {
+                this.notify.error(result.message);
             }
         });
     }

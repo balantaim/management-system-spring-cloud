@@ -1,6 +1,8 @@
 import {Routes} from '@angular/router';
 import {guestGuard} from "./core/guards/guest-guard";
 import {authGuard} from "./core/guards/auth-guard";
+import {authorityGuard} from "./core/guards/authority-guard";
+import {AUTHORITY} from "./core/models/authority";
 
 export const routes: Routes = [
     {
@@ -30,10 +32,11 @@ export const routes: Routes = [
         canActivate: [guestGuard],
         loadComponent: () => import('./pages/register/register').then(m => m.Register)
     },
+    //Only for logged users
     {
         path: 'gallery',
         title: 'Gallery',
-        canActivate: [authGuard],
+        canActivate: [authGuard, authorityGuard(AUTHORITY.customer)],
         loadComponent: () => import('./pages/gallery-page/gallery-page').then(m => m.GalleryPage)
     },
     {
@@ -42,6 +45,13 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent: () => import('./pages/account/account').then(m => m.Account)
     },
+    {
+        path: 'admin',
+        title: 'Administration',
+        canActivate: [authGuard, authorityGuard(AUTHORITY.admin)],
+        loadComponent: () => import('./pages/admin/admin').then(m => m.Admin),
+    },
+    //Default page (Error 404)
     {
         path: '**',
         title: 'Page not found',

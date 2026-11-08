@@ -1,10 +1,7 @@
-// import { NgxLoggerLevel } from "ngx-logger";
-
 export const environment = {
     production: true,
-    language: 'BG',
+    language: 'bg',
     apiUrl: 'http://localhost:5000',
-    // logging: {
-    //     level: NgxLoggerLevel.ERROR
-    // }
+    clientPlatformId: '1000',
+    logLevel: 'error'
 };

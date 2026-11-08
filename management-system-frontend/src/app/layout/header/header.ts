@@ -1,7 +1,5 @@
 import {Component, ElementRef, inject, viewChild} from '@angular/core';
-import {FormsModule} from '@angular/forms';
 import {RouterLink, RouterLinkActive} from '@angular/router';
-import {Select} from '@openng/optimus-ui/select';
 import {HeaderController} from '../../core/controllers/header.controller';
 import {Dropdown} from "../../shared/dropdown/dropdown";
 

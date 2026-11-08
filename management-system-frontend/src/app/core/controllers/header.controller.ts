@@ -18,13 +18,24 @@ export class HeaderController {
     readonly isLoggedIn = this.auth.isLoggedIn;
     readonly user = this.auth.user;
 
-    readonly navItems = computed<NavItem[]>(() => [
-        {label: 'Home', route: '/home', icon: 'pi pi-home'},
-        this.auth.isLoggedIn()
-            ? {label: 'Gallery', route: '/gallery', icon: 'pi pi-image'}
-            : {label: 'Demos', route: '/demos', icon: 'pi pi-th-large'},
-        {label: 'Sign in', route: '/sign-in', icon: 'pi pi-sign-in'},
-    ]);
+    readonly navItems = computed<NavItem[]>(() => {
+        const items: NavItem[] = [{label: 'Home', route: '/home', icon: 'pi pi-home'}];
+
+        if (this.auth.isCustomer()) {
+            items.push({label: 'Gallery', route: '/gallery', icon: 'pi pi-image'});
+        }
+
+        items.push({label: 'Demo', route: '/demos', icon: 'pi pi-th-large'}); // keep the icon you chose
+
+        if (!this.auth.isLoggedIn()) {
+            items.push({label: 'Sign in', route: '/sign-in', icon: 'pi pi-sign-in'});
+        }
+
+        if (this.auth.isAdmin()) {
+            items.push({label: 'Administration', route: '/admin', icon: 'pi pi-shield'});
+        }
+        return items;
+    });
 
     readonly themeOptions: DropdownOption<ThemeMode>[] = [
         {label: 'System', value: ThemeMode.SYSTEM, icon: 'pi pi-palette'},
@@ -33,11 +44,10 @@ export class HeaderController {
     ];
 
     readonly menuOpen = signal(false);
-    readonly themeMode = this.theme.mode;
     readonly userMenuOpen = signal(false);
+    readonly themeMode = this.theme.mode;
 
-    readonly initial = computed(() =>
-        this.auth.user()?.fullName.trim().charAt(0).toUpperCase() ?? '');
+    readonly initial = computed(() => this.auth.user()?.fullName.trim().charAt(0).toUpperCase() ?? '');
 
     toggleMenu(): void {
         this.menuOpen.update((open) => !open);

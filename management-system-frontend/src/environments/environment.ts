@@ -1,11 +1,7 @@
 export const environment = {
     production: false,
-    language: 'EN',
+    language: 'en',
     apiUrl: 'http://localhost:5000',
-    logging: {
-        // level: NgxLoggerLevel.DEBUG,
-        //Configuration for sending logs to the server
-        // serverLogLevel: NgxLoggerLevel.ERROR,
-        // serverLoggingUrl: '/api/logs'
-    }
+    clientPlatformId: '1000',
+    logLevel: 'debug'
 };

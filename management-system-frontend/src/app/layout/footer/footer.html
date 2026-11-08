@@ -35,6 +35,12 @@
                            class="text-muted-color hover:text-primary">Sign in</a>
                     </li>
                     }
+                    @if (auth.isAdmin()) {
+                    <li>
+                        <a routerLink="/admin"
+                           class="text-muted-color hover:text-primary">Administration</a>
+                    </li>
+                    }
                 </ul>
             </section>
 
