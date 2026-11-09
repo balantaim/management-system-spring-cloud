@@ -40,27 +40,61 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true,
+              "optimization": true,
+              "aot": true,
+              "sourceMap": false,
+              "extractLicenses": true,
+              "namedChunks": false,
+              "outputHashing": "all",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.production.ts"
                 }
               ]
+            },
+            "production-bg": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "optimization": true,
+              "aot": true,
+              "sourceMap": false,
+              "extractLicenses": true,
+              "namedChunks": false,
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production-bg.ts"
+                }
+              ]
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "management-system-frontend:build:production"
+            },
+            "production-bg": {
+              "buildTarget": "management-system-frontend:build:production-bg"
             },
             "development": {
               "buildTarget": "management-system-frontend:build:development"
