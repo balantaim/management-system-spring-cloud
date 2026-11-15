@@ -40,7 +40,14 @@
                   "maximumError": "8kB"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "aot": true,
               "sourceMap": false,
               "extractLicenses": true,

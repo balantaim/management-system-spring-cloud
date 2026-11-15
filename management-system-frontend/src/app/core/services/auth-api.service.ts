@@ -59,7 +59,9 @@ export class AuthApiService {
 
     /** The error interceptor has already logged HTTP errors for these public calls */
     private toAuthError(error: unknown): AuthError {
-        if (error instanceof RequestTimeoutError) return new AuthError('timeout');
+        if (error instanceof RequestTimeoutError) {
+            return new AuthError('timeout');
+        }
 
         if (error instanceof HttpErrorResponse) {
             switch (classify(error)) {

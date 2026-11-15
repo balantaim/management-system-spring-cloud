@@ -92,7 +92,9 @@ export class AuthService {
 
     private async requestNewTokens(): Promise<boolean> {
         const refreshToken = this.storage.refreshToken;
-        if (!refreshToken) return false;
+        if (!refreshToken) {
+            return false;
+        }
 
         try {
             const response = await this.api.refresh(refreshToken);

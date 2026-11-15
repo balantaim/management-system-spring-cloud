@@ -3,12 +3,38 @@
 @import "@openng/icons/openng-icons.css";
 
 /*Light Gallery library*/
-@import 'lightgallery/css/lightgallery.css';
-@import 'lightgallery/css/lg-thumbnail.css';
-@import 'lightgallery/css/lg-zoom.css';
+@import "lightgallery/css/lightgallery.css";
+@import "lightgallery/css/lg-thumbnail.css";
+@import "lightgallery/css/lg-zoom.css";
 
 /* Tailwind's dark: variant follows the same class Optimus uses */
 @custom-variant dark (&:where(.app-dark, .app-dark *));
+
+/* Custom font */
+@font-face {
+    font-family: 'Chomsky';
+    src: url('/fonts/chomsky/Chomsky.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+h1, h2, h3, .logo-text {
+    font-family: 'Chomsky', serif;
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 2.8rem;
+}
+
+h2 {
+    font-size: 2.4rem;
+}
+
+h3, .logo-text {
+    font-size: 2rem;
+}
 
 /* Page Transition CSS */
 @keyframes page-out {
