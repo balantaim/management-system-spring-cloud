@@ -1,7 +1,7 @@
 <header class="sticky top-0 z-50 border-b border-surface bg-surface-0 text-surface-900 dark:bg-surface-900 dark:text-surface-0">
     <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3"
          aria-label="Main">
-        <a routerLink="/home"
+        <a routerLink="/"
            class="text-lg font-semibold logo-text">Management System</a>
 
         <div class="flex items-center gap-2">
@@ -11,7 +11,8 @@
                 <li>
                     <a routerLinkActive="active-link font-semibold"
                        class="flex items-center gap-2 border-b-2 border-transparent px-3 py-2 text-muted-color hover:bg-surface-100 dark:hover:bg-surface-800 [&.active-link]:border-primary"
-                       [routerLink]="item.route">
+                       [routerLink]="item.route"
+                       [routerLinkActiveOptions]="{ exact: true }">
                         <i [class]="item.icon"></i>{{ item.label }}
                     </a>
                 </li>
@@ -82,6 +83,7 @@
             <a routerLinkActive="active-link font-semibold"
                class="inline-flex items-center gap-2 border-b-2 border-transparent px-3 py-3 text-muted-color hover:bg-surface-100 dark:hover:bg-surface-800 [&.active-link]:border-primary"
                [routerLink]="item.route"
+               [routerLinkActiveOptions]="{ exact: true }"
                (click)="ctrl.closeMenu()">
                 <i [class]="item.icon"></i>{{ item.label }}
             </a>

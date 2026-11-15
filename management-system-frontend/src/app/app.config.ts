@@ -10,13 +10,21 @@ import {errorInterceptor} from "./core/interceptors/error-interceptor";
 import {authInterceptor} from "./core/interceptors/auth-interceptor";
 import {AuthService} from "./core/services/auth.service";
 import {platformInterceptor} from "./core/interceptors/platform-interceptor";
+import {environment} from "../environments/environment";
+import {APP_BASE_HREF, DOCUMENT} from "@angular/common";
 
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
+        // Appends language variable after the domain
+        {provide: APP_BASE_HREF, useValue: `/${environment.language}`},
+        // <html lang="..."> follows the build language
+        provideAppInitializer(() => {
+            inject(DOCUMENT).documentElement.lang = environment.language;
+        }),
         provideRouter(routes, withViewTransitions()),
-        // order matters: the error interceptor is outermost, so its retry passes through the auth interceptor again
+        // The order matters: the error interceptor is outermost, so its retry passes through the auth interceptor again
         provideHttpClient(withInterceptors([
             errorInterceptor,
             platformInterceptor,

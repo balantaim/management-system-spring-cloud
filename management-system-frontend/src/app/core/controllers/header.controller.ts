@@ -19,7 +19,7 @@ export class HeaderController {
     readonly user = this.auth.user;
 
     readonly navItems = computed<NavItem[]>(() => {
-        const items: NavItem[] = [{label: 'Home', route: '/home', icon: 'pi pi-home'}];
+        const items: NavItem[] = [{label: 'Home', route: '/', icon: 'pi pi-home'}];
 
         if (this.auth.isCustomer()) {
             items.push({label: 'Gallery', route: '/gallery', icon: 'pi pi-image'});
@@ -73,7 +73,7 @@ export class HeaderController {
         this.closeUserMenu();
         this.closeMenu();
         this.auth.logout();
-        await this.router.navigateByUrl('/home');
+        await this.router.navigateByUrl('/');
     }
 
 }

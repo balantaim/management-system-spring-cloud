@@ -8,10 +8,6 @@ export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'home'
-    },
-    {
-        path: 'home',
         title: 'Home',
         loadComponent: () => import('./pages/home/home').then(m => m.Home)
     },
