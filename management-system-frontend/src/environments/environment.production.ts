@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
     language: 'en',
-    apiUrl: 'http://localhost:5000',
+    apiUrl: 'https://management-system-spring-cloud.vercel.app',
     clientPlatformId: '1000',
     logLevel: 'error'
 };

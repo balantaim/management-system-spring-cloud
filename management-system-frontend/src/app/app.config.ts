@@ -18,6 +18,7 @@ export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
         // Appends language variable after the domain
+        // In the real world you should use subdomain for /en, /bg etc. Every build has its own language
         {provide: APP_BASE_HREF, useValue: `/${environment.language}`},
         // <html lang="..."> follows the build language
         provideAppInitializer(() => {

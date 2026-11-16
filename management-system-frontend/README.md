@@ -26,6 +26,9 @@ The Management System Web Frontend is responsible for providing a user-friendly 
 
 - Test via preferred browser: http://localhost:4200
 
+> [!NOTE]
+> The application uses prefix for languages like `/en`, `/bg` etc. Consider using subdomain instead of prefix for production website.
+
 ### Useful information
 
 - Angular docs: [Angular](https://angular.dev/overview)
