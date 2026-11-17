@@ -53,6 +53,7 @@ export class ApiClientService {
         const context = new HttpContext().set(PUBLIC_REQUEST, options.public ?? false);
         const source = this.http.request<T>(method, `${environment.apiUrl}${path}`, {
             body,
+            headers: options.headers,
             observe: 'response',
             context,
         });

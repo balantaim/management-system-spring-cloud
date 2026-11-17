@@ -4,6 +4,7 @@ export type HttpErrorKind =
     | 'bad_request'
     | 'unauthorized'
     | 'forbidden'
+    | 'conflict'
     | 'account_locked'
     | 'too_many_requests'
     | 'server'
@@ -19,11 +20,14 @@ export function classify(error: HttpErrorResponse): HttpErrorKind {
 
     switch (status) {
         case 400:
+        case 422:
             return 'bad_request';
         case 401:
             return 'unauthorized';
         case 403:
             return 'forbidden';
+        case 409:
+            return 'conflict';
         case 423:
             return 'account_locked';
         case 429:

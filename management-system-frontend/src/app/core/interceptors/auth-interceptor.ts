@@ -6,7 +6,7 @@ import {TokenStorageService} from "../services/token-storage.service";
 
 /** The Bearer token goes only to guarded requests to our own backend */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    if (req.context.get(PUBLIC_REQUEST)) {
+    if (req.context.get(PUBLIC_REQUEST) || req.headers.has('Authorization')) {
         return next(req);
     }
 

@@ -1,16 +1,18 @@
 import {inject, Service} from '@angular/core';
 import {RefreshResponse, TokenResponse} from "../models/token-response";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {AuthError} from "../models/auth-result";
+import {AuthError, RegisterError} from "../models/auth-result";
 import {ApiClientService, RequestTimeoutError} from "../http/api-client.service";
 import {LoggerService} from "./logger.service";
 import {classify} from "../http/http-error";
 import {LoginRequest} from "../models/login-request";
 import {RefreshRequest} from "../models/refresh-request";
+import {RegisterPayload} from "../models/register-request";
 
 
 const LOGIN_PATH = '/auth/login';
 const REFRESH_PATH = '/auth/refresh';
+const REGISTER_PATH = '/api/users/register';
 const USER_ID_HEADER = 'User-Id';
 
 export interface AuthResponse<T = TokenResponse> {
@@ -48,6 +50,21 @@ export class AuthApiService {
             throw new AuthError('server_error');
         }
         return {tokens, userId: response.headers.get(USER_ID_HEADER)};
+    }
+
+    /** Any 2xx response means the account was created */
+    async register(payload: RegisterPayload): Promise<void> {
+        const body: RegisterPayload = {
+            email: payload.email,
+            fullName: payload.fullName,
+            password: payload.password,
+        };
+
+        try {
+            await this.api.post<unknown>(REGISTER_PATH, body, {public: true});
+        } catch (error) {
+            throw this.toRegisterError(error);
+        }
     }
 
     private async call<T>(
@@ -91,6 +108,26 @@ export class AuthApiService {
 
         this.logger.error('Unexpected error during an auth request', error);
         return new AuthError('server_error');
+    }
+
+    private toRegisterError(error: unknown): RegisterError {
+        if (error instanceof RequestTimeoutError) return new RegisterError('timeout');
+
+        if (error instanceof HttpErrorResponse) {
+            switch (classify(error)) {
+                case 'conflict':
+                    return new RegisterError('email_taken');
+                case 'bad_request':
+                    return new RegisterError('invalid_data');
+                case 'too_many_requests':
+                    return new RegisterError('too_many_requests');
+                default:
+                    return new RegisterError('server_error');
+            }
+        }
+
+        this.logger.error('Unexpected error during registration', error);
+        return new RegisterError('server_error');
     }
 
 }

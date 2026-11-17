@@ -2,7 +2,16 @@ import {computed, inject, Service, signal} from '@angular/core';
 import {LoginRequest} from "../models/login-request";
 import {RegisterRequest} from "../models/register-request";
 import {AuthUser} from "../models/auth-user";
-import {AUTH_MESSAGES, AuthError, AuthResult, AuthStatus} from "../models/auth-result";
+import {
+    AUTH_MESSAGES,
+    AuthError,
+    AuthResult,
+    AuthStatus,
+    REGISTER_MESSAGES,
+    RegisterError,
+    RegisterResult,
+    RegisterStatus
+} from "../models/auth-result";
 import {isTokenExpired, readAuthorities} from "../utils/jwt";
 import {AUTHORITY} from "../models/authority";
 import {AuthApiService} from "./auth-api.service";
@@ -84,10 +93,19 @@ export class AuthService {
         this.currentUser.set(null);
     }
 
-    /** Still a demo. Later: move to AuthApiService and call the backend. */
-    async register(request: RegisterRequest): Promise<boolean> {
-        await new Promise((resolve) => setTimeout(resolve, 600));
-        return request.email !== 'taken@example.com';
+    async register(request: RegisterRequest): Promise<RegisterResult> {
+        try {
+            await this.api.register({
+                email: request.email.trim(),
+                fullName: request.fullName.trim(),
+                password: request.password,
+            });
+            return {status: 'success', message: REGISTER_MESSAGES.success};
+        } catch (error) {
+            if (!(error instanceof RegisterError)) this.logger.error('Unexpected register error', error);
+            const status: RegisterStatus = error instanceof RegisterError ? error.status : 'server_error';
+            return {status, message: REGISTER_MESSAGES[status]};
+        }
     }
 
     private async requestNewTokens(): Promise<boolean> {

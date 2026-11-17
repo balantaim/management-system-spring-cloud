@@ -5,7 +5,6 @@ import {LoginRequest} from "../models/login-request";
 import {UiItem, UiSize} from "../models/ui-config";
 import {TextField} from "../../shared/text-field/text-field";
 import {SubmitButton} from "../../shared/submit-button/submit-button";
-import {TIMEOUT_ERROR_MESSAGE, withTimeout} from '../utils/with-timeout';
 import {
     EMAIL_MAX_LENGTH,
     HAS_LOWERCASE,

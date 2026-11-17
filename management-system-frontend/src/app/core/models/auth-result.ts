@@ -1,3 +1,4 @@
+// Auth
 export type AuthStatus =
     | 'success'
     | 'wrong_credentials'
@@ -29,5 +30,36 @@ export class AuthError extends Error {
     constructor(readonly status: Exclude<AuthStatus, 'success'>) {
         super(status);
         this.name = 'AuthError';
+    }
+}
+
+// Register
+export type RegisterStatus =
+    | 'success'
+    | 'email_taken'
+    | 'invalid_data'
+    | 'too_many_requests'
+    | 'timeout'
+    | 'server_error';
+
+export const REGISTER_MESSAGES: Record<RegisterStatus, string> = {
+    success: 'Account created, you can sign in now',
+    email_taken: 'This email is already registered',
+    invalid_data: 'Please check the entered data and try again',
+    too_many_requests: AUTH_MESSAGES.too_many_requests,
+    timeout: AUTH_MESSAGES.timeout,
+    server_error: AUTH_MESSAGES.server_error,
+};
+
+export interface RegisterResult {
+    status: RegisterStatus;
+    message: string;
+}
+
+/** Thrown by AuthApiService; AuthService turns it into a RegisterResult */
+export class RegisterError extends Error {
+    constructor(readonly status: Exclude<RegisterStatus, 'success'>) {
+        super(status);
+        this.name = 'RegisterError';
     }
 }

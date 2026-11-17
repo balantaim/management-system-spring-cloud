@@ -4,7 +4,7 @@
 
 ## Description
 
-**Management System** is a Spring Cloud–based microservices application designed to demonstrate a scalable, secure, and
+**Management System** is a Spring Cloud–based microservices platform designed to demonstrate a scalable, secure, and
 distributed system architecture. The project follows modern cloud-native principles and integrates several Spring Cloud
 components to handle service discovery, configuration management, security, and communication between services.
 

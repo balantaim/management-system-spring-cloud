@@ -41,7 +41,6 @@ public class ManagementSystemDesktopClientApplication {
 
         // Start Swing UI on EDT
         SwingUtilities.invokeLater(() -> {
-//            MainFrame frame = context.getBean(MainFrame.class);
             MainFrame frame = context.getBean(MainFrame.class);
             frame.init();
         });

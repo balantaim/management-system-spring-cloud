@@ -4,10 +4,10 @@ import {UiItem, UiSize} from "../models/ui-config";
 import {TextField} from "../../shared/text-field/text-field";
 import {PasswordStrength} from "../../shared/password-strength/password-strength";
 import {SubmitButton} from "../../shared/submit-button/submit-button";
-import {TIMEOUT_ERROR_MESSAGE, withTimeout} from "../utils/with-timeout";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 import {RegisterRequest} from "../models/register-request";
+import {NotificationService} from "../services/notification.service";
 import {
     EMAIL_MAX_LENGTH,
     FULL_NAME_MAX_LENGTH,
@@ -30,6 +30,7 @@ const BUTTON_SIZE: UiSize = undefined;
 export class RegisterController {
     private readonly auth = inject(AuthService);
     private readonly router = inject(Router);
+    private readonly notify = inject(NotificationService);
 
     private readonly model = signal<RegisterRequest>({
         email: '',
@@ -142,23 +143,28 @@ export class RegisterController {
     }));
 
     async onSubmit(): Promise<void> {
-        if (this.form().submitting()) return;
+        if (this.form().submitting()) {
+            return;
+        }
         this.submitError.set('');
 
         await submit(this.form, async () => {
-            try {
-                const success = await withTimeout(this.auth.register(this.model()), REGISTER_TIMEOUT_MS);
-                if (!success) {
-                    this.submitError.set('This email is already registered.');
-                    return;
-                }
-                await this.router.navigateByUrl('/sign-in');
-            } catch (error) {
-                const timedOut = error instanceof Error && error.message === TIMEOUT_ERROR_MESSAGE;
-                this.submitError.set(timedOut
-                    ? 'The request timed out. Please try again.'
-                    : 'Something went wrong. Please try again.');
+            const result = await this.auth.register(this.model());
+
+            switch (result.status) {
+                case 'success':
+                    this.notify.success(result.message);
+                    await this.router.navigateByUrl('/sign-in');
+                    break;
+                case 'email_taken':
+                case 'invalid_data':
+                case 'too_many_requests':
+                    this.notify.warn(result.message);
+                    break;
+                default:
+                    this.notify.error(result.message);
             }
         });
     }
+
 }

@@ -19,9 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -64,9 +61,9 @@ class SecurityConfig {
                         //.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
-                .cors(cors -> cors
-                        .configurationSource(corsConfigurationSource())
-                )
+//                .cors(cors -> cors
+//                        .configurationSource(corsConfigurationSource())
+//                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -83,6 +80,7 @@ class SecurityConfig {
     /// This is example for CorsConfigurationSource in WebMVC
     /// We handle the CorsConfigurationSource inside API Gateway
     /// It is safe to remove it and add .cors(Customizer.withDefaults()) inside securityFilterChain
+    /*
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -96,6 +94,7 @@ class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+    */
 
     private AuthenticationManager createCustomAuthenticationManager(HttpSecurity http) {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
