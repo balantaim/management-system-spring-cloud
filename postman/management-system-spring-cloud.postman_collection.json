@@ -235,63 +235,36 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});",
-                  "// Parse the JSON response",
-                  "const response = pm.response.json();",
-                  "// Extract the tokens",
-                  "const accessToken = response.access_token;",
-                  "// Store it in an environment variable named 'ACCESS_TOKEN'",
-                  "pm.environment.set(\"ACCESS_TOKEN\", accessToken);",
-                  "",
-                  "const refreshToken = response.refresh_token;",
-                  "// Store it in an environment variable named 'REFRESH_TOKEN'",
-                  "pm.environment.set(\"REFRESH_TOKEN\", refreshToken);",
-                  "",
-                  "const userId = pm.response.headers.get('User-Id');",
-                  "pm.environment.set(\"USER_ID\", userId);",
-                  ""
-                ],
                 "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            },
-            {
-              "listen": "prerequest",
-              "script": {
                 "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
+                  "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n// Parse the JSON response\nconst response = pm.response.json();\n// Extract the tokens\nconst accessToken = response.access_token;\n// Store it in an environment variable named 'ACCESS_TOKEN'\npm.environment.set(\"ACCESS_TOKEN\", accessToken);\n\nconst refreshToken = response.refresh_token;\n// Store it in an environment variable named 'REFRESH_TOKEN'\npm.environment.set(\"REFRESH_TOKEN\", refreshToken);\n\nconst userId = pm.response.headers.get('User-Id');\npm.environment.set(\"USER_ID\", userId);\n"
+                ]
               }
             }
           ],
           "request": {
             "auth": {
-              "type": "noauth"
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{USERNAME}}",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "{{PASSWORD}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "POST",
             "header": [
               {
                 "key": "Client-Platform-Id",
-                "value": "1000",
-                "type": "text"
+                "value": "1000"
               }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"email\": \"{{USERNAME}}\",\n    \"password\": \"{{PASSWORD}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
               "raw": "{{GATEWAY_BASE_URL}}/auth/login",
               "host": [
