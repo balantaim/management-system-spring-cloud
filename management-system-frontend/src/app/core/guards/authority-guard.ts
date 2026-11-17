@@ -13,5 +13,5 @@ export const authorityGuard = (authority: string): CanActivateFn => () => {
     if (auth.hasAuthority(authority)) return true;
 
     notify.warn(NO_PERMISSION_MESSAGE);
-    return router.createUrlTree(['/home']);
+    return router.createUrlTree(['/']);
 };
