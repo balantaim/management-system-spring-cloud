@@ -19,6 +19,7 @@ export interface ApiRequestOptions {
     /** No Bearer header, no token refresh, no global error toast (login, refresh) */
     public?: boolean;
     timeoutMs?: number;
+    headers?: Record<string, string>;
 }
 
 @Service()

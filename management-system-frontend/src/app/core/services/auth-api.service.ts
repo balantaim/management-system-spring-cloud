@@ -25,9 +25,10 @@ export class AuthApiService {
     private readonly logger = inject(LoggerService);
 
     async login(request: LoginRequest): Promise<AuthResponse> {
-        // explicit body: exactly { "email", "password" }, nothing else is sent
-        const body: LoginRequest = {email: request.email, password: request.password};
-        const response = await this.call<TokenResponse>(LOGIN_PATH, body);
+        // Credentials go in the Authorization header (Basic email:password), no body
+        const response = await this.call<TokenResponse>(LOGIN_PATH, null, {
+            Authorization: `Basic ${this.basic(request.email, request.password)}`,
+        });
 
         const tokens = response.body;
         if (!tokens?.access_token || !tokens.refresh_token) {
@@ -49,12 +50,22 @@ export class AuthApiService {
         return {tokens, userId: response.headers.get(USER_ID_HEADER)};
     }
 
-    private async call<T>(path: string, body: LoginRequest | RefreshRequest): Promise<HttpResponse<T>> {
+    private async call<T>(
+        path: string,
+        body: RefreshRequest | null = null,
+        headers?: Record<string, string>,
+    ): Promise<HttpResponse<T>> {
         try {
-            return await this.api.post<T>(path, body, {public: true});
+            return await this.api.post<T>(path, body, {public: true, headers});
         } catch (error) {
             throw this.toAuthError(error);
         }
+    }
+
+    /** UTF-8 safe base64 (plain btoa breaks on non-ASCII characters) */
+    private basic(email: string, password: string): string {
+        const bytes = new TextEncoder().encode(`${email}:${password}`);
+        return btoa(String.fromCharCode(...bytes));
     }
 
     /** The error interceptor has already logged HTTP errors for these public calls */
