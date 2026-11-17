@@ -1,9 +1,9 @@
 package com.martinatanasov.management.system.security;
 
 import com.martinatanasov.management.system.user.UserService;
+import jakarta.validation.Validator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -36,9 +34,12 @@ class SecurityConfig {
     private final AsymmetricJwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final Environment environment;
+    private final Validator validator;
+    private static final String DEFAULT_LOGIN_ENDPOINT = "/auth/login";
 
-    @Value("${security.allowed-origins}")
-    private List<String> allowedOrigins;
+    //Get allowed origins if we need to set CORS preferences
+//    @Value("${security.allowed-origins}")
+//    private List<String> allowedOrigins;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) {
@@ -77,6 +78,23 @@ class SecurityConfig {
         return http.build();
     }
 
+    private AuthenticationManager createCustomAuthenticationManager(HttpSecurity http) {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder);
+        return authenticationManagerBuilder.build();
+    }
+
+    private AuthenticationFilter getAuthenticationFilter(AuthenticationManager authenticationManager) {
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(
+                authenticationManager,
+                userService,
+                jwtService,
+                validator);
+        //Change the default url: "/login"
+        authenticationFilter.setFilterProcessesUrl(environment.getProperty("login.url", DEFAULT_LOGIN_ENDPOINT));
+        return authenticationFilter;
+    }
+
     /// This is example for CorsConfigurationSource in WebMVC
     /// We handle the CorsConfigurationSource inside API Gateway
     /// It is safe to remove it and add .cors(Customizer.withDefaults()) inside securityFilterChain
@@ -95,18 +113,5 @@ class SecurityConfig {
         return source;
     }
     */
-
-    private AuthenticationManager createCustomAuthenticationManager(HttpSecurity http) {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder);
-        return authenticationManagerBuilder.build();
-    }
-
-    private AuthenticationFilter getAuthenticationFilter(AuthenticationManager authenticationManager) {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, userService, jwtService);
-        //Change the default url: "/login"
-        authenticationFilter.setFilterProcessesUrl(environment.getProperty("login.url", "/auth/login"));
-        return authenticationFilter;
-    }
 
 }

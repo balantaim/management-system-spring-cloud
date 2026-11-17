@@ -6,11 +6,13 @@ import com.martinatanasov.management.system.user.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,9 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -29,31 +30,60 @@ class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final UserService userService;
     private final AsymmetricJwtService jwtService;
+    private final Validator validator;
 
     AuthenticationFilter(AuthenticationManager authenticationManager,
             UserService userService,
-            AsymmetricJwtService jwtService) {
+            AsymmetricJwtService jwtService,
+            Validator validator) {
         super(authenticationManager);
         this.userService = userService;
         this.jwtService = jwtService;
+        this.validator = validator;
     }
 
     @NonNull
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Basic ")) {
+            throw new BadCredentialsException("Missing or invalid Authorization header");
+        }
+
+        UserLoginDto credentials = getCredentialsFromAuthorization(authorizationHeader);
+        Set<ConstraintViolation<UserLoginDto>> violations = validator.validate(credentials);
+
+        if (!violations.isEmpty()) {
+            throw new BadCredentialsException("Invalid login credentials");
+        }
+
+        return getAuthenticationManager().authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        credentials.email(),
+                        credentials.password(),
+                        new ArrayList<>()
+                )
+        );
+    }
+
+    private UserLoginDto getCredentialsFromAuthorization(String authorizationHeader) {
         try {
-            UserLoginDto userLoginDto = new JsonMapper().readValue(request.getInputStream(), UserLoginDto.class);
+            String base64Credentials = authorizationHeader.substring("Basic ".length());
 
-            return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            userLoginDto.email(),
-                            userLoginDto.password(),
-                            new ArrayList<>()
-                    )
-            );
+            byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
 
-        } catch (IOException e) {
-            throw new AuthenticationServiceException("Failed to parse authentication request", e);
+            String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
+
+            String[] values = credentials.split(":", 2);
+
+            if (values.length != 2) {
+                throw new BadCredentialsException("Invalid Basic Authentication credentials");
+            }
+
+            return new UserLoginDto(values[0], values[1]);
+        } catch (IllegalArgumentException e) {
+            throw new BadCredentialsException("Invalid Basic Authentication credentials", e);
         }
     }
 
