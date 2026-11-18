@@ -25,7 +25,7 @@ export class HeaderController {
             items.push({label: 'Gallery', route: '/gallery', icon: 'pi pi-image'});
         }
 
-        items.push({label: 'Demo', route: '/demos', icon: 'pi pi-th-large'}); // keep the icon you chose
+        items.push({label: 'Demo', route: '/demos', icon: 'pi pi-th-large'});
 
         if (!this.auth.isLoggedIn()) {
             items.push({label: 'Sign in', route: '/sign-in', icon: 'pi pi-sign-in'});
@@ -73,7 +73,7 @@ export class HeaderController {
         this.closeUserMenu();
         this.closeMenu();
         this.auth.logout();
-        await this.router.navigateByUrl('/');
+        await this.router.navigateByUrl('/sign-in');
     }
 
 }

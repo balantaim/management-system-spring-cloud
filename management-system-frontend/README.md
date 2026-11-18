@@ -29,6 +29,18 @@ The Management System Web Frontend is responsible for providing a user-friendly 
 > [!NOTE]
 > The application uses prefix for languages like `/en`, `/bg` etc. Consider using subdomain instead of prefix for production website.
 
+### Improvements for production
+
+Add CSP browser policy as meta tag inside `index.html` and replace `https://api-backend.com` with real URL
+
+```html
+     <meta http-equiv="Content-Security-Policy"
+              content="style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api-backend.com; object-src 'none'; base-uri 'self'; form-action 'self'; trusted-types angular angular#bundler; require-trusted-types-for 'script'">
+
+```
+
+
+
 ### Useful information
 
 - Angular docs: [Angular](https://angular.dev/overview)
